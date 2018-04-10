@@ -4,7 +4,22 @@ import { Link } from 'react-router-dom';
 const LoggedOutView = props => {
   if (!props.currentUser) {
     return (
-      <div>loggedout</div>
+			<div className="navbar-end">
+	      <div className="navbar-item">
+	        <div className="field is-grouped">
+	          <p className="control">
+	            <Link className="button" to="/signup">
+	              Signup
+	            </Link>
+	          </p>
+	          <p className="control">
+							<Link className="button is-primary" to="/login">
+	              Login
+	            </Link>
+	          </p>
+	        </div>
+	      </div>
+			</div>
     );
   }
   return null;
@@ -13,7 +28,17 @@ const LoggedOutView = props => {
 const LoggedInView = props => {
   if (props.currentUser) {
     return (
-      <ul className="nav"></ul>
+			<div className="navbar-end">
+	      <div className="navbar-item">
+	        <div className="field">
+	          <p className="control">
+	            <Link className="button is-info" to="/logout">
+	            	Logout
+	            </Link>
+	          </p>
+	        </div>
+	      </div>
+			</div>
     );
   }
   return null;
@@ -35,11 +60,9 @@ class Header extends React.Component {
         </div>
 
         <div id="navbarMenu" className="navbar-menu">
-          <div className="navbar-start"></div>
-          <div className="navbar-end">
-            <LoggedInView currentUser={this.props.currentUser} />
-            <LoggedOutView currentUser={this.props.currentUser} />
-          </div>
+          <div classNameName="navbar-start"></div>
+          <LoggedInView currentUser={this.props.currentUser} />
+          <LoggedOutView currentUser={this.props.currentUser} />
         </div>
       </nav>
     );
