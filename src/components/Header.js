@@ -32,7 +32,7 @@ const LoggedInView = props => {
 	      <div className="navbar-item">
 	        <div className="field">
 	          <p className="control">
-	            <Link className="button is-info" to="/logout">
+	            <Link className="button is-text" to="/logout">
 	            	Logout
 	            </Link>
 	          </p>
