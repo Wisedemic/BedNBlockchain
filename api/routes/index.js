@@ -3,6 +3,7 @@ module.exports = function(app) {
 	// Define Exports
 	var exports = {
 		// index: require('./properties')
+		auth: require('./auth')
 	};
 
 	// Catch All
@@ -30,6 +31,7 @@ module.exports = function(app) {
 
 	// Define All Other Routes Here
 	// app.use( '/api/', exports.index );
+	app.use('/auth/', exports.auth);
 
   // Handle 404 - Last Route
 	app.use(function(req, res, next) {
