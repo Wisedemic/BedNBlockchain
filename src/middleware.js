@@ -4,9 +4,10 @@ import {
   ASYNC_END,
   LOGIN,
   LOGOUT,
-  REGISTER
+  SIGNUP
 } from './actions';
 
+// If an actions payload is a Promise
 const promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
     store.dispatch({ type: ASYNC_START, subtype: action.type });
@@ -46,8 +47,9 @@ const promiseMiddleware = store => next => action => {
   next(action);
 };
 
+// Ensure the user's token was removed on logout, and added on login.
 const localStorageMiddleware = store => next => action => {
-  if (action.type === REGISTER || action.type === LOGIN) {
+  if (action.type === SIGNUP || action.type === LOGIN) {
     if (!action.error) {
       window.localStorage.setItem('jwt', action.payload.user.token);
       agent.setToken(action.payload.user.token);
