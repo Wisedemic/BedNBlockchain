@@ -45,6 +45,20 @@ const LoggedInView = props => {
 };
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toggled: false
+    }
+    this.onClick = this.onClick.bind(this);
+  }
+
+  onClick() {
+    this.setState((prevState) => {
+      return {toggled: !prevState.toggled};
+    });
+  }
   render() {
     return (
       <nav className="navbar is-fixed-top is-dark">
@@ -52,15 +66,19 @@ class Header extends React.Component {
           <Link to="/" className="navbar-item">
             {this.props.appName}
           </Link>
-          <div className="navbar-burger burger" data-target="navbarMenu">
+          <div
+            className={'navbar-burger burger' + (this.state.toggled ? ' is-active' : '')}
+            data-target="navbarMenu"
+            onClick={this.onClick}
+            >
             <span></span>
             <span></span>
             <span></span>
           </div>
         </div>
 
-        <div id="navbarMenu" className="navbar-menu">
-          <div classNameName="navbar-start"></div>
+        <div id="navbarMenu" className={'navbar-menu' + (this.state.toggled ? ' is-active' : '')}>
+          <div className="navbar-start"></div>
           <LoggedInView currentUser={this.props.currentUser} />
           <LoggedOutView currentUser={this.props.currentUser} />
         </div>
