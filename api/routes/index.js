@@ -1,11 +1,4 @@
 module.exports = function(app) {
-
-	// Define Exports
-	var exports = {
-		// index: require('./properties')
-		auth: require('./auth')
-	};
-
 	// Catch All
 	app.all('*', function(req, res, next) {
 		res.set('Access-Control-Allow-Origin', '*');
@@ -17,8 +10,8 @@ module.exports = function(app) {
 		console.log(req.params);
 		console.log('Body: ');
 		console.log(req.body);
-		console.log(req.path)
-		if ('OPTIONS' == req.method) return res.send(200);
+		console.log(req.path);
+		console.log(req.headers);
 		next();
 	});
 
@@ -29,13 +22,17 @@ module.exports = function(app) {
 		next();
 	})
 
-	// Define All Other Routes Here
-	// app.use( '/api/', exports.index );
-	app.use('/auth/', exports.auth);
+	// Define Exports
+	const exports = {
+		auth: require('./auth')
+	};
 
-  // Handle 404 - Last Route
+	// Define All Other Routes Here
+	app.use('/api/auth/', exports.auth);
+
+  // Handle 404's (Final Route)
 	app.use(function(req, res, next) {
-		res.status(404).send('404');
+		res.sendStatus(404);
 	});
 
 	return exports;

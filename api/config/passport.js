@@ -26,7 +26,7 @@ passport.deserializeUser(function(user, done) {
 */
 passport.use(new LocalStrategy(function(username, password, done) {
 
-    // Grab out user from the database by their username.
+    // Grab our user from the database by their username.
     // Include the users Salt In this request
     Users.findOne({ username: username }).select('+salt').exec(function (err, user) {
 

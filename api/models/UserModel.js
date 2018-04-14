@@ -14,14 +14,14 @@ mongoose.Promise = global.Promise;
 var UserSchema = new Schema({
 	firstname:	{ type: String, trim: true },
 	lastname:	{ type: String, trim: true },
-	username:	{
+	email:	{
 		type: String,
 		required: true,
 		unique: true,
 		trim: true,
 		lowercase: true,
 		validate: [validators.isEmail({message: 'Invalid Email'})]
-	},
+	}, 
 	password:	{ type: String, required: true },
 	salt:		{ type: String, select: false },
 	avatar: 	{
@@ -40,8 +40,8 @@ var UserSchema = new Schema({
 // Before a user is saved into the Database
 UserSchema.pre('save', function(next) {
 
-    // Grab the user during this request
-    var user = this;
+	// Grab the user during this request
+  var user = this;
 
 	// change the updated_at field to current date
 	var currentDate = new Date();
@@ -56,17 +56,18 @@ UserSchema.pre('save', function(next) {
 	// generate a salt
 	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
 
-	    if (err) return next(err);
+	  if (err) return next(err);
 
-	    // hash the password using our new salt
-	    bcrypt.hash(user.password, salt, function(err, hash) {
-	        if (err) return next(err);
+    // hash the password using our new salt
+    bcrypt.hash(user.password, salt, function(err, hash) {
+      if (err) return next(err);
 
-	        // Update the user's password and salt fields for database entry.
-	        user.password = hash;
-	        user.salt = salt;
-	        next();
-	    });
+      // Update the user's password and salt fields for database entry.
+      user.password = hash;
+      user.salt = salt;
+			console.log(user);
+      next();
+  	});
 	});
 });
 
