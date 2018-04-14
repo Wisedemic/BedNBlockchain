@@ -31,10 +31,12 @@ const Auth = {
     requests.get('/auth'),
   login: (email, password) =>
     requests.post('/auth/login', { user: { email, password } }),
-  signup: (email, password) =>
-    requests.post('/auth', { user: { username, email, password } }),
+  signup: (email, password, passwordConfirm) => 
+    requests.post('/auth/signup', { email, password, passwordConfirm }),
   save: user =>
-    requests.put('/user', { user })
+    requests.put('/user', { user }),
+  logout: () =>
+    requests.post('/auth/logout')
 };
 
 export default {

@@ -1,27 +1,95 @@
 import React, { Component } from 'react';
 import agent from '../agent';
 import { connect } from 'react-redux';
+
+import Field from './Field';
+
 import {
 	SIGNUP,
 	SIGNUP_PAGE_UNLOADED,
-	UPDATE_FIELD_AUTH
+	UPDATE_FIELD_AUTH,
+	FIELD_ERROR
 } from '../actions';
 
 // Mapping Global Redux State to React Props
 const mapStateToProps = state => ({
 	...state.auth,
+	email: state.auth.email,
+	password: state.auth.password,
+	passwordConfirm: state.auth.passwordConfirm
 });
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
-	onChangeEmail: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
-  onChangePassword: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-  onChangeUsername: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
-	handleSubmit: (email, password) => {
-		const payload = agent.Auth.signup(email, password);
+	onChangeEmail: value => {
+		const key = 'email';
+		if (value.length === 0) {
+			dispatch({
+				type: FIELD_ERROR,
+				key: key,
+				message: 'Email cannot be blank!',
+				inputState: 'is-danger',
+				value: value
+			});
+		} else {
+			dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: value })
+		}
+	},
+  onChangePassword: value => {
+		const key = 'password';
+			if (value.length === 0) {
+				dispatch({
+					type: FIELD_ERROR,
+					key: key,
+					message: 'Password cannot be blank!',
+					inputState: 'is-danger',
+					value: value
+				});
+			} else if (value.length > 16 || value.length < 6) {
+				dispatch({
+					type: FIELD_ERROR,
+					key: key,
+					message: 'Password length must be between 6-16 characters!',
+					inputState: 'is-warning',
+					value: value
+				});
+			} else {
+				dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: value })
+			}
+	},
+  onChangePasswordConfirm: (password, passwordConfirm) => {
+	const key = 'passwordConfirm';
+	if (passwordConfirm.length === 0) {
+		dispatch({
+			type: FIELD_ERROR,
+			key: key,
+			message: 'Password cannot be blank!',
+			inputState: 'is-danger',
+			value: passwordConfirm
+		});
+	} else if (passwordConfirm.length > 16 || passwordConfirm.length < 6) {
+			dispatch({
+				type: FIELD_ERROR,
+				key: key,
+				message: 'Password length must be between 6-16 characters!',
+				inputState: 'is-warning',
+				value: passwordConfirm
+			});
+		} else if (password !== passwordConfirm) {
+			dispatch({
+				type: FIELD_ERROR,
+				key: key,
+				message: 'Passwords Must Match!',
+				inputState: 'is-danger',
+				value: passwordConfirm
+			});
+		} else {
+			dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: passwordConfirm })
+		}
+	},
+	handleSubmit: (email, password, passwordConfirm) => {
+		const payload = agent.Auth.signup(email, password, passwordConfirm);
+		console.log(payload);
 		dispatch({ type: SIGNUP, payload })
 	},
 	onUnload: () =>
@@ -31,57 +99,83 @@ const mapDispatchToProps = dispatch => ({
 export class Signup extends Component {
 	constructor() {
 		super();
-		this.submitForm = (email, password) => ev => {
+		this.state = {
+			disabled: true
+		}
+		// Grab the input on input Change Events
+		this.onChangeEmail = ev => this.props.onChangeEmail(ev.target.value);
+		this.onChangePassword =  ev => this.props.onChangePassword(ev.target.value);
+		this.onChangePasswordConfirm =  ev =>this.props.onChangePasswordConfirm(this.props.password.value, ev.target.value);
+
+		// Form Submit Handling
+		this.submitForm = (email, password, passwordConfirm) => ev => {
 			ev.preventDefault();
-			/*--
-				Sanitize
-			--*/
-			this.props.handleSubmit(email, password);
+			if (
+				this.props.email.valid &&
+				this.props.password.valid	&&
+				this.props.passwordConfirm.valid
+			) {
+				this.props.handleSubmit(email, password, passwordConfirm);
+			}
 		}
 	}
+
 	componentWillUnmount() {
     this.props.onUnload();
    }
 
   render() {
-    const email = this.props.email;
-    const password = this.props.password;
+		console.log(this.props)
+		const email = this.props.email.value;
+    const password = this.props.password.value;
+    const passwordConfirm = this.props.passwordConfirm.value;
     return (
       <section id="signup" className="hero is-light is-fullheight">
         <div className="hero-body">
-          <h1 className="title is-1">SIGNUP PAGE</h1>
-					<form onSubmit={this.submitForm(email, password)}>
-
-						<div class="field">
-						  <p class="control has-icons-left has-icons-right">
-						    <input class="input" type="email" placeholder="Email" value={this.props.email} />
-						    <span class="icon is-small is-left">
-						      <i class="fas fa-envelope"></i>
-						    </span>
-						    <span class="icon is-small is-right">
-						      <i class="fas fa-check"></i>
-						    </span>
-						  </p>
+					<div className="columns is-centered" style={{flexGrow: 1}}>
+						<div className="column is-half">
+							<h1 className="title is-1">Sign Up!</h1>
+							<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
+								<Field
+									key={'email'}
+									type={'text'}
+									value={this.props.email.value}
+									placeholder={'Enter your email'}
+									onChange={this.onChangeEmail}
+									inputState={this.props.email.inputState}
+									message={this.props.email.message}
+								/>
+								<Field
+									key={'password'}
+									type={'password'}
+									value={this.props.password.value}
+									placeholder={'Enter your password'}
+									onChange={this.onChangePassword}
+									inputState={this.props.password.inputState}
+									message={this.props.password.message}
+								/>
+								<Field
+									key={'passwordConfirm'}
+									type={'password'}
+									value={this.props.passwordConfirm.value}
+									placeholder={'Re-enter password'}
+									onChange={this.onChangePasswordConfirm}
+									inputState={this.props.passwordConfirm.inputState}
+									message={this.props.passwordConfirm.message}
+								/>
+								<div className="field">
+									<p className="control">
+										<button
+											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '')}
+											onClick={this.submitForm}
+											>
+											Sign Up
+										</button>
+									</p>
+								</div>
+							</form>
 						</div>
-
-						<div class="field">
-						  <p class="control has-icons-left">
-						    <input class="input" type="password" placeholder="Password" value={this.props.password} />
-						    <span class="icon is-small is-left">
-						      <i class="fas fa-lock"></i>
-						    </span>
-						  </p>
-						</div>
-
-						<div class="field">
-						  <p class="control">
-						    <button class="button is-success" onClick={this.submitForm}>
-						      Login
-						    </button>
-						  </p>
-						</div>
-
-					</form>
+					</div>
         </div>
       </section>
     );
