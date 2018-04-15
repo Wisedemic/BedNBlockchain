@@ -1,16 +1,20 @@
 module.exports = function(app) {
+	const cors = require('cors');
 	// Catch All
-	app.all('*', function(req, res, next) {
-		res.set('Access-Control-Allow-Origin', '*');
-		res.set('Access-Control-Allow-Credentials', true);
-		res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
-		res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
+	var corsOptions = {
+	  origin: ['http://localhost:3001', 'http://localhost:3000'],
+	  optionsSuccessStatus: 200,
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+	}
+	app.all('*', cors(corsOptions));
 
+	app.all('*', function(req, res, next) {
+		console.log('Path: ' + req.path);
 		console.log('Method: ' + req.method);
-		console.log(req.params);
+		console.log('Params: ', req.params);
 		console.log('Body: ');
 		console.log(req.body);
-		console.log(req.path);
+		console.log('Headers: ');
 		console.log(req.headers);
 		next();
 	});
