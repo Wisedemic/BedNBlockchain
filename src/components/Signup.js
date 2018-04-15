@@ -99,9 +99,7 @@ const mapDispatchToProps = dispatch => ({
 export class Signup extends Component {
 	constructor() {
 		super();
-		this.state = {
-			disabled: true
-		}
+		this.disabled = true;
 		// Grab the input on input Change Events
 		this.onChangeEmail = ev => this.props.onChangeEmail(ev.target.value);
 		this.onChangePassword =  ev => this.props.onChangePassword(ev.target.value);
@@ -125,10 +123,14 @@ export class Signup extends Component {
    }
 
   render() {
-		console.log(this.props)
 		const email = this.props.email.value;
     const password = this.props.password.value;
     const passwordConfirm = this.props.passwordConfirm.value;
+		if (this.props.email.valid && this.props.password.valid && this.props.passwordConfirm.valid) {
+			this.disabled = false;
+		} else {
+			this.disabled = true;
+		}
     return (
       <section id="signup" className="hero is-light is-fullheight">
         <div className="hero-body">
@@ -168,6 +170,7 @@ export class Signup extends Component {
 										<button
 											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '')}
 											onClick={this.submitForm}
+											disabled={this.disabled ? 'disabled' : false}
 											>
 											Sign Up
 										</button>
