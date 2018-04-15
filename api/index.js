@@ -20,7 +20,14 @@ api.use(validator());
 // Configuration
 // auth.set('port', process.env.PORT);
 api.set('port', 3001); // Set Port Globally
+api.set('secret', config.secret);
 api.listen(api.get('port')); // Define listening Port
+api.use(require('express-session')({
+    maxAge: 100*60*60,
+    secret: api.get('secret'),
+    resave: false,
+    saveUninitialized: false
+}));
 
 // Session Setup + Passport Init
 api.use(passport.initialize());

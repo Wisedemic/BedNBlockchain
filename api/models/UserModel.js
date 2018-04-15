@@ -16,12 +16,12 @@ var UserSchema = new Schema({
 	lastname:	{ type: String, trim: true },
 	email:	{
 		type: String,
-		required: true,
-		unique: true,
+		required: [true, 'An email is required!'],
+		unique: [true, 'Email already taken!'],
 		trim: true,
 		lowercase: true,
 		validate: [validators.isEmail({message: 'Invalid Email'})]
-	}, 
+	},
 	password:	{ type: String, required: true },
 	salt:		{ type: String, select: false },
 	avatar: 	{
@@ -65,7 +65,6 @@ UserSchema.pre('save', function(next) {
       // Update the user's password and salt fields for database entry.
       user.password = hash;
       user.salt = salt;
-			console.log(user);
       next();
   	});
 	});

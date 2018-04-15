@@ -1,7 +1,6 @@
 /* DB Config */
 const mongoose = require('mongoose');
 const config = require('./config.js');
-
 // Define Error Handler for All Mongo Errors
 mongoose.Model.MongoErrors = function(errs) {
 	var data = [];
@@ -17,6 +16,8 @@ mongoose.Model.MongoErrors = function(errs) {
 
 // Connect to MongoDB
 mongoose.connect(config.mongoURL, function (err, res) {
+
+	// mongoose.connection.db.dropDatabase();
     if (err) {
         console.log('[DB] Connection to MongoDB failed!. ' + err);
     } else {

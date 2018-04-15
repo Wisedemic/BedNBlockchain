@@ -43,7 +43,8 @@ function generateAndStoreToken(req, user, opts) {
     user.save(function (err, user) {
         if (err) return err;
     });
-    // Save Token to server session.
+		
+		return token;
 }
 
 function verify(token) {

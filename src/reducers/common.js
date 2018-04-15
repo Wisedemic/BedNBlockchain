@@ -1,6 +1,9 @@
 import {
   APP_LOAD,
   REDIRECT,
+	LOGIN,
+	SIGNUP,
+	LOGOUT
 } from '../actions';
 
 const defaultState = {
@@ -20,6 +23,16 @@ export default (state = defaultState, action) => {
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
+		case LOGOUT:
+			return { ...state, redirectTo: '/', token: null, currentUser: null };
+		case LOGIN:
+    case SIGNUP:
+      return {
+        ...state,
+        redirectTo: action.error ? null : '/',
+        token: action.error ? null : action.payload.user.token,
+        currentUser: action.error ? null : action.payload.user
+      };
     default:
       return state;
   }

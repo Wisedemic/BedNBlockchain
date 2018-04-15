@@ -35,6 +35,11 @@ auth.post('/login', function(req, res, next) {
 	})(req, res, next);
 });
 
+// Check Token for current Users request.
+auth.get('/', function(req, res, next) {
+	res.json({payload: {user: {name: 'hi'}}})
+});
+
 // Register a new User
 auth.post('/signup', function(req, res, next) {
 	var errors = [];
@@ -49,7 +54,7 @@ auth.post('/signup', function(req, res, next) {
 	} else if (req.body.password !== req.body.passwordConfirm) {
 		errors.push({key: 'password', message: 'Passwords Do Not Match'});
 		errors.push({key: 'passwordConfirm', message: 'Passwords Do Not Match'});
-		return res.json(errors);
+		return res.json({error: true, payload: {errors}});
 	} else {
 
 		// Delete the confirmed password and pass req.body
@@ -57,21 +62,25 @@ auth.post('/signup', function(req, res, next) {
 
 		// Create the user
 		Users.create(req.body, function(err, user) {
-			if (err) return res.json(Users.MongoErrors(err));
+			console.log('User Create function Complete.', err, user);
+			if (err) return res.json({error: true, payload: {errors: Users.MongoErrors(err)}});
 			if (user.created_at) {
-				
 				// Authenticate them through Passport.js through our API.
 				req.login(user, function (err) {
+					console.log('Req.login finished: ', err);
 					if (!err) {
-						helpers.generateAndStoreToken(req, user);
+						console.log('no error');
+						const token = helpers.generateAndStoreToken(req, user);
+						console.log(user);
+						console.log(token);
 						return res.json({
-							success: true,
-							message: 'Profile Created. Redirecting...'
+							user: {token}
 						});
 					} else {
+						console.log('######error');
 						return res.json({
-							success: false,
-							message: 'Something Unexpected Happened'
+							error: true,
+							payload: {errors: 'Something Unexpected Happened'}
 						})
 					}
 				})
