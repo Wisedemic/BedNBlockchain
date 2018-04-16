@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {
+	Component
+} from 'react';
 import { connect } from 'react-redux';
 import {
   HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED
-} from '../../actions';
+} from '../actions';
 
+import Banner from './assets/banner.jpg';
 
 const mapStateToProps = state => ({
   appName: state.common.appName,
@@ -18,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: HOME_PAGE_UNLOADED })
 });
 
-class Home extends React.Component {
+class Home extends Component {
   componentDidlMount() {
     this.props.onLoad();
   }
@@ -30,7 +33,12 @@ class Home extends React.Component {
   render() {
     return (
       <section id="home" className="hero is-light is-fullheight">
-        <div className="hero-body">
+        <div className="hero-body has-bg-img"
+					style={{
+						flexGrow: 1,
+						width: null,
+						height: null
+					}}>
           <h2 className="title is-2">Homepage</h2>
         </div>
       </section>

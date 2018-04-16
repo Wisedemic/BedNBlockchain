@@ -13,7 +13,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 
 // Application View Component
-import App from './components/App';
+import App from './containers/App';
 
 // Render DOM with React + Redux + Routing.
 ReactDOM.render((

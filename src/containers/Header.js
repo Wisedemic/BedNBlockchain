@@ -17,7 +17,7 @@ const NavButtons = props => {
   	      <div className="navbar-item">
   	        <div className="field">
   	          <p className="control">
-  	            <button className="button is-text" onClick={props.handleLogout}>
+  	            <button className="button is-white" onClick={props.handleLogout}>
   	            	Logout
   	            </button>
   	          </p>
