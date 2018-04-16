@@ -24,26 +24,18 @@ passport.deserializeUser(function(user, done) {
   Username @string
   Password @string
 */
-passport.use(new LocalStrategy(function(username, password, done) {
+passport.use(new LocalStrategy({usernameField: 'email'}, function(username, password, done) {
 
-    // Grab our user from the database by their username.
-    // Include the users Salt In this request
-    Users.findOne({ username: username }).select('+salt').exec(function (err, user) {
-
-      // Debugging
-      console.log(user)
-
-      // If the User is not Found ErrorHandling
+    // Grab our user from the database by their username
+    Users.findOne({ email: username }).select('+salt').exec(function (err, user) {
+      // If the User is not Found
       if (err) {
-        // Return a message to the route-handler
         return done({message: 'User Not Found'});
       }
 
       // Check for user data
       if (!user) {
-        // No user - Send route the message.
-        // This error can be proccessed better, but for now, it's shit.
-        return done(null, false, {el: '#login-email', error: 'Incorrect username.'});
+        return done(null, false, {message: 'Incorrect username.'});
       }
 
       // Validate PW
@@ -55,12 +47,10 @@ passport.use(new LocalStrategy(function(username, password, done) {
         if (isMatch) {
           // Send Success Message, along with the user data
           return done(null, user, {message: 'Login Successful'});
-        // Else, Send error message
         } else {
-          return done(null, false, {el: '#login-pw', error: 'Incorrect Password'})
+          return done(null, false, {message: 'Incorrect Password'})
         }
       });
-
     });
   }
 ));

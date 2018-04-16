@@ -9,6 +9,10 @@ const bodyParser = require('body-parser'); //bodyparser + json + urlencoder
 const morgan = require('morgan'); // logger
 const validator = require('express-validator'); // Validator
 
+// Session Handling
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session);
+
 // Config
 var db = require('./config/database'); // DB Config
 var passport = require('./config/passport'); // User Auth Config
@@ -22,11 +26,12 @@ api.use(validator());
 api.set('port', 3001); // Set Port Globally
 api.set('secret', config.secret);
 api.listen(api.get('port')); // Define listening Port
-api.use(require('express-session')({
+api.use(session({
     maxAge: 100*60*60,
     secret: api.get('secret'),
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: new MongoStore({url: config.mongoURL})
 }));
 
 // Session Setup + Passport Init

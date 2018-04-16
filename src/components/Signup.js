@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import agent from '../agent';
 import { connect } from 'react-redux';
 
+import ErrorList from './ErrorList';
 import Field from './Field';
 
 import {
 	SIGNUP,
-	SIGNUP_PAGE_UNLOADED,
 	UPDATE_FIELD_AUTH,
-	FIELD_ERROR
+	FIELD_ERROR,
+	CLOSE_ERROR
 } from '../actions';
 
 // Mapping Global Redux State to React Props
@@ -89,11 +90,11 @@ const mapDispatchToProps = dispatch => ({
 	},
 	handleSubmit: (email, password, passwordConfirm) => {
 		const payload = agent.Auth.signup(email, password, passwordConfirm);
-		console.log(payload);
+		console.log('PAYLOAD', payload);
 		dispatch({ type: SIGNUP, payload })
 	},
-	onUnload: () =>
-    dispatch({ type: SIGNUP_PAGE_UNLOADED })
+	closeError: () =>
+		dispatch({ type: CLOSE_ERROR })
 });
 
 export class Signup extends Component {
@@ -118,10 +119,6 @@ export class Signup extends Component {
 		}
 	}
 
-	componentWillUnmount() {
-    this.props.onUnload();
-   }
-
   render() {
 		const email = this.props.email.value;
     const password = this.props.password.value;
@@ -136,6 +133,9 @@ export class Signup extends Component {
         <div className="hero-body">
 					<div className="columns is-centered" style={{flexGrow: 1}}>
 						<div className="column is-half">
+							<ErrorList
+								handleClose={this.props.closeError}
+								errors={this.props.errors} />
 							<h1 className="title is-1">Sign Up!</h1>
 							<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
 								<Field

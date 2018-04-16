@@ -12,6 +12,7 @@ mongoose.Promise = global.Promise;
 
 // Define User Schema
 var UserSchema = new Schema({
+	token: { type: String, select: false },
 	firstname:	{ type: String, trim: true },
 	lastname:	{ type: String, trim: true },
 	email:	{
@@ -23,8 +24,8 @@ var UserSchema = new Schema({
 		validate: [validators.isEmail({message: 'Invalid Email'})]
 	},
 	password:	{ type: String, required: true },
-	salt:		{ type: String, select: false },
-	avatar: 	{
+	salt: { type: String, select: false },
+	avatar: {
 		data: Buffer,
 		contentType: String
 	},

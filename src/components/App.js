@@ -45,7 +45,6 @@ class App extends React.Component {
     if (token) {
       agent.setToken(token);
     }
-		console.log(token);
     this.props.onLoad(token ? agent.Auth.current() : null, token);
   }
 
@@ -56,6 +55,7 @@ class App extends React.Component {
           <Header
             appName={this.props.appName}
             currentUser={this.props.currentUser}
+            appLoaded={this.props.appLoaded}
           />
           <Switch>
             <Route exact path="/" component={Home} />
@@ -70,6 +70,7 @@ class App extends React.Component {
       <div>
         <Header
           appName={this.props.appName}
+          appLoaded={this.props.appLoaded}
           currentUser={this.props.currentUser} />
         <section id="loader" className="section">
           <img src={require('./assets/loader.gif')} alt="Loading..."/>

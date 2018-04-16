@@ -14,8 +14,9 @@ const { matchedData } = require('express-validator/filter');
 
 /* Helpers */
 const helpers = require('../config/helpers.js');
-var generateName = require('sillyname');
-var randomstring = require("randomstring");
+const generateName = require('sillyname');
+const randomstring = require("randomstring");
+const extend = require('util')._extend;
 
 // Login Submit Handling
 auth.post('/login', function(req, res, next) {
@@ -24,13 +25,22 @@ auth.post('/login', function(req, res, next) {
 		if (err) return next(err); // will generate a 500 error
 
 		// Incorrect Username Error
-		if (!user) return res.json({ success : false, message: [message] });
+		if (!user) return res.json({error: true, message: [message] });
 
 		// Submit login request using the user found in this request.
 		req.logIn(user, function (err) {
 		    if (err) return next(err);
-				helpers.generateAndStoreToken(req, user);
-	    	return res.json({ success : true, message: [message] });
+				console.log('req.login successful!');
+
+					console.log(req.user);
+					
+				const payload = {user: {
+					email: user.email,
+					updated_at: user.updated_at,
+					created_at: user.created_at,
+					token: helpers.generateAndStoreToken(req, user)
+				}}
+				return res.json({payload});
 		});
 	})(req, res, next);
 });
@@ -63,21 +73,27 @@ auth.post('/signup', function(req, res, next) {
 		// Create the user
 		Users.create(req.body, function(err, user) {
 			console.log('User Create function Complete.', err, user);
-			if (err) return res.json({error: true, payload: {errors: Users.MongoErrors(err)}});
+			if (err) {
+				if (err.code === 11000) {
+					return res.json({error: true, payload: {errors: 'Email Already Registered!'}})
+				} else {
+					return res.json({error: true, payload: {errors: Users.MongoErrors(err)}});
+				}
+			}
 			if (user.created_at) {
 				// Authenticate them through Passport.js through our API.
 				req.login(user, function (err) {
-					console.log('Req.login finished: ', err);
 					if (!err) {
-						console.log('no error');
-						const token = helpers.generateAndStoreToken(req, user);
-						console.log(user);
-						console.log(token);
-						return res.json({
-							user: {token}
-						});
+						console.log('req.login successful!');
+						const payload = {user: {
+							email: user.email,
+							updated_at: user.updated_at,
+							created_at: user.created_at,
+							token: helpers.generateAndStoreToken(req, user)
+						}}
+						return res.json({payload});
 					} else {
-						console.log('######error');
+						console.log('req.login errors: ', err);
 						return res.json({
 							error: true,
 							payload: {errors: 'Something Unexpected Happened'}

@@ -1,50 +1,55 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { LOGOUT } from '../actions';
 
-const LoggedOutView = props => {
-  if (!props.currentUser) {
-    return (
-			<div className="navbar-end">
-	      <div className="navbar-item">
-	        <div className="field is-grouped">
-	          <p className="control">
-	            <Link className="button" to="/signup">
-	              Signup
-	            </Link>
-	          </p>
-	          <p className="control">
-							<Link className="button is-primary" to="/login">
-	              Login
-	            </Link>
-	          </p>
-	        </div>
-	      </div>
-			</div>
-    );
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  handleLogout: () => dispatch({type: LOGOUT})
+});
+
+const NavButtons = props => {
+  if (props.appLoaded) {
+    if (props.currentUser) {
+      return (
+  			<div className="navbar-end">
+  	      <div className="navbar-item">
+  	        <div className="field">
+  	          <p className="control">
+  	            <button className="button is-text" onClick={props.handleLogout}>
+  	            	Logout
+  	            </button>
+  	          </p>
+  	        </div>
+  	      </div>
+  			</div>
+      );
+    } else {
+      return (
+        <div className="navbar-end">
+          <div className="navbar-item">
+            <div className="field is-grouped">
+              <p className="control">
+                <Link className="button" to="/signup">
+                  Signup
+                </Link>
+              </p>
+              <p className="control">
+                <Link className="button is-primary" to="/login">
+                  Login
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
   }
   return null;
 };
 
-const LoggedInView = props => {
-  if (props.currentUser) {
-    return (
-			<div className="navbar-end">
-	      <div className="navbar-item">
-	        <div className="field">
-	          <p className="control">
-	            <Link className="button is-text" to="/logout">
-	            	Logout
-	            </Link>
-	          </p>
-	        </div>
-	      </div>
-			</div>
-    );
-  }
-  return null;
-};
-
-class Header extends React.Component {
+class Header extends Component {
   constructor(props) {
     super(props);
 
@@ -79,12 +84,15 @@ class Header extends React.Component {
 
         <div id="navbarMenu" className={'navbar-menu' + (this.state.toggled ? ' is-active' : '')}>
           <div className="navbar-start"></div>
-          <LoggedInView currentUser={this.props.currentUser} />
-          <LoggedOutView currentUser={this.props.currentUser} />
+          <NavButtons
+            appLoaded={this.props.appLoaded}
+            handleLogout={this.props.handleLogout}
+            currentUser={this.props.currentUser}
+          />
         </div>
       </nav>
     );
   }
 }
 
-export default Header;
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

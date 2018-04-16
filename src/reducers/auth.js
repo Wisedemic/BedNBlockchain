@@ -1,12 +1,12 @@
 import {
   LOGIN,
   SIGNUP,
-  LOGIN_PAGE_UNLOADED,
-  SIGNUP_PAGE_UNLOADED,
   ASYNC_START,
   ASYNC_END ,
   UPDATE_FIELD_AUTH,
-  FIELD_ERROR
+  FIELD_ERROR,
+  CLOSE_ERROR,
+  HANDLE_AJAX_ERROR
 } from '../actions';
 
 const defaultInputState = {
@@ -21,6 +21,7 @@ const defaultState = {
   password: {...defaultInputState},
   passwordConfirm: {...defaultInputState},
   inProgress: false,
+  errors: null
 };
 
 export default (state = defaultState, action) => {
@@ -32,12 +33,9 @@ export default (state = defaultState, action) => {
         inProgress: false,
         errors: action.error ? action.payload.errors : null
       };
-    case LOGIN_PAGE_UNLOADED:
-    case SIGNUP_PAGE_UNLOADED:
-      return {};
     case ASYNC_START:
       if (action.subtype === LOGIN || action.subtype === SIGNUP) {
-        return { ...state, inProgress: true };
+        return {...state, inProgress: true, errors: null};
       }
       break;
     case ASYNC_END:
@@ -45,6 +43,8 @@ export default (state = defaultState, action) => {
         return {...state, inProgress: false};
       }
       break;
+    case CLOSE_ERROR:
+      return {...state, errors: null};
     case FIELD_ERROR:
       return {...state,
         [action.key]: {
@@ -63,9 +63,10 @@ export default (state = defaultState, action) => {
           valid: true
         }
       };
+    case HANDLE_AJAX_ERROR:
+      return {...state, inProgress: false, errors: action.payload.errors};
     default:
       return defaultState;
   }
-
   return state;
 };

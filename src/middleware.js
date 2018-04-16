@@ -4,7 +4,8 @@ import {
   ASYNC_END,
   LOGIN,
   LOGOUT,
-  SIGNUP
+  SIGNUP,
+  HANDLE_AJAX_ERROR
 } from './actions';
 
 // If an actions payload is a Promise
@@ -22,9 +23,14 @@ const promiseMiddleware = store => next => action => {
           return
         }
         console.log('RESULT', res);
-        action.payload = res;
+        action.payload = res.payload;
         store.dispatch({ type: ASYNC_END, promise: action.payload });
-        store.dispatch(action);
+        if (res.error) {
+            action.error = res.error;
+            store.dispatch({ type: HANDLE_AJAX_ERROR, payload: action.payload });
+        } else {
+          store.dispatch(action);
+        }
       },
       error => {
         const currentState = store.getState()
