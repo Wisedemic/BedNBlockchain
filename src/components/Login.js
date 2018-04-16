@@ -31,6 +31,14 @@ const mapDispatchToProps = dispatch => ({
 				inputState: 'is-danger',
 				value: value
 			});
+		} else if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(value).toLowerCase()))) {
+			dispatch({
+				type: FIELD_ERROR,
+				key: key,
+				message: 'Must be a proper email! Ex. elon@spacex.com',
+				inputState: 'is-danger',
+				value: value
+			});
 		} else {
 			dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: value })
 		}

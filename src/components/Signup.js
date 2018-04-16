@@ -22,6 +22,7 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
+
 	onChangeEmail: value => {
 		const key = 'email';
 		if (value.length === 0) {
@@ -29,6 +30,14 @@ const mapDispatchToProps = dispatch => ({
 				type: FIELD_ERROR,
 				key: key,
 				message: 'Email cannot be blank!',
+				inputState: 'is-danger',
+				value: value
+			});
+		} else if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(value).toLowerCase()))) {
+			dispatch({
+				type: FIELD_ERROR,
+				key: key,
+				message: 'Must be a proper email! Ex. elon@spacex.com',
 				inputState: 'is-danger',
 				value: value
 			});
@@ -136,7 +145,7 @@ export class Signup extends Component {
 							<ErrorList
 								handleClose={this.props.closeError}
 								errors={this.props.errors} />
-							<h1 className="title is-1">Sign Up!</h1>
+							<h1 className="title is-1">Sign up to coninue</h1>
 							<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
 								<Field
 									key={'email'}
