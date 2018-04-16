@@ -1,0 +1,8 @@
+#home .has-bg-img {
+  background: url("/public/banner.jpg") no-repeat center center fixed; }
+
+.has-bg-img {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
