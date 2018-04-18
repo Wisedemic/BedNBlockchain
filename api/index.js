@@ -22,8 +22,8 @@ var config = require('./config/config'); // Secret Stuff
 api.use(validator());
 
 // Configuration
-// auth.set('port', process.env.PORT);
 api.set('port', 3001); // Set Port Globally
+console.log(process.env)
 api.set('secret', config.secret);
 api.listen(api.get('port')); // Define listening Port
 api.use(session({

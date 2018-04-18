@@ -35,9 +35,7 @@ class Home extends Component {
       <section id="home" className="hero is-light is-fullheight">
         <div className="hero-body has-bg-img"
 					style={{
-						flexGrow: 1,
-						width: null,
-						height: null
+						backgroundImage: 'url(' + Banner + ')'
 					}}>
           <h2 className="title is-2">Homepage</h2>
         </div>
