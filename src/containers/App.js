@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
 import Header from './Header';
-import Home from './Home';
-import Login from '../components/Login';
-import Signup from '../components/Signup';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Four_Oh_Four from '../components/404';
 
 import { APP_LOAD, REDIRECT } from '../actions';
