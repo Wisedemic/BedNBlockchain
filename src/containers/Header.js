@@ -3,50 +3,89 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LOGOUT } from '../actions';
 
+import defaultUserAvatar from './assets/defaultUserAvatar.png';
+
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
-  handleLogout: () => dispatch({type: LOGOUT})
+  handleLogout: () => dispatch({ type: LOGOUT })
 });
 
+const Avatar = props => {
+  if (props.avatar) {
+    return (
+      <img src={props.avatar} alt='User Avatar'/>
+    );
+  } else {
+    return (
+      <img src={defaultUserAvatar} alt='User Avatar' />
+    );
+  }
+};
+
 const NavButtons = props => {
-  if (props.appLoaded) {
-    if (props.currentUser) {
-      return (
-  			<div className="navbar-end">
-  	      <div className="navbar-item">
-  	        <div className="field">
-  	          <p className="control">
-  	            <button className="button is-white" onClick={props.handleLogout}>
-  	            	Logout
-  	            </button>
-  	          </p>
-  	        </div>
-  	      </div>
-  			</div>
-      );
-    } else {
-      return (
-        <div className="navbar-end">
-          <div className="navbar-item">
-            <div className="field is-grouped">
-              <p className="control">
-                <Link className="button" to="/signup">
-                  Signup
-                </Link>
-              </p>
-              <p className="control">
-                <Link className="button is-primary" to="/login">
-                  Login
-                </Link>
-              </p>
-            </div>
+  if (props.appLoaded && props.currentUser) {
+    return (
+			<div className="navbar-end">
+        <div className="navbar-item">
+          <div className="field is-grouped">
+            <p className="control">
+              <Link className="button is-outlined is-info" to="/listings/add">
+                <span className="icon">
+                  <i className="fa fa-book"></i>
+                </span>
+                <span>Book Now!</span>
+              </Link>
+            </p>
+            <p className="control">
+              <Link className="button is-outlined is-danger" to="/listings/add">
+                <span className="icon">
+                  <i className="fa fa-plus"></i>
+                </span>
+                <span>List A Property</span>
+              </Link>
+            </p>
           </div>
         </div>
-      );
-    }
+	      <div className="navbar-item has-dropdown is-hoverable">
+          <a className="navbar-link">
+            <Avatar avatar={props.currentUser.avatar} />
+          </a>
+          <div className="navbar-dropdown is-right is-boxed">
+            <Link className="navbar-item" to="/profile/">
+              Profile
+            </Link>
+            <Link className="navbar-item" to="/settings">
+              Settings
+            </Link>
+            <div className="navbar-divider"></div>
+            <a className="navbar-item" onClick={props.handleLogout}>
+            	Logout
+  	        </a>
+          </div>
+        </div>
+			</div>
+    );
+  } else {
+    return (
+      <div className="navbar-end">
+        <div className="navbar-item">
+          <div className="field is-grouped">
+            <p className="control">
+              <Link className="button" to="/signup">
+                Signup
+              </Link>
+            </p>
+            <p className="control">
+              <Link className="button is-primary" to="/login">
+                Login
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
-  return null;
 };
 
 class Header extends Component {
@@ -66,7 +105,7 @@ class Header extends Component {
   }
   render() {
     return (
-      <nav className="navbar is-fixed-top is-dark">
+      <nav className="navbar is-fixed-top">
         <div className="navbar-brand">
           <Link to="/" className="navbar-item">
             {this.props.appName}
