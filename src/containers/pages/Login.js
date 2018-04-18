@@ -1,28 +1,26 @@
 import React, { Component } from 'react';
-import agent from '../agent';
+import agent from '../../agent';
 import { connect } from 'react-redux';
 
-import ErrorList from './ErrorList';
-import Field from './Field';
+import ErrorList from '../../components/ErrorList';
+import Field from '../../components/Field';
 
 import {
-	SIGNUP,
+	LOGIN,
 	UPDATE_FIELD_AUTH,
 	FIELD_ERROR,
 	CLOSE_ERROR
-} from '../actions';
+} from '../../actions';
 
 // Mapping Global Redux State to React Props
 const mapStateToProps = state => ({
 	...state.auth,
 	email: state.auth.email,
-	password: state.auth.password,
-	passwordConfirm: state.auth.passwordConfirm
+	password: state.auth.password
 });
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
-
 	onChangeEmail: value => {
 		const key = 'email';
 		if (value.length === 0) {
@@ -47,83 +45,49 @@ const mapDispatchToProps = dispatch => ({
 	},
   onChangePassword: value => {
 		const key = 'password';
-			if (value.length === 0) {
-				dispatch({
-					type: FIELD_ERROR,
-					key: key,
-					message: 'Password cannot be blank!',
-					inputState: 'is-danger',
-					value: value
-				});
-			} else if (value.length > 16 || value.length < 6) {
-				dispatch({
-					type: FIELD_ERROR,
-					key: key,
-					message: 'Password length must be between 6-16 characters!',
-					inputState: 'is-warning',
-					value: value
-				});
-			} else {
-				dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: value })
-			}
-	},
-  onChangePasswordConfirm: (password, passwordConfirm) => {
-	const key = 'passwordConfirm';
-	if (passwordConfirm.length === 0) {
-		dispatch({
-			type: FIELD_ERROR,
-			key: key,
-			message: 'Password cannot be blank!',
-			inputState: 'is-danger',
-			value: passwordConfirm
-		});
-	} else if (passwordConfirm.length > 16 || passwordConfirm.length < 6) {
+		if (value.length === 0) {
+			dispatch({
+				type: FIELD_ERROR,
+				key: key,
+				message: 'Password cannot be blank!',
+				inputState: 'is-danger',
+				value: value
+			});
+		} else if (value.length > 16 || value.length < 6) {
 			dispatch({
 				type: FIELD_ERROR,
 				key: key,
 				message: 'Password length must be between 6-16 characters!',
 				inputState: 'is-warning',
-				value: passwordConfirm
-			});
-		} else if (password !== passwordConfirm) {
-			dispatch({
-				type: FIELD_ERROR,
-				key: key,
-				message: 'Passwords Must Match!',
-				inputState: 'is-danger',
-				value: passwordConfirm
+				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: passwordConfirm })
+			dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: value })
 		}
 	},
-	handleSubmit: (email, password, passwordConfirm) => {
-		const payload = agent.Auth.signup(email, password, passwordConfirm);
+	handleSubmit: (email, password) => {
+		const payload = agent.Auth.login(email, password);
 		console.log('PAYLOAD', payload);
-		dispatch({ type: SIGNUP, payload })
+		dispatch({ type: LOGIN, payload })
 	},
 	closeError: () =>
 		dispatch({ type: CLOSE_ERROR })
 });
 
-export class Signup extends Component {
+export class Login extends Component {
 	constructor() {
 		super();
 		this.disabled = true;
-		// Grab the input on input Change Events
+
+    // Grab the input on input Change Events
 		this.onChangeEmail = ev => this.props.onChangeEmail(ev.target.value);
 		this.onChangePassword =  ev => this.props.onChangePassword(ev.target.value);
-		this.onChangePasswordConfirm =  ev =>this.props.onChangePasswordConfirm(this.props.password.value, ev.target.value);
 
 		// Form Submit Handling
 		this.submitForm = (email, password, passwordConfirm) => ev => {
 			ev.preventDefault();
-			if (
-				this.props.email.valid &&
-				this.props.password.valid	&&
-				this.props.passwordConfirm.valid
-			) {
-				this.props.handleSubmit(email, password, passwordConfirm);
+			if (this.props.email.valid && this.props.password.valid) {
+				this.props.handleSubmit(email, password);
 			}
 		}
 	}
@@ -131,8 +95,7 @@ export class Signup extends Component {
   render() {
 		const email = this.props.email.value;
     const password = this.props.password.value;
-    const passwordConfirm = this.props.passwordConfirm.value;
-		if (this.props.email.valid && this.props.password.valid && this.props.passwordConfirm.valid) {
+		if (this.props.email.valid && this.props.password.valid) {
 			this.disabled = false;
 		} else {
 			this.disabled = true;
@@ -145,8 +108,8 @@ export class Signup extends Component {
 							<ErrorList
 								handleClose={this.props.closeError}
 								errors={this.props.errors} />
-							<h1 className="title is-1">Sign up to coninue</h1>
-							<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
+              <h2 className="title is-2">Login to continue</h2>
+							<form onSubmit={this.submitForm(email, password)}>
 								<Field
 									key={'email'}
 									type={'text'}
@@ -165,15 +128,6 @@ export class Signup extends Component {
 									inputState={this.props.password.inputState}
 									message={this.props.password.message}
 								/>
-								<Field
-									key={'passwordConfirm'}
-									type={'password'}
-									value={this.props.passwordConfirm.value}
-									placeholder={'Re-enter password'}
-									onChange={this.onChangePasswordConfirm}
-									inputState={this.props.passwordConfirm.inputState}
-									message={this.props.passwordConfirm.message}
-								/>
 								<div className="field">
 									<p className="control">
 										<button
@@ -181,9 +135,9 @@ export class Signup extends Component {
 											onClick={this.submitForm}
 											disabled={this.disabled ? 'disabled' : false}
 											>
-											Sign Up
+											Login
 										</button>
-									</p>
+                  </p>
 								</div>
 							</form>
 						</div>
@@ -194,4 +148,4 @@ export class Signup extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
