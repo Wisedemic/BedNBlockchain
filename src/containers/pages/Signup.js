@@ -145,7 +145,7 @@ export class Signup extends Component {
 							<ErrorList
 								handleClose={this.props.closeError}
 								errors={this.props.errors} />
-							<h1 className="title is-1">Sign up to coninue</h1>
+							<h1 className="title is-1">Sign up to continue</h1>
 							<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
 								<Field
 									key={'email'}

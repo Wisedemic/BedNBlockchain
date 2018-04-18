@@ -2,7 +2,7 @@ module.exports = function(app) {
 	const cors = require('cors');
 	// Catch All
 	var corsOptions = {
-	  origin: ['http://localhost:3001', 'http://localhost:3000'],
+	  origin: ['http://localhost:3001', 'http://localhost:3000', ],
 	  optionsSuccessStatus: 200,
 		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 	}

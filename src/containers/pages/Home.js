@@ -1,11 +1,12 @@
-import React, {
-	Component
-} from 'react';
+import React, {	Component } from 'react';
 import { connect } from 'react-redux';
+
 import {
   HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED
 } from '../../actions';
+
+import Banner from '../assets/banner.jpg';
 
 const mapStateToProps = state => ({
   appName: state.common.appName,
@@ -31,14 +32,9 @@ class Home extends Component {
   render() {
     return (
       <section id="home" className="hero is-light is-fullheight">
-<<<<<<< HEAD:src/containers/Home.js
-        <div className="hero-body has-bg-img"
-					style={{
+        <div className="hero-body has-bg-img" style={{
 						backgroundImage: 'url(' + Banner + ')'
 					}}>
-=======
-        <div className="hero-body has-bg-img">
->>>>>>> bc2467be9fd542d8b6e7d6aafb4c295adba03c3e:src/containers/pages/Home.js
           <h2 className="title is-2">Homepage</h2>
         </div>
       </section>
