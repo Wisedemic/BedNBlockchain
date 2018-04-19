@@ -1,3 +1,11 @@
+#loader {
+  align-items: center;
+  align-content: center;
+  justify-content: center; }
+  #loader img {
+    max-height: 150px;
+    max-width: 150px; }
+
 #home .has-bg-img {
   background: url("/public/banner.jpg") no-repeat center center fixed; }
 

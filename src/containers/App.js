@@ -7,7 +7,8 @@ import Header from './Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Listings from './pages/Listings';
+import Rooms from './pages/Rooms';
+import Room from './pages/Room';
 import Four_Oh_Four from '../components/404';
 
 import { APP_LOAD, REDIRECT } from '../actions';
@@ -27,7 +28,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (payload, token) => {
-		console.log(token, payload);
 	  dispatch({ type: APP_LOAD, payload, token, skipTracking: true })
 	},
   onRedirect: () =>
@@ -64,7 +64,8 @@ class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />
-						<Route exact path="/listings" component={Listings} />
+						<Route exact path="/rooms" component={Rooms} />
+            <Route path="/room/:roomId" component={Room} />
             <Route component={Four_Oh_Four} />
           </Switch>
         </div>
@@ -76,8 +77,10 @@ class App extends React.Component {
           appName={this.props.appName}
           appLoaded={this.props.appLoaded}
           currentUser={this.props.currentUser} />
-        <section id="loader" className="section">
+        <section id="loader" className="hero is-fullheight">
+          <h2 className="title is-2">This will just take a moment...</h2>
           <img src={require('./assets/loader.gif')} alt="Loading..."/>
+          <h2 className="subtitle is-2">Loading. . .</h2>
         </section>
       </div>
     );

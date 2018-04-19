@@ -1,8 +1,12 @@
+// React + Redux
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+// Actions
 import { LOGOUT } from '../actions';
 
+// Assets
 import defaultUserAvatar from './assets/defaultUserAvatar.png';
 
 const mapStateToProps = state => ({});
@@ -30,7 +34,7 @@ const NavButtons = props => {
         <div className="navbar-item">
           <div className="field is-grouped">
             <p className="control">
-              <Link className="button is-outlined is-info" to="/listings/">
+              <Link className="button is-outlined is-info" to="/rooms/">
                 <span className="icon">
                   <i className="fa fa-book"></i>
                 </span>
@@ -38,7 +42,7 @@ const NavButtons = props => {
               </Link>
             </p>
             <p className="control">
-              <Link className="button is-outlined is-danger" to="/listings/add">
+              <Link className="button is-outlined is-danger" to="/rooms/add">
                 <span className="icon">
                   <i className="fa fa-plus"></i>
                 </span>
