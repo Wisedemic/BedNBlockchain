@@ -20,11 +20,12 @@ const promiseMiddleware = store => next => action => {
       res => {
         const currentState = store.getState()
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
-          return
+          return;
         }
         console.log('RESULT', res);
         action.payload = res.payload;
         store.dispatch({ type: ASYNC_END, promise: action.payload });
+
         if (res.error) {
             action.error = res.error;
             store.dispatch({ type: HANDLE_AJAX_ERROR, payload: action.payload });
@@ -57,8 +58,10 @@ const promiseMiddleware = store => next => action => {
 const localStorageMiddleware = store => next => action => {
   if (action.type === SIGNUP || action.type === LOGIN) {
     if (!action.error) {
-      window.localStorage.setItem('jwt', action.payload.user.token);
-      agent.setToken(action.payload.user.token);
+      window.localStorage.setItem('jwt', action.payload.user.token.key);
+			action.token = action.payload.user.token.key;
+			console.log(action);
+      agent.setToken(action.payload.user.token.key);
     }
   } else if (action.type === LOGOUT) {
     window.localStorage.setItem('jwt', '');

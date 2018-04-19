@@ -12,7 +12,11 @@ mongoose.Promise = global.Promise;
 
 // Define User Schema
 var UserSchema = new Schema({
-	token: { type: String, select: false },
+	token: {
+		key: String,
+		valid: Boolean,
+		created_at: Date
+	},
 	firstname:	{ type: String, trim: true },
 	lastname:	{ type: String, trim: true },
 	email:	{

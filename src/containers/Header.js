@@ -30,7 +30,7 @@ const NavButtons = props => {
         <div className="navbar-item">
           <div className="field is-grouped">
             <p className="control">
-              <Link className="button is-outlined is-info" to="/listings/add">
+              <Link className="button is-outlined is-info" to="/listings/">
                 <span className="icon">
                   <i className="fa fa-book"></i>
                 </span>

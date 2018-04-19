@@ -6,6 +6,7 @@ import ErrorList from '../../components/ErrorList';
 import Field from '../../components/Field';
 
 import {
+	SIGNUP_PAGE_UNLOADED,
 	SIGNUP,
 	UPDATE_FIELD_AUTH,
 	FIELD_ERROR,
@@ -22,7 +23,7 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
-
+	onUnload: () => dispatch({ type: SIGNUP_PAGE_UNLOADED }),
 	onChangeEmail: value => {
 		const key = 'email';
 		if (value.length === 0) {
@@ -127,7 +128,9 @@ export class Signup extends Component {
 			}
 		}
 	}
-
+	componentWillUnmount() {
+		this.props.onUnload();
+	}
   render() {
 		const email = this.props.email.value;
     const password = this.props.password.value;

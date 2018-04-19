@@ -27,6 +27,7 @@ function generateToken(req, GUID, opts) {
         auth:  GUID,
         agent: req.headers['user-agent']
     }, secret, { expiresIn: opts.expires || expiresDefault });
+		console.log('token generated: ', token);
     return token;
 }
 
@@ -35,16 +36,16 @@ function generateAndStoreToken(req, user, opts) {
     var token  = generateToken(req, GUID, opts);
     var record = {
         key: token,
-        valid : true,
-        created_at : new Date().getTime()
-    }
-
+        valid: true,
+        created_at: new Date().getTime()
+    };
     user.set('token', record);
     user.save(function (err, user) {
+			console.log('user.save token', err, user);
         if (err) return err;
     });
-		
-		return token;
+
+		return record;
 }
 
 function verify(token) {

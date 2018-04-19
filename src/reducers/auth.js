@@ -66,7 +66,7 @@ export default (state = defaultState, action) => {
     case HANDLE_AJAX_ERROR:
       return {...state, inProgress: false, errors: action.payload.errors};
     default:
-      return defaultState;
+      return {...state};
   }
   return state;
 };

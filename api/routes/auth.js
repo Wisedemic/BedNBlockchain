@@ -31,9 +31,7 @@ auth.post('/login', function(req, res, next) {
 		req.logIn(user, function (err) {
 		    if (err) return next(err);
 				console.log('req.login successful!');
-
-					console.log(req.user);
-					
+				console.log(req.user);
 				const payload = {user: {
 					email: user.email,
 					updated_at: user.updated_at,
@@ -47,7 +45,29 @@ auth.post('/login', function(req, res, next) {
 
 // Check Token for current Users request.
 auth.get('/', function(req, res, next) {
-	res.json({payload: {user: {name: 'hi'}}})
+	if (!req.headers.authorization && !req.headers.authorization.split(' ')[0] === 'Token') {
+		res.json({error: true, payload: {errors: 'This request did not have a valid token!'}})
+	} else {
+		let token = req.headers.authorization.split(' ')[1];
+		Users
+			.findOne({ 'token.key': token })
+			.lean()
+			.exec(function (err, user) {
+			if (err) {
+				console.log(err, user);
+				res.status(200).send({});
+				// res.json({error: true, payload: {errors: 'Token not associated to a User!'}});
+			}
+			if (user) {
+				console.log(err, user);
+				res.json({payload: {user}});
+			} else {
+				console.log(err, user);
+				res.status(200).send({});
+				// res.json({error: true, payload: {errors: 'Token not associated to a User!'}});
+			}
+		});
+	}
 });
 
 // Register a new User
@@ -91,6 +111,7 @@ auth.post('/signup', function(req, res, next) {
 							created_at: user.created_at,
 							token: helpers.generateAndStoreToken(req, user)
 						}}
+						console.log(user)
 						return res.json({payload});
 					} else {
 						console.log('req.login errors: ', err);

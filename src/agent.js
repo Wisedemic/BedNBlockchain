@@ -30,13 +30,11 @@ const Auth = {
   current: () =>
     requests.get('/auth'),
   login: (email, password) =>
-    requests.post('/auth/login', {email, password }),
+    requests.post('/auth/login', {email, password}),
   signup: (email, password, passwordConfirm) =>
-    requests.post('/auth/signup', {email, password, passwordConfirm }),
+    requests.post('/auth/signup', {email, password, passwordConfirm}),
   save: user =>
-    requests.put('/user', { user }),
-  logout: () =>
-    requests.post('/auth/logout')
+    requests.put('/user', {user})
 };
 
 export default {

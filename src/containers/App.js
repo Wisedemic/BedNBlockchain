@@ -7,6 +7,7 @@ import Header from './Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Listings from './pages/Listings';
 import Four_Oh_Four from '../components/404';
 
 import { APP_LOAD, REDIRECT } from '../actions';
@@ -25,8 +26,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: (payload, token) =>
-    dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
+  onLoad: (payload, token) => {
+		console.log(token, payload);
+	  dispatch({ type: APP_LOAD, payload, token, skipTracking: true })
+	},
   onRedirect: () =>
     dispatch({ type: REDIRECT })
 });
@@ -61,6 +64,7 @@ class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />
+						<Route exact path="/listings" component={Listings} />
             <Route component={Four_Oh_Four} />
           </Switch>
         </div>
