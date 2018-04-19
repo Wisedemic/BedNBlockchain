@@ -37,7 +37,13 @@ const Auth = {
     requests.put('/user', {user})
 };
 
+const Rooms = {
+  all: () => requests.get('/rooms/all'),
+  getRoom: (id) => requests.get('/rooms/'+id)
+}
+
 export default {
   Auth,
+  Rooms,
   setToken: _token => { token = _token; }
 };

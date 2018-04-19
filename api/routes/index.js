@@ -28,11 +28,13 @@ module.exports = function(app) {
 
 	// Define Exports
 	const exports = {
-		auth: require('./auth')
+		auth: require('./auth'),
+		rooms: require('./rooms')
 	};
 
 	// Define All Other Routes Here
 	app.use('/api/auth/', exports.auth);
+	app.use('/api/rooms/', exports.rooms);
 
   // Handle 404's (Final Route)
 	app.use(function(req, res, next) {
