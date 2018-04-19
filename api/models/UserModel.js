@@ -8,14 +8,12 @@ mongoose.Promise = global.Promise;
 var bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
 
-mongoose.Promise = global.Promise;
-
 // Define User Schema
 var UserSchema = new Schema({
 	token: {
 		key: String,
-		valid: Boolean,
-		created_at: Date
+		valid: {type: Boolean, select: false},
+		created_at: {type: Date, select: false}
 	},
 	firstname:	{ type: String, trim: true },
 	lastname:	{ type: String, trim: true },

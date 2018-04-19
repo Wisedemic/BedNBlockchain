@@ -32,11 +32,12 @@ auth.post('/login', function(req, res, next) {
 		    if (err) return next(err);
 				console.log('req.login successful!');
 				console.log(req.user);
+				const token = helpers.generateAndStoreToken(req, user);
 				const payload = {user: {
 					email: user.email,
 					updated_at: user.updated_at,
 					created_at: user.created_at,
-					token: helpers.generateAndStoreToken(req, user)
+					token: token.key
 				}}
 				return res.json({payload});
 		});
