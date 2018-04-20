@@ -10,6 +10,7 @@ import Signup from './pages/Signup';
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
 import YourRooms from './pages/YourRooms';
+import AddRooms from './pages/AddRooms';
 import Bookings from './pages/Bookings';
 import Four_Oh_Four from '../components/404';
 
@@ -69,7 +70,7 @@ class App extends React.Component {
             <Route exact path="/room/:roomId" component={Room} />
             <Route exact path="/bookings" component={Bookings} />
             <Route exact path="/your-rooms" component={YourRooms} />
-            <Route exact path="/your-rooms/add" component={YourRooms} />
+            <Route exact path="/your-rooms/add" component={AddRooms} />
             <Route component={Four_Oh_Four} />
           </Switch>
         </div>
