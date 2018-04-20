@@ -7,11 +7,11 @@ mongoose.Promise = global.Promise;
 // Define User Schema
 var RoomsSchema = new Schema({
   title: { type: String, required: [true, 'A title is required!']},
+  description: String,
+  features: String,
   booked: Boolean,
-  // price: {},
-  // owner_id: {//mongoose model.id schema},
-  // image: {},
-  description: { type: String },
+  numGuests: Number,
+  price: Number,
   location: {
     lat: Number,
     lng: Number,
@@ -20,8 +20,11 @@ var RoomsSchema = new Schema({
     start: Date,
     end: Date
   },
+  // banner: {},
+  // gallery: [],
   created_at: Date,
 	updated_at: Date
+
 });
 
 // Export Models

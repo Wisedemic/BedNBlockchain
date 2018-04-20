@@ -26,7 +26,6 @@ const mapDispatchToProps = dispatch => ({
 class Rooms extends Component {
   componentDidMount() {
     this.props.onLoad();
-    console.log(this);
   }
 
   componentWillUnmount() {
@@ -34,9 +33,6 @@ class Rooms extends Component {
   }
 
   render() {
-    // if (this.props.match.path.split['/'][1]) {
-    //
-    // }
     return (
 			<section id="rooms" className="hero is-light is-fullheight">
         <div className="hero-body has-bg-img">

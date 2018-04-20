@@ -42,7 +42,7 @@ const NavButtons = props => {
               </Link>
             </p>
             <p className="control">
-              <Link className="button is-outlined is-danger" to="/rooms/add">
+              <Link className="button is-outlined is-danger" to="/your-rooms/add">
                 <span className="icon">
                   <i className="fa fa-plus"></i>
                 </span>
@@ -56,6 +56,12 @@ const NavButtons = props => {
             <Avatar avatar={props.currentUser.avatar} />
           </a>
           <div className="navbar-dropdown is-right is-boxed">
+            <Link className="navbar-item" to="/your-rooms">
+              Your Rooms
+            </Link>
+            <Link className="navbar-item" to="/bookings">
+              Your Bookings
+            </Link>
             <Link className="navbar-item" to="/profile/">
               Profile
             </Link>
@@ -94,8 +100,7 @@ const NavButtons = props => {
 
 class Header extends Component {
   constructor(props) {
-    super(props);
-
+    super(props)
     this.state = {
       toggled: false
     }
@@ -107,6 +112,7 @@ class Header extends Component {
       return {toggled: !prevState.toggled};
     });
   }
+
   render() {
     return (
       <nav className="navbar is-fixed-top">

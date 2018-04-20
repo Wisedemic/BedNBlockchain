@@ -9,6 +9,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
+import YourRooms from './pages/YourRooms';
+import Bookings from './pages/Bookings';
 import Four_Oh_Four from '../components/404';
 
 import { APP_LOAD, REDIRECT } from '../actions';
@@ -37,7 +39,6 @@ const mapDispatchToProps = dispatch => ({
 class App extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
-      // this.context.router.replace(nextProps.redirectTo);
       store.dispatch(push(nextProps.redirectTo));
       this.props.onRedirect();
     }
@@ -64,8 +65,11 @@ class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />
-						<Route exact path="/rooms" component={Rooms} />
-            <Route path="/room/:roomId" component={Room} />
+            <Route exact path="/rooms" component={Rooms} />
+            <Route exact path="/room/:roomId" component={Room} />
+            <Route exact path="/bookings" component={Bookings} />
+            <Route exact path="/your-rooms" component={YourRooms} />
+            <Route exact path="/your-rooms/add" component={YourRooms} />
             <Route component={Four_Oh_Four} />
           </Switch>
         </div>

@@ -9,7 +9,7 @@ import {
 } from '../../actions';
 
 const mapStateToProps = state => ({
-  // rooms: state.rooms
+  ...state.rooms
 });
 
 const mapDispatchToProps = dispatch => ({
