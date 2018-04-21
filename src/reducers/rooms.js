@@ -35,6 +35,6 @@ export default (state = defaultState, action) => {
     case YOURROOMS_PAGE_UNLOADED:
       return {};
     default:
-      return state;
+      return {};
   }
 };
