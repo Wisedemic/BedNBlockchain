@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class Home extends Component {
-  componentDidlMount() {
+  componentDidMount() {
     this.props.onLoad();
   }
 

@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import common from './common';
 import home from './home';
 import rooms from './rooms';
-import addRoom from './addRoom';
+import roomEditor from './roomEditor';
 // import profile from './profile';
 // import settings from './settings';
 import { routerReducer } from 'react-router-redux';
@@ -13,7 +13,7 @@ export default combineReducers({
   common,
   home,
   rooms,
-  addRoom,
+  roomEditor,
   // profile,
   // settings,
   router: routerReducer

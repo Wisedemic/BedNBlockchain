@@ -7,7 +7,9 @@ import Field from '../../components/Field';
 
 import {
 	LOGIN,
-	UPDATE_FIELD_AUTH,
+	LOGIN_PAGE_LOADED,
+	LOGIN_PAGE_UNLOADED,
+	UPDATE_AUTH_FIELD,
 	FIELD_ERROR,
 	CLOSE_ERROR
 } from '../../actions';
@@ -21,6 +23,10 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
+	onLoad: () => {
+		console.log('iran');
+		dispatch({ type: LOGIN_PAGE_LOADED }) },
+	unLoad: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
 	onChangeEmail: value => {
 		const key = 'email';
 		if (value.length === 0) {
@@ -40,7 +46,7 @@ const mapDispatchToProps = dispatch => ({
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: value })
+			dispatch({ type: UPDATE_AUTH_FIELD, key: key, value: value })
 		}
 	},
   onChangePassword: value => {
@@ -62,7 +68,7 @@ const mapDispatchToProps = dispatch => ({
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_FIELD_AUTH, key: key, value: value })
+			dispatch({ type: UPDATE_AUTH_FIELD, key: key, value: value })
 		}
 	},
 	handleSubmit: (email, password) => {
@@ -77,7 +83,6 @@ const mapDispatchToProps = dispatch => ({
 export class Login extends Component {
 	constructor() {
 		super();
-		this.disabled = true;
 
     // Grab the input on input Change Events
 		this.onChangeEmail = ev => this.props.onChangeEmail(ev.target.value);
@@ -86,20 +91,21 @@ export class Login extends Component {
 		// Form Submit Handling
 		this.submitForm = (email, password, passwordConfirm) => ev => {
 			ev.preventDefault();
-			if (this.props.email.valid && this.props.password.valid) {
-				this.props.handleSubmit(email, password);
-			}
+			this.props.handleSubmit(email, password);
 		}
+	}
+
+	componentWillMount() {
+		this.props.onLoad();
+	}
+
+	componentWillUnmount() {
+		this.props.unLoad();
 	}
 
   render() {
 		const email = this.props.email.value;
     const password = this.props.password.value;
-		if (this.props.email.valid && this.props.password.valid) {
-			this.disabled = false;
-		} else {
-			this.disabled = true;
-		}
     return (
       <section id="signup" className="hero is-light is-fullheight">
         <div className="hero-body">
@@ -133,8 +139,8 @@ export class Login extends Component {
 										<button
 											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '')}
 											onClick={this.submitForm}
-											disabled={this.disabled ? 'disabled' : false}
-											>
+											disabled={(this.props.email.valid && this.props.password.valid) ? false : 'disabled'}
+										>
 											Login
 										</button>
                   </p>

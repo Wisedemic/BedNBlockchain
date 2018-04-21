@@ -1,9 +1,13 @@
 import {
   LOGIN,
   SIGNUP,
+	LOGIN_PAGE_LOADED,
+	LOGIN_PAGE_UNLOADED,
+	SIGNUP_PAGE_LOADED,
+	SIGNUP_PAGE_UNLOADED,
   ASYNC_START,
   ASYNC_END ,
-  UPDATE_FIELD_AUTH,
+  UPDATE_AUTH_FIELD,
   FIELD_ERROR,
   CLOSE_ERROR,
   HANDLE_AJAX_ERROR
@@ -25,7 +29,11 @@ const defaultState = {
 };
 
 export default (state = defaultState, action) => {
+	console.log(action, Date.now());
   switch (action.type) {
+		case LOGIN_PAGE_LOADED:
+		case SIGNUP_PAGE_LOADED:
+			return defaultState;
     case LOGIN:
     case SIGNUP:
       return {
@@ -54,7 +62,7 @@ export default (state = defaultState, action) => {
           valid: false
         }
       };
-    case UPDATE_FIELD_AUTH:
+    case UPDATE_AUTH_FIELD:
       return { ...state,
         [action.key]: {
           value: action.value,
@@ -65,8 +73,11 @@ export default (state = defaultState, action) => {
       };
     case HANDLE_AJAX_ERROR:
       return {...state, inProgress: false, errors: action.payload.errors};
+		case LOGIN_PAGE_UNLOADED:
+		case SIGNUP_PAGE_UNLOADED:
+			return defaultState;
     default:
-      return {...state};
+      return state;
   }
   return state;
 };
