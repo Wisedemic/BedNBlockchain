@@ -9,9 +9,7 @@ import {
 } from '../../actions';
 
 const mapStateToProps = state => ({
-  appName: state.common.appName,
-  token: state.common.token,
-  rooms: state.rooms
+  roomsList: state.rooms.roomsList
 });
 
 const mapDispatchToProps = dispatch => ({

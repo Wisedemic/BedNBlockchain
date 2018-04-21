@@ -116,7 +116,7 @@ class YourRooms extends Component {
         <section id="rooms" className="hero is-light is-bold is-fullheight">
           <div className="hero-body">
             <div className="container">
-              <h2 className="title is-2 has-text-centered">Add A Room</h2>
+              <h2 className="title is-2">Add A Room</h2>
               <div className="box">
                 <form onSubmit={this.submitForm(title, desc)}>
   								<Field
@@ -142,7 +142,7 @@ class YourRooms extends Component {
   								<div className="field">
   									<p className="control">
   										<button
-  											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '')}
+  											className={'button is-success' + (this.props.inProgress ? ' is-loading': '') + (this.disabled ? ' is-outlined' : '')}
   											onClick={this.submitForm}
   											disabled={this.disabled ? 'disabled' : false}
   											>

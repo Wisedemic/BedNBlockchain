@@ -14,3 +14,6 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover; }
+
+.box {
+  background: rgba(255, 255, 255, 0.5) !important; }

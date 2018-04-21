@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import BulmaInput from './Input';
 
 const Label = props => {
+	if (!props.label) return null;
   if (props.label.length > 0 ) {
     return (
       <label className="label">{props.label}</label>
     );
-  } else {
-    return null;
-  }
+	}
+	return null;
 }
 
 const Message = props => {

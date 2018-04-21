@@ -23,7 +23,7 @@ export default (state = defaultState, action) => {
     case ROOMS_PAGE_LOADED:
       return {
         ...state,
-        list: action.payload.rooms ? action.payload.rooms : []
+        roomsList: action.payload.rooms ? action.payload.rooms : []
       };
     case YOURROOMS_PAGE_LOADED:
       return {

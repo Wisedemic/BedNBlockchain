@@ -36,7 +36,34 @@ rooms.get('/all', function(req, res, next) {
       const payload = {
         rooms: rooms
       };
-      res.send({payload})
+      res.send({payload});
+    }
+  });
+});
+
+
+// Check Token for current Users request.
+rooms.post('/add', function(req, res, next) {
+	const roomData = {
+		title: req.body.title,
+		description: req.body.desc
+	};
+	console.log(roomData);
+	if (!roomData.title) return res.send('A title is required!');
+	if (!roomData.description) return res.send('A description is required!');
+	Rooms.create(roomData, function(err, room) {
+    console.log(err, room);
+    if (err || !room) {
+      res.send('WOOPS');
+    } else {
+			room.save(function(err) {
+				if (err) res.send('Idk');
+				const payload = {
+					success: true,
+	        room: room
+	      };
+	      res.send({payload});
+			})
     }
   });
 });

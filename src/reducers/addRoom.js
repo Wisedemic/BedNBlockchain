@@ -1,4 +1,5 @@
 import {
+	ADD_ROOM,
   ADD_ROOM_PAGE_LOADED,
   ADD_ROOM_PAGE_UNLOADED,
   ADD_ROOM_FIELD_ERROR,
@@ -19,6 +20,10 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+		case ADD_ROOM:
+			return {
+				...state
+			};
     case ADD_ROOM_PAGE_UNLOADED:
       return {...state};
     case ADD_ROOM_PAGE_LOADED:

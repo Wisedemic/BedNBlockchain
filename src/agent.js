@@ -39,6 +39,7 @@ const Auth = {
 
 const Rooms = {
   all: () => requests.get('/rooms/all'),
+	add: (title, desc) => requests.post('/rooms/add', {title, desc}),
   getRoom: (id) => requests.get('/rooms/'+id)
 }
 
