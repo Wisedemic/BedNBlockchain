@@ -56,11 +56,8 @@ const NavButtons = props => {
             <Avatar avatar={props.currentUser.avatar} />
           </a>
           <div className="navbar-dropdown is-right is-boxed">
-            <Link className="navbar-item" to="/your-rooms">
-              Your Rooms
-            </Link>
             <Link className="navbar-item" to="/bookings">
-              Your Bookings
+              Your Reservations
             </Link>
             <Link className="navbar-item" to="/profile/">
               Profile
@@ -132,7 +129,21 @@ class Header extends Component {
         </div>
 
         <div id="navbarMenu" className={'navbar-menu' + (this.state.toggled ? ' is-active' : '')}>
-          <div className="navbar-start"></div>
+          <div className="navbar-start">
+						<div class="navbar-item has-dropdown is-hoverable">
+			        <a className="navbar-link" href="/documentation/overview/start/">
+			          Rooms
+			        </a>
+			        <div className="navbar-dropdown is-boxed">
+			          <Link className="navbar-item" to="/rooms">
+			            Browse
+			          </Link>
+								<Link className="navbar-item" to="/your-rooms">
+									Your Rooms
+								</Link>
+			        </div>
+			      </div>
+					</div>
           <NavButtons
             appLoaded={this.props.appLoaded}
             handleLogout={this.props.handleLogout}
