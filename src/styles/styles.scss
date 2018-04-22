@@ -39,3 +39,43 @@
 .box {
 	background: rgba(255, 255, 255, 0.5) !important;
 }
+
+footer {
+	padding: 1.5rem;
+	background-color: #fff;
+
+	.title {
+		color: #363636;
+	}
+	.level-item {
+		flex-direction: column;
+		p {
+			color: #363636;
+		}
+		a {
+			color: #209cee;
+			i {
+				font-size: 24px;
+				&:active,
+				&:hover {
+					color: #209cee;
+				}
+			}
+			&:active,
+			&:hover,
+			i {
+				color: #363636;
+			}
+		}
+	}
+
+	.content p {
+		color: black;
+	}
+	a {
+		color: #209cee;
+	}
+	a:hover {
+		color: #066db1;
+	}
+}

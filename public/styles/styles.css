@@ -31,3 +31,28 @@
 
 .box {
   background: rgba(255, 255, 255, 0.5) !important; }
+
+footer {
+  padding: 1.5rem;
+  background-color: #fff; }
+  footer .title {
+    color: #363636; }
+  footer .level-item {
+    flex-direction: column; }
+    footer .level-item p {
+      color: #363636; }
+    footer .level-item a {
+      color: #209cee; }
+      footer .level-item a i {
+        font-size: 24px; }
+        footer .level-item a i:active, footer .level-item a i:hover {
+          color: #209cee; }
+      footer .level-item a:active, footer .level-item a:hover,
+      footer .level-item a i {
+        color: #363636; }
+  footer .content p {
+    color: black; }
+  footer a {
+    color: #209cee; }
+  footer a:hover {
+    color: #066db1; }

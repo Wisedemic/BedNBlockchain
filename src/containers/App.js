@@ -74,6 +74,26 @@ class App extends React.Component {
 						<Route exact path="/your-rooms/edit" component={RoomEditor} />
             <Route component={Four_Oh_Four} />
           </Switch>
+					<footer className="footer">
+					  <div className="container has-text-centered">
+							<nav className="level">
+								<div className="level-item has-text-centered">
+									<h4 className="subtitle is-4">Created By</h4>
+									<br />
+									<p>Tristan Navarrete</p>
+									<a href="https://tristannavarrete.com/">{'https://tristannavarrete.com/'}</a>
+									<a href="https://github.com/Wisedemic/"><i className="fa fa-github"></i></a>
+								</div>
+								<div className="level-item has-text-centered">
+									<h4 className="subtitle is-4">Made With</h4>
+									<br />
+									<p className="content">
+										React, Redux, Express.js, Mongoose.js, Passport.js, Bulma.io
+									</p>
+								</div>
+							</nav>
+						</div>
+					</footer>
         </div>
       );
     }
