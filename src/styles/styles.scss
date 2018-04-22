@@ -9,15 +9,28 @@
 	}
 }
 
-#home .has-bg-img {
-	background: url("/public/banner.jpg") no-repeat center center fixed;
+#home {
+	.title,
+	.subtitle {
+		color: white;
+	}
 }
 
-.has-bg-img {
+.banner {
+	width: 100%;
+	margin-top: 0.5rem;
+	height: 100%;
+	background-position: center top;
+	position: absolute;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+	-webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
 }
 
 .box {

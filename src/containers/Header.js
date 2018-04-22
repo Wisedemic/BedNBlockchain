@@ -52,9 +52,9 @@ const NavButtons = props => {
           </div>
         </div>
 	      <div className="navbar-item has-dropdown is-hoverable">
-          <a className="navbar-link">
+          <p className="navbar-link">
             <Avatar avatar={props.currentUser.avatar} />
-          </a>
+          </p>
           <div className="navbar-dropdown is-right is-boxed">
             <Link className="navbar-item" to="/bookings">
               Your Reservations
@@ -130,17 +130,17 @@ class Header extends Component {
 
         <div id="navbarMenu" className={'navbar-menu' + (this.state.toggled ? ' is-active' : '')}>
           <div className="navbar-start">
-						<div class="navbar-item has-dropdown is-hoverable">
-			        <a className="navbar-link" href="/documentation/overview/start/">
+						<div className="navbar-item has-dropdown is-hoverable">
+			        <p className="navbar-link">
 			          Rooms
-			        </a>
+			        </p>
 			        <div className="navbar-dropdown is-boxed">
 			          <Link className="navbar-item" to="/rooms">
 			            Browse
 			          </Link>
-								<Link className="navbar-item" to="/your-rooms">
+								{this.props.currentUser ? (<Link className="navbar-item" to="/your-rooms">
 									Your Rooms
-								</Link>
+								</Link>) : null}
 			        </div>
 			      </div>
 					</div>

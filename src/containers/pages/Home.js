@@ -1,5 +1,6 @@
 import React, {	Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import {
   HOME_PAGE_LOADED,
@@ -30,12 +31,31 @@ class Home extends Component {
   }
 
   render() {
+		console.log(this.props);
     return (
       <section id="home" className="hero is-light is-fullheight">
-        <div className="hero-body has-bg-img" style={{
-						backgroundImage: 'url(' + Banner + ')'
-					}}>
-          <h2 className="title is-2">Homepage</h2>
+				<div className="banner" style={{backgroundImage: 'url('+Banner+')'}}></div>
+				<div className="hero-body">
+					<div className="container has-text-centered">
+	          <h1 className="title is-1">Find a Room, or List One</h1>
+						<h4 className="subtitle is-4">{this.props.appName} does it all!</h4>
+						<div className="columns is-centered">
+							<div className="column is-narrow">
+								<div className="field has-addons">
+								  <p className="control">
+								    <Link className="button is-info is-medium" to="/rooms">
+								      <span>Book Now</span>
+								    </Link>
+								  </p>
+								  <p className="control">
+								    <Link className="button is-danger is-medium" to={(this.props.token > 16) ? '/your-rooms/add' : '/signup'}>
+								      <span>List A Property</span>
+								    </Link>
+								  </p>
+								</div>
+							</div>
+						</div>
+					</div>
         </div>
       </section>
     );
