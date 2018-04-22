@@ -35,11 +35,16 @@ class YourRooms extends Component {
 
   render() {
     return (
-			<section id="rooms" className="hero is-info is-bold is-fullheight">
-        <div className="hero-body">
-          <h2 className="title is-2">Your Rooms</h2>
-        </div>
-      </section>
+			<section id="yourRooms" className="hero is-info is-bold is-fullheight">
+				<div className="hero-body">
+					<div className="container has-text-centered">
+						<h2 className="title is-2">Your Rooms</h2>
+						<div className="box">
+							<code>Your Room Data</code>
+						</div>
+					</div>
+				</div>
+			</section>
     );
   }
 }

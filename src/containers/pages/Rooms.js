@@ -32,11 +32,18 @@ class Rooms extends Component {
 
   render() {
     return (
-			<section id="rooms" className="hero is-light is-fullheight">
-        <div className="hero-body has-bg-img">
-          <h2 className="title is-2">Browse Rooms</h2>
-        </div>
-      </section>
+			<section id="browse" className="hero is-fullheight">
+				<div className="hero-body">
+					<div className="container has-text-centered">
+						<h2 className="title is-2">Browse Rooms</h2>
+						<div className="columns">
+							<div className="column">Room #1</div>
+							<div className="column">Room #2</div>
+							<div className="column">Room #3</div>
+						</div>
+					</div>
+				</div>
+			</section>
     );
   }
 }

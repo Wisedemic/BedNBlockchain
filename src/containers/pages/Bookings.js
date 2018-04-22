@@ -10,7 +10,7 @@ import {
 
 const mapStateToProps = state => ({
   ...state.rooms,
-	
+
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -32,11 +32,16 @@ class Bookings extends Component {
 
   render() {
     return (
-			<section id="rooms" className="hero is-info is-bold is-fullheight">
-        <div className="hero-body">
-          <h2 className="title is-2">Bookings</h2>
-        </div>
-      </section>
+			<section id="browse" className="hero is-info is-bold is-fullheight">
+				<div className="hero-body">
+					<div className="container has-text-centered">
+						<h2 className="title is-2">Bookings</h2>
+						<div className="box">
+							<code>Your Bookings Data</code>
+						</div>
+					</div>
+				</div>
+			</section>
     );
   }
 }
