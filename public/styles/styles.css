@@ -10,6 +10,9 @@
 #home .subtitle {
   color: white; }
 
+#home .button {
+  font-weight: 600; }
+
 .banner {
   width: 100%;
   margin-top: 0.5rem;
