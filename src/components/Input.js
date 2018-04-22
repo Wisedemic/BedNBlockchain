@@ -25,23 +25,49 @@ class BulmaInput extends Component {
     this.setState({hover: false})
   }
   render() {
-    return (
-      <input
-        type={this.props.type}
-        className={'input' +
-          (this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
-          (this.state.focus ? ' is-focused' : '') +
-          (this.state.hover ? ' is-hovered' : '')
-        }
-        value={this.props.value}
-        placeholder={this.props.placeholder}
-        onChange={this.props.onChange}
-        onMouseOver={this.onHover}
-        onMouseLeave={this.offHover}
-        onBlur={this.onBlur}
-        onFocus={this.onFocus}
-        />
-    );
+		switch (this.props.type) {
+			case 'text':
+			case 'password':
+			case 'email':
+			case 'date':
+				return (
+					<input
+						type={this.props.type}
+						className={'input' +
+							(this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
+							(this.state.focus ? ' is-focused' : '') +
+							(this.state.hover ? ' is-hovered' : '')
+						}
+						value={this.props.value}
+						placeholder={this.props.placeholder}
+						onChange={this.props.onChange}
+						onMouseOver={this.onHover}
+						onMouseLeave={this.offHover}
+						onBlur={this.onBlur}
+						onFocus={this.onFocus}
+						/>
+				);
+			case 'textarea':
+				return (
+					<textarea
+						type={this.props.type}
+						className={'textarea' +
+							(this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
+							(this.state.focus ? ' is-focused' : '') +
+							(this.state.hover ? ' is-hovered' : '')
+						}
+						value={this.props.value}
+						placeholder={this.props.placeholder}
+						onChange={this.props.onChange}
+						onMouseOver={this.onHover}
+						onMouseLeave={this.offHover}
+						onBlur={this.onBlur}
+						onFocus={this.onFocus}
+						/>
+				);
+			default:
+				return null;
+		}
   }
 }
 
