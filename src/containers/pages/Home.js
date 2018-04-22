@@ -40,7 +40,7 @@ class Home extends Component {
 						<div className="container has-text-centered">
 		          <h1 className="title is-1">Find a Room, or List One</h1>
 							<h4 className="subtitle is-4">{this.props.appName} does it all!</h4>
-							<div className="columns is-centered">
+							<div className="columns is-mobile is-centered">
 								<div className="column is-narrow">
 									<div className="field has-addons">
 									  <p className="control">

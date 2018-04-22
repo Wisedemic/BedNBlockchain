@@ -36,7 +36,7 @@ const NavButtons = props => {
             <p className="control">
               <Link className="button is-outlined is-info" to="/rooms/">
                 <span className="icon">
-                  <i className="fa fa-book"></i>
+                  <i className="fa fa-bed"></i>
                 </span>
                 <span>Book Now!</span>
               </Link>
@@ -44,7 +44,7 @@ const NavButtons = props => {
             <p className="control">
               <Link className="button is-outlined is-danger" to="/your-rooms/add">
                 <span className="icon">
-                  <i className="fa fa-plus"></i>
+                  <i className="fa fa-home"></i>
                 </span>
                 <span>List A Property</span>
               </Link>

@@ -15,11 +15,33 @@ import {
   CLOSE_ERROR
 } from '../../actions';
 
+const HomeTypes = [
+  'Entire Place',
+  'Private Room',
+  'Shared Room'
+];
+const PropertyTypes = [
+  'House',
+  'Bed and Breakfast',
+  'Bungalow',
+  'Chalet',
+  'Cottage',
+  'Guesthouse',
+  'Guest suite',
+  'Hotel',
+  'Resort',
+  'Loft',
+  'Townhouse',
+  'Villa'
+];
+
 const mapStateToProps = state => ({
   ...state,
 	mode: state.roomEditor.mode,
   title: state.roomEditor.title,
-  desc: state.roomEditor.desc
+  desc: state.roomEditor.desc,
+  propertyType: state.roomEditor.propertyType,
+  homeType: state.roomEditor.homeType
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -77,16 +99,44 @@ const mapDispatchToProps = dispatch => ({
 		} else {
 			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
 		}
-	}
+	},
+  onChangePropertyType: value => {
+    const key = 'propertyType';
+		if (!PropertyTypes.includes(value)) {
+			dispatch({
+				type: ROOMEDITOR_FIELD_ERROR,
+				key: key,
+				message: 'NO TAMPERING FIELDS!',
+				inputState: 'is-danger',
+				value: value
+			});
+		} else {
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+		}
+  },
+  onChangeHomeType: value => {
+    const key = 'homeType';
+    if (!HomeTypes.includes(value)) {
+			dispatch({
+				type: ROOMEDITOR_FIELD_ERROR,
+				key: key,
+				message: 'NO TAMPERING FIELDS!',
+				inputState: 'is-danger',
+				value: value
+			});
+		} else {
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+		}
+  }
 });
 
 class RoomEditor extends Component {
   constructor() {
     super();
-    this.disabled = true;
-
     this.onChangeTitle = ev => this.props.onChangeTitle(ev.target.value);
     this.onChangeDesc = ev => this.props.onChangeDesc(ev.target.value);
+    this.onChangePropertyType = ev => this.props.onChangePropertyType(ev.target.value);
+    this.onChangeHomeType = ev => this.props.onChangeHomeType(ev.target.value);
 
     this.submitForm = (title, desc) => ev => {
       ev.preventDefault();
@@ -135,6 +185,28 @@ class RoomEditor extends Component {
 									inputState={this.props.desc.inputState}
 									message={this.props.desc.message}
 								/>
+                <Field
+                  key={'propertyType'}
+                  label={'Property Type'}
+                  type={'select'}
+                  value={this.props.propertyType.value}
+                  opts={PropertyTypes}
+                  placeholder={'Please Select'}
+                  onChange={this.onChangePropertyType}
+                  inputState={this.props.propertyType.inputState}
+                  message={this.props.propertyType.message}
+                />
+                <Field
+                  key={'homeType'}
+                  label={'Home Type'}
+                  type={'select'}
+                  value={this.props.homeType.value}
+                  opts={HomeTypes}
+                  placeholder={'Please Select'}
+                  onChange={this.onChangeHomeType}
+                  inputState={this.props.homeType.inputState}
+                  message={this.props.homeType.message}
+                />
 								<div className="field">
 									<p className="control">
 										<button

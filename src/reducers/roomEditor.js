@@ -17,7 +17,9 @@ const defaultInputState = {
 const defaultState = {
 	mode: 'edit',
   title: {...defaultInputState},
-  desc: {...defaultInputState}
+  desc: {...defaultInputState},
+  propertyType: {...defaultInputState},
+	homeType: {...defaultInputState}
 };
 
 export default (state = defaultState, action) => {
