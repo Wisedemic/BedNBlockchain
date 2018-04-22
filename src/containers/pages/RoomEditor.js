@@ -24,10 +24,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (url) => {
-		const mode = () => {
-			if (url === '/your-room/add') return 'add';
-			if (url === '/your-room/edit') return 'edit';
-		};
+		const mode = (url === '/your-rooms/add') ? 'add' : 'edit';
     dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode })
   },
   onUnload: () =>
@@ -101,7 +98,7 @@ class RoomEditor extends Component {
   }
 
   componentDidMount() {
-		this.props.onLoad(this.props.match.path);
+		this.props.onLoad(this.props.match.url);
   }
 
   componentWillUnmount() {
@@ -133,7 +130,7 @@ class RoomEditor extends Component {
                   label={'Description'}
 									type={'textarea'}
 									value={this.props.desc.value}
-									placeholder={'This gorgeous home has everything you need ....'}
+									placeholder={'This gorgeous home has everything you need...'}
 									onChange={this.onChangeDesc}
 									inputState={this.props.desc.inputState}
 									message={this.props.desc.message}
@@ -141,7 +138,7 @@ class RoomEditor extends Component {
 								<div className="field">
 									<p className="control">
 										<button
-											className={'button is-success' + (this.props.inProgress ? ' is-loading': '') + (this.disabled ? ' is-outlined' : '')}
+											className={'button is-success' + (this.props.inProgress ? ' is-loading': '') + ((this.props.title.valid && this.props.desc.valid) ? '' : ' is-outlined')}
 											onClick={this.submitForm}
 											disabled={(this.props.title && this.props.desc.valid) ? false : 'disabled'}
 											>

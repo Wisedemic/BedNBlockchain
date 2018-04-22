@@ -51,7 +51,7 @@ export default (state = defaultState, action) => {
         }
       };
     case ROOMEDITOR_PAGE_UNLOADED:
-      return {};
+      return defaultState;
     default:
       return state;
   }

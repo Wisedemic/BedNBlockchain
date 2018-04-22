@@ -34,7 +34,7 @@ class Rooms extends Component {
     return (
 			<section id="rooms" className="hero is-light is-fullheight">
         <div className="hero-body has-bg-img">
-          <h2 className="title is-2">Rooms</h2>
+          <h2 className="title is-2">Browse Rooms</h2>
         </div>
       </section>
     );

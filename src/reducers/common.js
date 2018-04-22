@@ -29,7 +29,7 @@ export default (state = defaultState, action) => {
     case SIGNUP:
       return {
         ...state,
-        redirectTo: action.error ? null : '/',
+        redirectTo: action.error ? null : '/bookings',
         token: action.error ? null : action.payload.user.token.key,
         currentUser: action.error ? null : action.payload.user
       };
