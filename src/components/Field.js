@@ -29,16 +29,34 @@ class BulmaField extends Component {
     return (
       <div className="field">
         <Label label={this.props.label}/>
-        <p className={'control'}>
-          <BulmaInput
-            onChange={this.props.onChange}
-            type={this.props.type}
-            placeholder={this.props.placeholder}
-            value={this.props.value}
-            disabled={this.props.disabled}
-            inputState={this.props.inputState}
-          />
-        </p>
+
+				{this.props.type === 'select' ? (
+					<div className={'control'}>
+	          <BulmaInput
+	            onChange={this.props.onChange}
+							opts={this.props.opts}
+	            type={this.props.type}
+	            placeholder={this.props.placeholder}
+	            value={this.props.value}
+	            disabled={this.props.disabled}
+	            inputState={this.props.inputState}
+	          />
+				</div>
+				) :
+				(
+					<p className={'control'}>
+	          <BulmaInput
+	            onChange={this.props.onChange}
+							opts={this.props.opts}
+	            type={this.props.type}
+	            placeholder={this.props.placeholder}
+	            value={this.props.value}
+	            disabled={this.props.disabled}
+	            inputState={this.props.inputState}
+	          />
+	        </p>
+				)
+				}
         <Message inputState={this.props.inputState} message={this.props.message}/>
       </div>
     );

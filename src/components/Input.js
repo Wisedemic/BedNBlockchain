@@ -65,6 +65,32 @@ class BulmaInput extends Component {
 						onFocus={this.onFocus}
 						/>
 				);
+      case 'select':
+        return (
+          <div className={'select' +
+  						(this.props.inputState.length > 0 ? (' '+this.props.inputState) : '') +
+  						(this.state.focus ? ' is-focused' : '') +
+  						(this.state.hover ? ' is-hovered' : '')
+  					}
+            onMouseOver={this.onHover}
+            onMouseLeave={this.offHover}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
+          >
+            <select
+              defaultValue=""
+  						value={this.props.value}
+  						onChange={this.props.onChange}
+              >
+              {this.props.placeholder.length > 0 ? (<option value="" disabled>{this.props.placeholder}</option>) : null}
+              {this.props.opts.map((key, val) => {
+                return (
+                  <option key={val}>{key}</option>
+                );
+              })};
+            </select>
+          </div>
+        );
 			default:
 				return null;
 		}
