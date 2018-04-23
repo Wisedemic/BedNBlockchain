@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 class Loading extends Component {
-  constructor(props) {
-    super(props);
-
-  }
   render() {
 		return (
       <section id="loader" className="hero is-fullheight">
