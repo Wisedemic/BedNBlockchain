@@ -136,6 +136,25 @@ const mapDispatchToProps = dispatch => ({
     const key = 'location';
   }, onChangePrice: (value) => {
     const key = 'price';
+    if (!value || value === 0) {
+			dispatch({
+				type: ROOMEDITOR_FIELD_ERROR,
+				key: key,
+				message: 'A price is required!',
+				inputState: 'is-danger',
+				value: value
+			});
+		} else if (value > 100000) {
+  			dispatch({
+  				type: ROOMEDITOR_FIELD_ERROR,
+  				key: key,
+  				message: 'Price is too high!',
+  				inputState: 'is-warning',
+  				value: value
+  			});
+    } else {
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+		}
   }
 });
 
@@ -179,7 +198,7 @@ class RoomEditor extends Component {
     return (
       <section id="rooms" className="hero is-light is-bold is-fullheight">
         <div className="hero-body">
-          <div className="container">
+          <div className="container has-text-centered">
             <h2 className="title is-2">Add A Room</h2>
             <div className="box">
               <form onSubmit={this.submitForm(title, desc, propertyType, homeType, location, price, guests)}>
@@ -188,6 +207,7 @@ class RoomEditor extends Component {
 									type={'text'}
                   label={'Title'}
 									value={this.props.title.value}
+                  isHorizontal={true}
 									placeholder={'A Stunning Two Bedroom Home!'}
 									onChange={this.onChangeTitle}
 									inputState={this.props.title.inputState}
@@ -198,6 +218,7 @@ class RoomEditor extends Component {
                   label={'Description'}
 									type={'textarea'}
 									value={this.props.desc.value}
+                  isHorizontal={true}
 									placeholder={'This gorgeous home has everything you need...'}
 									onChange={this.onChangeDesc}
 									inputState={this.props.desc.inputState}
@@ -209,6 +230,7 @@ class RoomEditor extends Component {
                   type={'select'}
                   value={this.props.propertyType.value}
                   opts={PropertyTypes}
+                  isHorizontal={true}
                   placeholder={'Please Select'}
                   onChange={this.onChangePropertyType}
                   inputState={this.props.propertyType.inputState}
@@ -221,6 +243,7 @@ class RoomEditor extends Component {
                   value={this.props.homeType.value}
                   opts={HomeTypes}
                   placeholder={'Please Select'}
+                  isHorizontal={true}
                   onChange={this.onChangeHomeType}
                   inputState={this.props.homeType.inputState}
                   message={this.props.homeType.message}
@@ -228,9 +251,11 @@ class RoomEditor extends Component {
                 <Field
                   key={'location'}
                   label={'Location'}
-                  type={'text'}
-                  value={this.props.location.value}
-                  placeholder={'Enter the adress'}
+                  type={'location'}
+                  value={this.props.location.value.formatted_address}
+                  placeholder={'Type the address to search...'}
+                  isHorizontal={true}
+                  hasIconLeft={'search'}
                   onChange={this.onChangeLocation}
                   inputState={this.props.location.inputState}
                   message={this.props.location.message}
@@ -240,6 +265,9 @@ class RoomEditor extends Component {
                   label={'Price'}
                   type={'number'}
                   value={this.props.price.value}
+                  isHorizontal={true}
+                  hasAddonLeft={(<a className="button is-static">$</a>)}
+                  hasAddonRight={(<a className="button is-static">/ Day</a>)}
                   placeholder={'180'}
                   onChange={this.onChangePrice}
                   inputState={this.props.price.inputState}
