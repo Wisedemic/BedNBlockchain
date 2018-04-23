@@ -11,6 +11,8 @@ import {
   ROOMEDITOR_PAGE_LOADED,
   ROOMEDITOR_PAGE_UNLOADED,
   UPDATE_ROOMEDITOR_FIELD,
+	FETCH_GMAPS_RESULTS,
+	UPDATE_LOCATION_FROM_SUGGESTION,
   ROOMEDITOR_FIELD_ERROR,
   CLOSE_ERROR
 } from '../../actions';
@@ -50,10 +52,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: (url) => {
 		const mode = (url === '/your-rooms/add') ? 'add' : 'edit';
-    dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode })
+    dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode });
   },
-  onUnload: () =>
-    dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
+  onUnload: () => dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
   handleSubmit: (title, desc) => {
     const payload = agent.Rooms.add(title, desc);
     console.log('PAYLOAD', payload);
@@ -78,7 +79,7 @@ const mapDispatchToProps = dispatch => ({
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value });
 		}
 	},
   onChangeDesc: value => {
@@ -130,11 +131,32 @@ const mapDispatchToProps = dispatch => ({
 		} else {
 			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
 		}
-  }, onChangeGusts: (value, type) => {
+  },
+	onChangeGusts: (value, type) => {
     const key = 'guests';
-  }, onChangeLocation: (value) => {
+  },
+	onChangeLocation: (value) => {
     const key = 'location';
-  }, onChangePrice: (value) => {
+		if (value.length === 0) {
+			dispatch({
+				type: ROOMEDITOR_FIELD_ERROR,
+				key: key,
+				message: 'Location cannot be blank!',
+				inputState: 'is-danger',
+				value: value
+			});
+		} else {
+			const payload = agent.Maps.findAddress(value);
+			dispatch({ type: FETCH_GMAPS_RESULTS, payload });
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value });
+		}
+  },
+	onClickLocation: (key) => {
+		if (key) {
+			dispatch({ type: UPDATE_LOCATION_FROM_SUGGESTION, key });
+		}
+  },
+	onChangePrice: (value) => {
     const key = 'price';
     if (!value || value === 0) {
 			dispatch({
@@ -165,7 +187,8 @@ class RoomEditor extends Component {
     this.onChangeDesc = ev => this.props.onChangeDesc(ev.target.value);
     this.onChangePropertyType = ev => this.props.onChangePropertyType(ev.target.value);
     this.onChangeHomeType = ev => this.props.onChangeHomeType(ev.target.value);
-    this.onChangeLocation = ev => this.props.onChangeLocation(ev.target.value);
+		this.onChangeLocation = ev => this.props.onChangeLocation(ev.target.value);
+		this.onClickLocation = ev => this.props.onClickLocation(ev.target.value);
     this.onChangePrice = ev => this.props.onChangePrice(ev.target.value);
     this.onChangeGusts = ev => this.props.onChangeGuests(ev.target.value);
 
@@ -190,17 +213,18 @@ class RoomEditor extends Component {
     const title = this.props.title.value;
     const desc = this.props.desc.value;
     const propertyType = this.props.propertyType.value;
-    const homeType = this.props.homeType.value;
-    const guests = this.props.guests.value;
-    const location = this.props.location.value;
+		const homeType = this.props.homeType.value;
+		const location = this.props.location.value;
     const price = this.props.price.value;
+		const guests = this.props.guests.value;
 
     return (
       <section id="rooms" className="hero is-light is-bold is-fullheight">
         <div className="hero-body">
-          <div className="container has-text-centered">
+          <div className="container">
             <h2 className="title is-2">Add A Room</h2>
             <div className="box">
+							<ErrorList handleClose={this.props.closeError} errors={this.props.errors} />
               <form onSubmit={this.submitForm(title, desc, propertyType, homeType, location, price, guests)}>
 								<Field
 									key={'title'}
@@ -257,8 +281,10 @@ class RoomEditor extends Component {
                   isHorizontal={true}
                   hasIconLeft={'search'}
                   onChange={this.onChangeLocation}
+									onClick={this.onClickLocation}
                   inputState={this.props.location.inputState}
                   message={this.props.location.message}
+									results={this.props.location.results}
                 />
                 <Field
                   key={'price'}

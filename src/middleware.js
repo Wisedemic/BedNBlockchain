@@ -12,7 +12,6 @@ import {
 const promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
     store.dispatch({ type: ASYNC_START, subtype: action.type });
-
     const currentView = store.getState().viewChangeCounter;
     const skipTracking = action.skipTracking;
 
@@ -23,7 +22,7 @@ const promiseMiddleware = store => next => action => {
           return;
         }
         console.log('RESULT', res);
-        action.payload = res.payload;
+        action.payload = (res.payload || res.body);
         store.dispatch({ type: ASYNC_END, promise: action.payload });
 
         if (res.error) {

@@ -4,16 +4,24 @@ import _superagent from 'superagent';
 const superagent = superagentPromise(_superagent, global.Promise);
 
 const API_ROOT = 'http://localhost:3001/api';
-
+const GMAPS_ROOT = 'https://maps.googleapis.com/maps/api/geocode/';
 // const encode = encodeURIComponent;
 const responseBody = res => res.body;
 
 let token = null;
+let GMAPSKEY = 'AIzaSyAeUUJdV1tvsAu8J63PvZVFEQAKvg8thVI';
 const tokenPlugin = req => {
   if (token) {
     req.set('authorization', `Token ${token}`);
   }
 }
+
+const GMapsAPIRequest = {
+	post: address =>
+		superagent.post(`${GMAPS_ROOT}json?address=${address}&key=${GMAPSKEY}`),
+	get: address =>
+		superagent.get(`${GMAPS_ROOT}json?address=${address}&key=${GMAPSKEY}`)
+};
 
 const requests = {
   del: url =>
@@ -37,6 +45,13 @@ const Auth = {
     requests.put('/user', {user})
 };
 
+const Maps = {
+	findAddress: (value) => {
+		const json = encodeURIComponent(JSON.stringify(value));
+		return GMapsAPIRequest.get(json);
+	}
+}
+
 const Rooms = {
   all: () => requests.get('/rooms/all'),
 	add: (title, desc) => requests.post('/rooms/add', {title, desc}),
@@ -46,5 +61,6 @@ const Rooms = {
 export default {
   Auth,
   Rooms,
+	Maps,
   setToken: _token => { token = _token; }
 };

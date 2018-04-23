@@ -63,3 +63,20 @@ footer {
     color: #209cee; }
   footer a:hover {
     color: #066db1; }
+
+.or {
+  padding: 0.3rem; }
+
+.results {
+  position: absolute;
+  z-index: 5;
+  width: 100%;
+  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.2);
+  background: white; }
+  .results .suggestion {
+    padding: .3rem;
+    font-size: 14px;
+    border: 1px whitesmoke solid; }
+    .results .suggestion:hover {
+      cursor: pointer;
+      background: whitesmoke; }

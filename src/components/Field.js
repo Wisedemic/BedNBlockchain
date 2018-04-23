@@ -49,6 +49,7 @@ const FieldWrapper = props => {
 class BulmaField extends Component {
 
   render() {
+		console.log(this);
 		return (
 			<FieldWrapper
 				label={this.props.label ? this.props.label : null}
@@ -72,7 +73,18 @@ class BulmaField extends Component {
 						value={this.props.value}
 						disabled={this.props.disabled}
 						inputState={this.props.inputState}
+						results={this.props.results}
 					/>
+					{this.props.results ? (
+						<div className="results">
+							{this.props.results.map((result, key) => {
+								console.log(this);
+								return (<div key={key} className="suggestion" onClick={this.props.onClick}>{result.formatted_address}</div>);
+							}, this)}
+						</div>
+					) : (
+						<div className="results"></div>
+					) }
 					{this.props.hasIconLeft ? (
 						<span className={'icon is-left'}>
 							<i className={'fa fa-' + this.props.hasIconLeft}></i>
