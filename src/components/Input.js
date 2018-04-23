@@ -27,6 +27,7 @@ class BulmaInput extends Component {
   render() {
 		switch (this.props.type) {
 			case 'text':
+      case 'number':
 			case 'password':
 			case 'email':
 			case 'date':
@@ -67,8 +68,9 @@ class BulmaInput extends Component {
 				);
       case 'select':
         return (
-          <div className={'select' +
-  						(this.props.inputState.length > 0 ? (' '+this.props.inputState) : '') +
+          <div
+            className={'select' +
+  						((this.props.inputState.length > 0) ? (' '+this.props.inputState) : '') +
   						(this.state.focus ? ' is-focused' : '') +
   						(this.state.hover ? ' is-hovered' : '')
   					}
@@ -77,17 +79,11 @@ class BulmaInput extends Component {
             onBlur={this.onBlur}
             onFocus={this.onFocus}
           >
-            <select
-              defaultValue=""
-  						value={this.props.value}
-  						onChange={this.props.onChange}
-              >
-              {this.props.placeholder.length > 0 ? (<option value="" disabled>{this.props.placeholder}</option>) : null}
+            <select value={this.props.value} onChange={this.props.onChange}>
+              {this.props.placeholder.length > 0 ? (<option value="" disabled>{this.props.placeholder}</option>) : (<option value="" disabled></option>)}
               {this.props.opts.map((key, val) => {
-                return (
-                  <option key={val}>{key}</option>
-                );
-              })};
+                return (<option key={val}>{key}</option>);
+              })}
             </select>
           </div>
         );
