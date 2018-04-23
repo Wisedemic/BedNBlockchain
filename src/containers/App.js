@@ -96,28 +96,48 @@ class App extends React.Component {
           currentUser={this.props.currentUser}
           appLoaded={this.props.appLoaded}
         />
-        <AnimatedSwitch
-          atEnter={bounceTransition.atEnter}
-          atLeave={bounceTransition.atLeave}
-          atActive={bounceTransition.atActive}
-          mapStyles={mapStyles}
-          className="route-wrapper"
-        >
-          {this.props.appLoaded ? null : (
-            <Route component={Loading} />
-          )}
-          <Route exact path="/" component={Home} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/rooms" component={Rooms} />
-          <Route exact path="/room/:roomId" component={Room} />
-          <Route exact path="/bookings" component={Bookings} />
-          <Route exact path="/your-rooms" component={YourRooms} />
-          <Route exact path="/your-rooms/add" component={RoomEditor} />
-					<Route exact path="/your-rooms/edit" component={RoomEditor} />
-          <Route component={Four_Oh_Four} />
-        </AnimatedSwitch>
-				<footer className="footer">
+        {this.props.currentUser ? (
+          <AnimatedSwitch
+            atEnter={bounceTransition.atEnter}
+            atLeave={bounceTransition.atLeave}
+            atActive={bounceTransition.atActive}
+            mapStyles={mapStyles}
+            className="route-wrapper"
+          >
+            {this.props.appLoaded ? null : (
+              <Route component={Loading} />
+            )}
+            <Route exact path="/" component={Home} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/rooms" component={Rooms} />
+            <Route exact path="/room/:roomId" component={Room} />
+            <Route exact path="/bookings" component={Bookings} />
+            <Route exact path="/your-rooms" component={YourRooms} />
+            <Route exact path="/your-rooms/add" component={RoomEditor} />
+  					<Route exact path="/your-rooms/edit" component={RoomEditor} />
+            <Route component={Four_Oh_Four} />
+          </AnimatedSwitch>
+        ) : (
+          <AnimatedSwitch
+            atEnter={bounceTransition.atEnter}
+            atLeave={bounceTransition.atLeave}
+            atActive={bounceTransition.atActive}
+            mapStyles={mapStyles}
+            className="route-wrapper"
+          >
+            {this.props.appLoaded ? null : (
+              <Route component={Loading} />
+            )}
+            <Route exact path="/" component={Home} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/rooms" component={Rooms} />
+            <Route exact path="/room/:roomId" component={Room} />
+            <Route component={Four_Oh_Four} />
+          </AnimatedSwitch>
+        )}
+    		<footer className="footer">
 				  <div className="container has-text-centered">
 						<nav className="level">
 							<div className="level-item has-text-centered">
