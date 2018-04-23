@@ -19,7 +19,10 @@ const defaultState = {
   title: {...defaultInputState},
   desc: {...defaultInputState},
   propertyType: {...defaultInputState},
-	homeType: {...defaultInputState}
+	homeType: {...defaultInputState},
+	location: {...defaultInputState, value: {lat: 0, lng: 0, formatted_address: ''}},
+	price: {...defaultInputState},
+	guests: {...defaultInputState, value: {adults: 0, children: 0, infants: 0}}
 };
 
 export default (state = defaultState, action) => {

@@ -41,7 +41,10 @@ const mapStateToProps = state => ({
   title: state.roomEditor.title,
   desc: state.roomEditor.desc,
   propertyType: state.roomEditor.propertyType,
-  homeType: state.roomEditor.homeType
+  homeType: state.roomEditor.homeType,
+  location: state.roomEditor.location,
+  price: state.roomEditor.price,
+  guests: state.roomEditor.guests
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -127,6 +130,12 @@ const mapDispatchToProps = dispatch => ({
 		} else {
 			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
 		}
+  }, onChangeGusts: (value, type) => {
+    const key = 'guests';
+  }, onChangeLocation: (value) => {
+    const key = 'location';
+  }, onChangePrice: (value) => {
+    const key = 'price';
   }
 });
 
@@ -137,12 +146,15 @@ class RoomEditor extends Component {
     this.onChangeDesc = ev => this.props.onChangeDesc(ev.target.value);
     this.onChangePropertyType = ev => this.props.onChangePropertyType(ev.target.value);
     this.onChangeHomeType = ev => this.props.onChangeHomeType(ev.target.value);
+    this.onChangeLocation = ev => this.props.onChangeLocation(ev.target.value);
+    this.onChangePrice = ev => this.props.onChangePrice(ev.target.value);
+    this.onChangeGusts = ev => this.props.onChangeGuests(ev.target.value);
 
-    this.submitForm = (title, desc) => ev => {
+    this.submitForm = (title, desc, propertyType, homeType, location, price) => ev => {
       ev.preventDefault();
       // Don't send form if required fields aren't filled out.
       if (this.props.title.valid && this.props.desc.valid) {
-        this.props.handleSubmit(title, desc);
+        this.props.handleSubmit(title, desc, propertyType, homeType, location, price);
       }
     };
   }
@@ -158,13 +170,19 @@ class RoomEditor extends Component {
   render() {
     const title = this.props.title.value;
     const desc = this.props.desc.value;
+    const propertyType = this.props.propertyType.value;
+    const homeType = this.props.homeType.value;
+    const guests = this.props.guests.value;
+    const location = this.props.location.value;
+    const price = this.props.price.value;
+
     return (
       <section id="rooms" className="hero is-light is-bold is-fullheight">
         <div className="hero-body">
           <div className="container">
             <h2 className="title is-2">Add A Room</h2>
             <div className="box">
-              <form onSubmit={this.submitForm(title, desc)}>
+              <form onSubmit={this.submitForm(title, desc, propertyType, homeType, location, price, guests)}>
 								<Field
 									key={'title'}
 									type={'text'}
@@ -206,6 +224,26 @@ class RoomEditor extends Component {
                   onChange={this.onChangeHomeType}
                   inputState={this.props.homeType.inputState}
                   message={this.props.homeType.message}
+                />
+                <Field
+                  key={'location'}
+                  label={'Location'}
+                  type={'text'}
+                  value={this.props.location.value}
+                  placeholder={'Enter the adress'}
+                  onChange={this.onChangeLocation}
+                  inputState={this.props.location.inputState}
+                  message={this.props.location.message}
+                />
+                <Field
+                  key={'price'}
+                  label={'Price'}
+                  type={'number'}
+                  value={this.props.price.value}
+                  placeholder={'180'}
+                  onChange={this.onChangePrice}
+                  inputState={this.props.price.inputState}
+                  message={this.props.price.message}
                 />
 								<div className="field">
 									<p className="control">
