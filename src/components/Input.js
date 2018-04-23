@@ -26,6 +26,24 @@ class BulmaInput extends Component {
   }
   render() {
 		switch (this.props.type) {
+      case 'location':
+        return (
+          <input
+						type={'text'}
+						className={'input' +
+							(this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
+							(this.state.focus ? ' is-focused' : '') +
+							(this.state.hover ? ' is-hovered' : '')
+						}
+						value={this.props.value}
+						placeholder={this.props.placeholder}
+						onChange={this.props.onChange}
+						onMouseOver={this.onHover}
+						onMouseLeave={this.offHover}
+						onBlur={this.onBlur}
+						onFocus={this.onFocus}
+					/>
+        );
 			case 'text':
       case 'number':
 			case 'password':
