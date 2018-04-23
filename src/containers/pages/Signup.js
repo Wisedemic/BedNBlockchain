@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 
@@ -143,7 +144,7 @@ export class Signup extends Component {
 							<ErrorList
 								handleClose={this.props.closeError}
 								errors={this.props.errors} />
-							<h1 className="title is-1">Sign up to continue</h1>
+							<h1 className="title is-1">Sign Up</h1>
 							<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
 								<Field
 									key={'email'}
@@ -172,7 +173,7 @@ export class Signup extends Component {
 									inputState={this.props.passwordConfirm.inputState}
 									message={this.props.passwordConfirm.message}
 								/>
-								<div className="field">
+								<div className="field is-grouped">
 									<p className="control">
 										<button
 											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '')}
@@ -182,6 +183,12 @@ export class Signup extends Component {
 											Sign Up
 										</button>
 									</p>
+									<p className="or">or</p>
+									<p className="control">
+										<Link className={'button is-text'} to="/login">
+											Log In
+										</Link>
+                  </p>
 								</div>
 							</form>
 						</div>

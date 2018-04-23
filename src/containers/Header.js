@@ -80,12 +80,12 @@ const NavButtons = props => {
           <div className="field is-grouped">
             <p className="control">
               <Link className="button" to="/signup">
-                Signup
+                Sign Up
               </Link>
             </p>
             <p className="control">
               <Link className="button is-primary" to="/login">
-                Login
+                Log In
               </Link>
             </p>
           </div>

@@ -44,12 +44,12 @@ class Home extends Component {
 								<div className="column is-narrow">
 									<div className="field has-addons">
 									  <p className="control">
-									    <Link className="button is-info is-outlined is-medium" to="/rooms">
+									    <Link className="button is-info is-outlined is-medium" to={this.props.token ? '/rooms' : '/login'}>
 									      <span>Book A Now</span>
 									    </Link>
 									  </p>
 									  <p className="control">
-									    <Link className="button is-danger is-outlined is-medium" to={(this.props.token > 16) ? '/your-rooms/add' : '/signup'}>
+									    <Link className="button is-danger is-outlined is-medium" to={this.props.token ? '/your-rooms/add' : '/login'}>
 									      <span>List A Property</span>
 									    </Link>
 									  </p>

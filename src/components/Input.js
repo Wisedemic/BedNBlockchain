@@ -28,8 +28,7 @@ class BulmaInput extends Component {
 		switch (this.props.type) {
       case 'location':
         return (
-          <input
-						type={'text'}
+          <input type="text"
 						className={'input' +
 							(this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
 							(this.state.focus ? ' is-focused' : '') +
@@ -43,7 +42,7 @@ class BulmaInput extends Component {
 						onBlur={this.onBlur}
 						onFocus={this.onFocus}
 					/>
-        );
+				);
 			case 'text':
       case 'number':
 			case 'password':
