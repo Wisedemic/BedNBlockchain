@@ -1,4 +1,6 @@
 import {
+	ASYNC_START,
+	ASYNC_END,
 	ADD_ROOM,
 	EDIT_ROOM,
   ROOMEDITOR_PAGE_LOADED,
@@ -22,7 +24,11 @@ const defaultState = {
   desc: {...defaultInputState},
   propertyType: {...defaultInputState},
 	homeType: {...defaultInputState},
-	location: {...defaultInputState, results: [], value: {lat: 0, lng: 0, formatted_address: ''}},
+	location: {...defaultInputState,
+		loading: false,
+		results: [],
+		value: {lat: 0, lng: 0, formatted_address: ''}
+	},
 	price: {...defaultInputState},
 	guests: {...defaultInputState, value: {adults: 0, children: 0, infants: 0}}
 };
@@ -72,10 +78,11 @@ export default (state = defaultState, action) => {
 			return {
 				...state,
 				location: {...state.location,
+					results: [],
 					value: {
-						formatted_address: state.location.results[action.key].formatted_address,
-						lat: state.location.results[action.key].geometry.location.lat,
-						lng: state.location.results[action.key].geometry.location.lng,
+						formatted_address: action.value.formatted_address,
+						lat: action.value.lat,
+						lng: action.value.lng,
 					}
 				}
 			};
@@ -83,6 +90,21 @@ export default (state = defaultState, action) => {
 			return { ...state,
 				location: {...state.location,
 					results: action.payload.results
+				}
+			};
+		case ASYNC_START:
+			if (action.subtype === FETCH_GMAPS_RESULTS) {
+				return { ...state,
+					location: {...state.location,
+						loading: true
+					}
+				};
+			}
+			return {...state};
+		case ASYNC_END:
+			return { ...state,
+				location: {...state.location,
+					loading: false
 				}
 			};
 	  case ROOMEDITOR_PAGE_UNLOADED:
