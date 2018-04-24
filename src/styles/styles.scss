@@ -103,10 +103,14 @@ footer {
 	.suggestion {
 		&:hover {
 			cursor: pointer;
-			background: whitesmoke;	
+			background: whitesmoke;
 		}
-		padding: .3rem;
-		font-size: 14px;
+		padding: .5rem;
+		font-size: 16px;
     border: 1px whitesmoke solid;
 	}
+}
+
+input {
+	z-index: 3;
 }

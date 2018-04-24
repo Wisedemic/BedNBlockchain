@@ -74,9 +74,12 @@ footer {
   box-shadow: 0 1px 2px rgba(10, 10, 10, 0.2);
   background: white; }
   .results .suggestion {
-    padding: .3rem;
-    font-size: 14px;
+    padding: .5rem;
+    font-size: 16px;
     border: 1px whitesmoke solid; }
     .results .suggestion:hover {
       cursor: pointer;
       background: whitesmoke; }
+
+input {
+  z-index: 3; }

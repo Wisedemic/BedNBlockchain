@@ -4,7 +4,7 @@ import BulmaInput from './Input';
 
 const Label = props => {
 	if (!props.label) return null;
-  if (props.label.length > 0 ) {
+  if (props.label) {
     return (
       <label className={props.className}>{props.label}</label>
     );
@@ -13,13 +13,12 @@ const Label = props => {
 }
 
 const Message = props => {
-  if (props.message.length > 0) {
+  if (props.message) {
     return (
       <p className={'help ' + props.inputState}>{props.message}</p>
     );
-  } else {
-    return null;
   }
+  return null;
 };
 
 const FieldWrapper = props => {
@@ -49,7 +48,6 @@ const FieldWrapper = props => {
 class BulmaField extends Component {
 
   render() {
-		console.log(this);
 		return (
 			<FieldWrapper
 				label={this.props.label ? this.props.label : null}
@@ -64,11 +62,17 @@ class BulmaField extends Component {
 						{this.props.hasAddonLeft}
 					</div>
 				) : null}
-				<div className={'control' + (this.props.hasIconRight ? ' has-icons-right' : '') + (this.props.hasIconLeft ? ' has-icons-left' : '')}>
+				<div className={'control' +
+					(this.props.size ? ' '+ this.props.size : '') +
+					(this.props.hasIconRight ? ' has-icons-right' : '') +
+					(this.props.hasIconLeft ? ' has-icons-left' : '') +
+					(this.props.isLoading ? ' is-loading' : '')
+				}>
 					<BulmaInput
 						onChange={this.props.onChange}
 						opts={this.props.opts}
 						type={this.props.type}
+						size={this.props.size}
 						placeholder={this.props.placeholder}
 						value={this.props.value}
 						disabled={this.props.disabled}
@@ -78,8 +82,13 @@ class BulmaField extends Component {
 					{this.props.results ? (
 						<div className="results">
 							{this.props.results.map((result, key) => {
-								console.log(this);
-								return (<div key={key} className="suggestion" onClick={this.props.onClick}>{result.formatted_address}</div>);
+								const locationObj = {
+									resultId: key,
+									lat: result.geometry.location.lat,
+									lng: result.geometry.location.lng,
+									formatted_address: result.formatted_address
+								}
+								return (<div key={key} className="suggestion" onClick={() => this.props.onClick(locationObj)}>{locationObj.formatted_address}</div>);
 							}, this)}
 						</div>
 					) : (

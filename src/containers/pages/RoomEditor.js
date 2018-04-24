@@ -132,7 +132,7 @@ const mapDispatchToProps = dispatch => ({
 			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
 		}
   },
-	onChangeGusts: (value, type) => {
+	onChangeGusts: (value) => {
     const key = 'guests';
   },
 	onChangeLocation: (value) => {
@@ -143,7 +143,7 @@ const mapDispatchToProps = dispatch => ({
 				key: key,
 				message: 'Location cannot be blank!',
 				inputState: 'is-danger',
-				value: value
+				value: {formatted_address: ''}
 			});
 		} else {
 			const payload = agent.Maps.findAddress(value);
@@ -151,10 +151,8 @@ const mapDispatchToProps = dispatch => ({
 			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value });
 		}
   },
-	onClickLocation: (key) => {
-		if (key) {
-			dispatch({ type: UPDATE_LOCATION_FROM_SUGGESTION, key });
-		}
+	onClickLocation: (value) => {
+			dispatch({ type: UPDATE_LOCATION_FROM_SUGGESTION, value })
   },
 	onChangePrice: (value) => {
     const key = 'price';
@@ -188,15 +186,23 @@ class RoomEditor extends Component {
     this.onChangePropertyType = ev => this.props.onChangePropertyType(ev.target.value);
     this.onChangeHomeType = ev => this.props.onChangeHomeType(ev.target.value);
 		this.onChangeLocation = ev => this.props.onChangeLocation(ev.target.value);
-		this.onClickLocation = ev => this.props.onClickLocation(ev.target.value);
+		this.onClickLocation = value => this.props.onClickLocation(value);
     this.onChangePrice = ev => this.props.onChangePrice(ev.target.value);
-    this.onChangeGusts = ev => this.props.onChangeGuests(ev.target.value);
+    this.onChangeGusts = value => this.props.onChangeGuests(value);
 
-    this.submitForm = (title, desc, propertyType, homeType, location, price) => ev => {
+    this.submitForm = (title, desc, propertyType, homeType, location, price, guests) => ev => {
       ev.preventDefault();
       // Don't send form if required fields aren't filled out.
-      if (this.props.title.valid && this.props.desc.valid) {
-        this.props.handleSubmit(title, desc, propertyType, homeType, location, price);
+      if (
+        this.props.title.valid &&
+        this.props.desc.valid &&
+        this.props.propertyType.valid &&
+        this.props.homeType.valid &&
+        this.props.location.valid &&
+        this.props.price.valid &&
+        this.props.guests.valid
+      ) {
+        this.props.handleSubmit(title, desc, propertyType, homeType, location, price, guests);
       }
     };
   }
@@ -226,7 +232,7 @@ class RoomEditor extends Component {
             <div className="box">
 							<ErrorList handleClose={this.props.closeError} errors={this.props.errors} />
               <form onSubmit={this.submitForm(title, desc, propertyType, homeType, location, price, guests)}>
-								<Field
+                <Field
 									key={'title'}
 									type={'text'}
                   label={'Title'}
@@ -276,6 +282,7 @@ class RoomEditor extends Component {
                   key={'location'}
                   label={'Location'}
                   type={'location'}
+                  size={'is-medium'}
                   value={this.props.location.value.formatted_address}
                   placeholder={'Type the address to search...'}
                   isHorizontal={true}
@@ -285,6 +292,7 @@ class RoomEditor extends Component {
                   inputState={this.props.location.inputState}
                   message={this.props.location.message}
 									results={this.props.location.results}
+                  isLoading={this.props.location.loading}
                 />
                 <Field
                   key={'price'}
@@ -299,12 +307,24 @@ class RoomEditor extends Component {
                   inputState={this.props.price.inputState}
                   message={this.props.price.message}
                 />
+
+
 								<div className="field">
 									<p className="control">
 										<button
 											className={'button is-success' + (this.props.inProgress ? ' is-loading': '') + ((this.props.title.valid && this.props.desc.valid) ? '' : ' is-outlined')}
 											onClick={this.submitForm}
-											disabled={(this.props.title && this.props.desc.valid) ? false : 'disabled'}
+											disabled={
+                        (
+                          this.props.title.valid &&
+                          this.props.desc.valid &&
+                          this.props.propertyType.valid &&
+                          this.props.homeType.valid &&
+                          this.props.location.valid &&
+                          this.props.price.valid &&
+                          this.props.guests.valid
+                        )
+                         ? false : 'disabled'}
 											>
 											Submit
 										</button>

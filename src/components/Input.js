@@ -28,9 +28,10 @@ class BulmaInput extends Component {
 		switch (this.props.type) {
       case 'location':
         return (
-          <input type="text"
+          <input type={this.props.type}
 						className={'input' +
-							(this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
+              (this.props.size ? ' '+ this.props.size : '') +
+							(this.props.inputState ? ' ' + this.props.inputState : '') +
 							(this.state.focus ? ' is-focused' : '') +
 							(this.state.hover ? ' is-hovered' : '')
 						}
@@ -52,7 +53,8 @@ class BulmaInput extends Component {
 					<input
 						type={this.props.type}
 						className={'input' +
-							(this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
+              (this.props.size ? ' '+ this.props.size : '') +
+							(this.props.inputState ? ' '+this.props.inputState : '') +
 							(this.state.focus ? ' is-focused' : '') +
 							(this.state.hover ? ' is-hovered' : '')
 						}
@@ -70,6 +72,7 @@ class BulmaInput extends Component {
 					<textarea
 						type={this.props.type}
 						className={'textarea' +
+              (this.props.size ? ' '+ this.props.size : '') +
 							(this.props.inputState.length > 0 ? ' ' + this.props.inputState : '') +
 							(this.state.focus ? ' is-focused' : '') +
 							(this.state.hover ? ' is-hovered' : '')
@@ -87,6 +90,7 @@ class BulmaInput extends Component {
         return (
           <div
             className={'select' +
+              (this.props.size ? ' '+ this.props.size : '') +
   						((this.props.inputState.length > 0) ? (' '+this.props.inputState) : '') +
   						(this.state.focus ? ' is-focused' : '') +
   						(this.state.hover ? ' is-hovered' : '')
