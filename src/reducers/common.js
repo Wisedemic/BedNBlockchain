@@ -1,5 +1,6 @@
 import {
   APP_LOAD,
+	HANDLE_AJAX_ERROR,
   REDIRECT,
 	LOGIN,
 	SIGNUP,
@@ -15,6 +16,16 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+		case HANDLE_AJAX_ERROR:
+			if (action.subtype === APP_LOAD) {
+				return {
+					...state,
+					token: null,
+					appLoaded: true,
+					currentUser: null
+				};
+			}
+			break;
     case APP_LOAD:
       return {
         ...state,
