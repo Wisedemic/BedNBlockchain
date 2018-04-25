@@ -16,7 +16,8 @@ import {
   ROOMEDITOR_FIELD_ERROR,
   CLOSE_ERROR,
   INCREMENT_ROOMEDITOR_GUESTS,
-  DECREMENT_ROOMEDITOR_GUESTS
+  DECREMENT_ROOMEDITOR_GUESTS,
+	UPLOAD_FEATURED_IMAGE
 } from '../../actions';
 
 const HomeTypes = [
@@ -24,6 +25,7 @@ const HomeTypes = [
   'Private Room',
   'Shared Room'
 ];
+
 const PropertyTypes = [
   'House',
   'Bed and Breakfast',
@@ -49,7 +51,8 @@ const mapStateToProps = state => ({
   roomType: state.roomEditor.roomType,
   location: state.roomEditor.location,
   price: state.roomEditor.price,
-  guests: state.roomEditor.guests
+  guests: state.roomEditor.guests,
+	featuredImage: state.roomEditor.featuredImage
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -57,8 +60,10 @@ const mapDispatchToProps = dispatch => ({
 		const mode = (url === '/your-rooms/add') ? 'add' : 'edit';
     dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode });
   },
-  onUnload: () => dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
-	closeError: () =>	dispatch({ type: CLOSE_ERROR }),
+  onUnload: () =>
+		dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
+	closeError: () =>
+		dispatch({ type: CLOSE_ERROR }),
   handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests) => {
     const payload = agent.Rooms.add(userId, title, desc, propertyType, roomType, location, price, guests);
     console.log('PAYLOAD', payload);
@@ -69,7 +74,7 @@ const mapDispatchToProps = dispatch => ({
 		if (value.length === 0) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'Title cannot be blank!',
 				inputState: 'is-danger',
 				value: value
@@ -77,13 +82,13 @@ const mapDispatchToProps = dispatch => ({
 		} else if (value.length < 6 || value.length > 140) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'Must be between 4-140 characters!',
 				inputState: 'is-warning',
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value });
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value });
 		}
 	},
   onChangeDesc: value => {
@@ -91,7 +96,7 @@ const mapDispatchToProps = dispatch => ({
 		if (value.length === 0) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'Description cannot be blank!',
 				inputState: 'is-danger',
 				value: value
@@ -99,13 +104,13 @@ const mapDispatchToProps = dispatch => ({
 		} else if (value.length < 6 || value.length > 500) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'Must be between 6-500 characters!',
 				inputState: 'is-warning',
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value })
 		}
 	},
   onChangePropertyType: value => {
@@ -113,13 +118,13 @@ const mapDispatchToProps = dispatch => ({
 		if (!PropertyTypes.includes(value)) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'NO TAMPERING FIELDS!',
 				inputState: 'is-danger',
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value })
 		}
   },
   onChangeHomeType: value => {
@@ -127,13 +132,13 @@ const mapDispatchToProps = dispatch => ({
     if (!HomeTypes.includes(value)) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'NO TAMPERING FIELDS!',
 				inputState: 'is-danger',
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value });
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value });
 		}
   },
 	incrementGuests: (guestType) => dispatch({ type: INCREMENT_ROOMEDITOR_GUESTS, guestType }),
@@ -143,15 +148,15 @@ const mapDispatchToProps = dispatch => ({
 		if (value.length === 0) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'Location cannot be blank!',
 				inputState: 'is-danger',
 				value: {formatted_address: ''}
 			});
 		} else {
 			const payload = agent.Maps.findAddress(value);
-			dispatch({ type: FETCH_GMAPS_RESULTS, payload });
 			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value });
+			dispatch({ type: FETCH_GMAPS_RESULTS, payload });
 		}
   },
 	onClickLocation: (value) => {
@@ -162,7 +167,7 @@ const mapDispatchToProps = dispatch => ({
     if (!value || value === 0) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
-				key: key,
+				key,
 				message: 'A price is required!',
 				inputState: 'is-danger',
 				value: value
@@ -170,15 +175,46 @@ const mapDispatchToProps = dispatch => ({
 		} else if (value > 100000) {
   			dispatch({
   				type: ROOMEDITOR_FIELD_ERROR,
-  				key: key,
+  				key,
   				message: 'Price is too high!',
   				inputState: 'is-warning',
   				value: value
   			});
     } else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value })
 		}
-  }
+  },
+	onChangeFeaturedImage: (file) => {
+		const key = 'featuredImage';
+		console.log(file);
+		if (file.size > 4000000) {
+			dispatch({
+				type: ROOMEDITOR_FIELD_ERROR,
+				key,
+				message: 'File size can be no larger then 4MB\'s',
+				inputState: 'is-danger',
+				value: {
+					name: file.name,
+					size: file.size,
+					type: file.type,
+					file: ''
+				}
+			});
+		} else if (file.size < 20) {
+			dispatch({
+				type: ROOMEDITOR_FIELD_ERROR,
+				key,
+				message: 'Must upload a featured image!',
+				inputState: 'is-danger',
+				value: {name: '', size: 0, type: '', file: ''}
+			});
+		} else {
+			const payload = agent.Uploads.asyncFileUpload(file);
+			console.log('PAYLOAD', payload);
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: {name: file.name, size: file.size, type: file.type, file: file}});
+			dispatch({ type: UPLOAD_FEATURED_IMAGE, payload: payload });
+		}
+	}
 });
 
 class RoomEditor extends Component {
@@ -192,9 +228,9 @@ class RoomEditor extends Component {
 		this.onClickLocation = value => this.props.onClickLocation(value);
     this.onChangePrice = ev => this.props.onChangePrice(ev.target.value);
     this.onChangeGusts = value => this.props.onChangeGuests(value);
-
     this.incrementGuests = type => this.props.incrementGuests(type);
     this.decrementGusts = type => this.props.decrementGuests(type);
+		this.onChangeFeaturedImage = ev => this.props.onChangeFeaturedImage((ev.target.files[0]));
 
     this.submitForm = (title, desc, propertyType, roomType, location, price, guests) => ev => {
       ev.preventDefault();
@@ -228,6 +264,7 @@ class RoomEditor extends Component {
 		const location = this.props.location.value;
     const price = this.props.price.value;
 		const guests = this.props.guests.value;
+		const featuredImage = this.props.featuredImage.value;
 
     return (
       <section id="rooms" className="hero is-light is-bold is-fullheight">
@@ -340,6 +377,16 @@ class RoomEditor extends Component {
                   hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('infants')}>+</a>)}
                   hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('infants')}>-</a>)}
                 />
+							<Field
+								key={'featuredImage'}
+								label={'Featured Image'}
+								type={'file'}
+								value={this.props.featuredImage.value}
+								isHorizontal={true}
+								onChange={this.onChangeFeaturedImage}
+								inputState={this.props.featuredImage.inputState}
+								message={this.props.featuredImage.message}
+							/>
 								<div className="field">
 									<p className="control">
 										<button
