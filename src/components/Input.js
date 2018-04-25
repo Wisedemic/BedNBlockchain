@@ -26,6 +26,29 @@ class BulmaInput extends Component {
   }
   render() {
 		switch (this.props.type) {
+			case 'file':
+				return (
+					<div className="file is-info is-fullwidth">
+						<label className="file-label">
+							<input
+								className="file-input"
+								type="file"
+								onChange={this.props.onChange}
+							/>
+							<span className="file-cta">
+								<span className="file-icon">
+									<i className="fa fa-upload"></i>
+								</span>
+								<span className="file-label">
+					        Click To Upload
+					      </span>
+							</span>
+							<span className="file-name">
+								{this.props.value.name || ''}
+							</span>
+						</label>
+					</div>
+				);
       case 'location':
         return (
           <input type={this.props.type}
