@@ -1,3 +1,13 @@
+// mobile: up to 768px
+// tablet: from 769px
+// desktop: from 1024px
+// widescreen: from 1216px
+// fullhd: from 1408px
+
+.file-name {
+  background-color: white;
+}
+
 #loader {
 	align-items: center;
   align-content: center;
@@ -13,6 +23,32 @@
 	font-weight: 700;
 }
 
+#rooms {
+	flex-grow: 1;
+	justify-content: space-between;
+	.room {
+		display: inline-flex;
+		flex: 1;
+		width: 30%;
+		margin: 1rem;
+	}
+}
+
+@media(max-width: 768px) {
+	#rooms {
+		.room {
+			width: 98% !important;
+		}
+	}
+}
+
+@media(max-width: 1024px) {
+	#rooms {
+		.room {
+			width: 45%;
+		}
+	}
+}
 #home {
 	.title,
 	.subtitle {

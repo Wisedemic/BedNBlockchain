@@ -1,3 +1,6 @@
+.file-name {
+  background-color: white; }
+
 #loader {
   align-items: center;
   align-content: center;
@@ -8,6 +11,23 @@
 
 .field-label {
   font-weight: 700; }
+
+#rooms {
+  flex-grow: 1;
+  justify-content: space-between; }
+  #rooms .room {
+    display: inline-flex;
+    flex: 1;
+    width: 30%;
+    margin: 1rem; }
+
+@media (max-width: 768px) {
+  #rooms .room {
+    width: 98% !important; } }
+
+@media (max-width: 1024px) {
+  #rooms .room {
+    width: 45%; } }
 
 #home .title,
 #home .subtitle {
