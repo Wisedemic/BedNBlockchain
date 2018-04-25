@@ -18,23 +18,25 @@ export default (state = defaultState, action) => {
     case ROOM_PAGE_LOADED:
       return {
         ...state,
-        currentRoom: action.payload.room
+        currentRoomInView: action.payload.room
       }
     case ROOMS_PAGE_LOADED:
       return {
         ...state,
+				currentRoomInView: null,
         roomsList: action.payload.rooms ? action.payload.rooms : []
       };
     case YOURROOMS_PAGE_LOADED:
       return {
         ...state,
+				currentRoomInView: null,
         yourRooms: action.payload.rooms ? action.payload.rooms : []
       };
     case ROOMS_PAGE_UNLOADED:
     case ROOM_PAGE_UNLOADED:
     case YOURROOMS_PAGE_UNLOADED:
-      return {};
+      return state;
     default:
-      return {};
+      return state;
   }
 };

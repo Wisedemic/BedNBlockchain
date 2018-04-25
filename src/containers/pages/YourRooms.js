@@ -13,7 +13,7 @@ import {
 } from '../../actions';
 
 const mapStateToProps = state => ({
-  rooms: state.rooms,
+  yourRooms: state.rooms.yourRooms,
   userId: state.common.currentUser ? state.common.currentUser.id : null
 });
 
@@ -43,7 +43,19 @@ class YourRooms extends Component {
 					<div className="container has-text-centered">
 						<h2 className="title is-2">Your Rooms</h2>
 						<div className="box">
-							<code>Your Room Data</code>
+							{this.props.yourRooms ? (
+								this.props.yourRooms.map((room, index) => {
+									return (
+										<div className="box" key={index}>
+											<code>{room.id}</code>
+										</div>
+									);
+								}, this)
+							) : (
+								<div className="box">
+								<code>No Rooms Found</code>
+							</div>
+						)}
 						</div>
 					</div>
 				</div>

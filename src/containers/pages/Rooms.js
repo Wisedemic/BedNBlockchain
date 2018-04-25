@@ -36,11 +36,21 @@ class Rooms extends Component {
 				<div className="hero-body">
 					<div className="container has-text-centered">
 						<h2 className="title is-2">Browse Rooms</h2>
-						<div className="columns">
-							<div className="column">Room #1</div>
-							<div className="column">Room #2</div>
-							<div className="column">Room #3</div>
-						</div>
+							<div className="box">
+								{this.props.roomsList ? (
+									this.props.roomsList.map((room, index) => {
+										return (
+											<div className="box" key={index}>
+												<code>{room.id}</code>
+											</div>
+										);
+									}, this)
+								) : (
+									<div className="box">
+									<code>No Rooms Found</code>
+								</div>
+							)}
+							</div>
 					</div>
 				</div>
 			</section>

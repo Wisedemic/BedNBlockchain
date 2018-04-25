@@ -56,7 +56,7 @@ const Rooms = {
   all: () => requests.get('/rooms/all'),
 	add: (ownerId, title, desc, propertyType, roomType, location, price, guests) => requests.post('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests}),
   getRoom: (id) => requests.get('/rooms/'+id),
-  roomByUserId: (id) => requests.get('/rooms/userId/'+id)
+  roomByUserId: (id) => requests.get('/rooms/ownerId/'+id)
 }
 
 export default {

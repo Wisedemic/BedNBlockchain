@@ -4,47 +4,33 @@ const rooms = express.Router();
 
 /* Necessary Models */
 const Rooms = require('../models/RoomsModel').RoomsModel;
-//
+
 // /* Helpers */
 const helpers = require('../config/helpers.js');
-
 rooms.use(helpers.validateToken);
-
-rooms.get('/userId/:userId', function(req, res, next) {
-  // Rooms.find()
-});
-
-rooms.get('/:roomId', function(req, res, next) {
-  console.log(req.params.roomId);
-  if (req.params.roomId) {
-    Rooms.find({id:req.params.roomId}, function(err, room) {
-      console.log(err, room);
-      if (err) {
-        return res.json('why');
-      } else if (!room) {
-        return res.json('idk');
-      } else if (room) {
-        return res.json({payload: {room: {}}});
-      } else {
-        return res.json('huh?');
-      }
-    });
-  } else {
-      return res.json('A roomId is required!');
-  }
-});
 
 // Check Token for current Users request.
 rooms.get('/all', function(req, res, next) {
   Rooms.find({}, function(err, rooms) {
-    console.log(err, rooms);
     if (err || !rooms) {
       res.send('WOOPS');
     } else {
-      const payload = {
-        rooms: rooms
-      };
-      res.send({payload});
+			const payload = rooms.map((room, index) => {
+				return {
+					id: room._id,
+					ownerId: room.ownerId,
+					title: room.title,
+					description: room.description,
+					propertyType: room.propertyType,
+					roomType: room.roomType,
+					location: room.location,
+					price: room.price,
+					guests: room.guests,
+					updated_at: room.updated_at,
+					created_at: room.created_at
+				};
+			});
+			return res.json({payload: {rooms: payload}});
     }
   });
 });
@@ -79,6 +65,70 @@ rooms.post('/add', function(req, res, next) {
 			})
     }
   });
+});
+
+rooms.get('/:roomId', function(req, res, next) {
+  // if (!req.parmas.roomId) return res.json('A roomId is required!');
+  if (req.params.roomId) {
+    Rooms.find({id: req.params.roomId}, function(err, room) {
+      console.log(err, room);
+      if (err) {
+        return res.json('why');
+      } else if (!room) {
+        return res.json('idk');
+      } else if (room) {
+				const payload = {
+					id: room._id,
+					ownerId: room.ownerId,
+					title: room.title,
+					description: room.description,
+					propertyType: room.propertyType,
+					roomType: room.roomType,
+					location: room.location,
+					price: room.price,
+					guests: room.guests,
+					updated_at: room.updated_at,
+					created_at: room.created_at
+				};
+				return res.json({payload: {room: payload}});
+      } else {
+        return res.json('huh?');
+      }
+    });
+  }
+});
+
+rooms.get('/ownerId/:ownerId', function(req, res, next) {
+	if (!req.params.ownerId) return res.json('An ownerId is required!');
+	if (req.params.ownerId) {
+		Rooms.find({ownerId: req.params.ownerId}, function(err, rooms) {
+			console.log(err, rooms)
+			if (err) {
+        return res.json('why');
+      } else if (!rooms) {
+        return res.json('idk');
+      } else if (rooms) {
+				const payload = rooms.map((room, index) => {
+					return {
+						id: room._id,
+						ownerId: room.ownerId,
+						title: room.title,
+						description: room.description,
+						propertyType: room.propertyType,
+						roomType: room.roomType,
+						location: room.location,
+						price: room.price,
+						guests: room.guests,
+						updated_at: room.updated_at,
+						created_at: room.created_at
+					};
+				});
+        return res.json({payload: {rooms: payload}});
+      } else {
+        return res.json('huh?');
+      }
+		});
+	}
 });
 
 module.exports = rooms;
