@@ -10,11 +10,12 @@ const responseBody = res => res.body;
 
 let token = null;
 let GMAPSKEY = 'AIzaSyAeUUJdV1tvsAu8J63PvZVFEQAKvg8thVI';
+
 const tokenPlugin = req => {
   if (token) {
     req.set('authorization', `Token ${token}`);
   }
-}
+};
 
 const GMapsAPIRequest = {
 	post: address =>
@@ -50,18 +51,26 @@ const Maps = {
 		const json = encodeURIComponent(JSON.stringify(value));
 		return GMapsAPIRequest.get(json);
 	}
-}
+};
 
 const Rooms = {
   all: () => requests.get('/rooms/all'),
 	add: (ownerId, title, desc, propertyType, roomType, location, price, guests) => requests.post('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests}),
   getRoom: (id) => requests.get('/rooms/'+id),
   roomByUserId: (id) => requests.get('/rooms/ownerId/'+id)
-}
+};
+
+const Uploads = {
+	asyncFileUpload: (file) => {
+		console.log(file);
+		requests.post('/uploads/', {file})
+	}
+};
 
 export default {
   Auth,
   Rooms,
 	Maps,
+	Uploads,
   setToken: _token => { token = _token; }
 };

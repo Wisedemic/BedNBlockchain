@@ -14,7 +14,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')(session);
 
 // Config
-var db = require('./config/database'); // DB Config
+var db = require('./config/database')(api); // DB Config
 var passport = require('./config/passport'); // User Auth Config
 var config = require('./config/config'); // Secret Stuff
 

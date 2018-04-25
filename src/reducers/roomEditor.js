@@ -33,7 +33,20 @@ const defaultState = {
 		value: {lat: 0, lng: 0, formatted_address: ''}
 	},
 	price: {...defaultInputState},
-	guests: {value: {adults: 0, children: 0, infants: 0}}
+	guests: {value: {adults: 0, children: 0, infants: 0}},
+	featuredImage: {
+		...defaultInputState,
+		value: {
+			name: '',
+			size: 0,
+			type: '',
+			file: ''
+		},
+		loading: false,
+		message: '',
+		inputState: '',
+		valid: false
+	}
 };
 
 export default (state = defaultState, action) => {
@@ -58,13 +71,13 @@ export default (state = defaultState, action) => {
 				}
 			};
 		case DECREMENT_ROOMEDITOR_GUESTS:
-		return {...state,
-			guests: {...state.guests,
-				value: {...state.guests.value,
-					[action.guestType]: (state.guests.value[action.guestType] <= 0 ? 0 : --state.guests.value[action.guestType])
+			return {...state,
+				guests: {...state.guests,
+					value: {...state.guests.value,
+						[action.guestType]: (state.guests.value[action.guestType] <= 0 ? 0 : --state.guests.value[action.guestType])
+					}
 				}
-			}
-		};
+			};
 		case ROOMEDITOR_FIELD_ERROR:
       return { ...state,
         [action.key]: {
