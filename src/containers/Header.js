@@ -32,21 +32,13 @@ const NavButtons = props => {
     return (
 			<div className="navbar-end">
         <div className="navbar-item">
-          <div className="field is-grouped">
+          <div className="field">
             <p className="control">
               <Link className="button is-outlined is-info" to="/rooms/">
                 <span className="icon">
                   <i className="fa fa-bed"></i>
                 </span>
                 <span>Book Now!</span>
-              </Link>
-            </p>
-            <p className="control">
-              <Link className="button is-outlined is-danger" to="/your-rooms/add">
-                <span className="icon">
-                  <i className="fa fa-home"></i>
-                </span>
-                <span>List A Property</span>
               </Link>
             </p>
           </div>
@@ -56,6 +48,9 @@ const NavButtons = props => {
             <Avatar avatar={props.currentUser.avatar} />
           </p>
           <div className="navbar-dropdown is-right is-boxed">
+            <Link className="navbar-item" to="/your-rooms">
+              Your Rooms
+            </Link>
             <Link className="navbar-item" to="/bookings">
               Your Reservations
             </Link>
@@ -138,9 +133,9 @@ class Header extends Component {
 			          <Link className="navbar-item" to="/rooms">
 			            Browse
 			          </Link>
-								{this.props.currentUser ? (<Link className="navbar-item" to="/your-rooms">
-									Your Rooms
-								</Link>) : null}
+                <Link className="navbar-item" to="/your-rooms/add">
+			            Add A Room
+			          </Link>
 			        </div>
 			      </div>
 					</div>

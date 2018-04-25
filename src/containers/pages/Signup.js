@@ -106,8 +106,7 @@ const mapDispatchToProps = dispatch => ({
 		console.log('PAYLOAD', payload);
 		dispatch({ type: SIGNUP, payload })
 	},
-	closeError: () =>
-		dispatch({ type: CLOSE_ERROR })
+	closeError: () => dispatch({ type: CLOSE_ERROR })
 });
 
 export class Signup extends Component {

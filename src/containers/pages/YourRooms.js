@@ -6,27 +6,30 @@ import agent from '../../agent';
 import {
   YOURROOMS_PAGE_LOADED,
   YOURROOMS_PAGE_UNLOADED,
-  ADD_ROOM,
-  UPDATE_ROOM_AUTH,
-  ROOM_FIELD_ERROR,
+  // ADD_ROOM,
+  // UPDATE_ROOM_AUTH,
+  // ROOM_FIELD_ERROR,
   CLOSE_ERROR
 } from '../../actions';
 
 const mapStateToProps = state => ({
-  ...state.rooms
+  rooms: state.rooms,
+  userId: state.common.currentUser ? state.common.currentUser.id : null
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: () => {
-    const payload = agent.Rooms.all();
+  onLoad: (userId) => {
+    const payload = agent.Rooms.roomByUserId(userId);
     dispatch({ type: YOURROOMS_PAGE_LOADED, payload })
   },
-  onUnload: () => dispatch({ type: YOURROOMS_PAGE_UNLOADED })
+  onUnload: () => dispatch({ type: YOURROOMS_PAGE_UNLOADED }),
+  closeError: () => dispatch({ type: CLOSE_ERROR })
 });
 
 class YourRooms extends Component {
   componentDidMount() {
-    this.props.onLoad();
+    console.log(this.props);
+    this.props.onLoad(this.props.userId);
   }
 
   componentWillUnmount() {

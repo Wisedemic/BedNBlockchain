@@ -79,7 +79,7 @@ class BulmaField extends Component {
 						inputState={this.props.inputState}
 						results={this.props.results}
 					/>
-					{this.props.results ? (
+					{(this.props.results) ? (
 						<div className="results">
 							{this.props.results.map((result, key) => {
 								const locationObj = {
@@ -92,7 +92,7 @@ class BulmaField extends Component {
 							}, this)}
 						</div>
 					) : (
-						<div className="results"></div>
+						null
 					) }
 					{this.props.hasIconLeft ? (
 						<span className={'icon is-left'}>
