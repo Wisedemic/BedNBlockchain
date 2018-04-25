@@ -52,6 +52,7 @@ rooms.get('/all', function(req, res, next) {
 // Check Token for current Users request.
 rooms.post('/add', function(req, res, next) {
 	const roomData = {
+    ownerId: req.body.ownerId,
 		title: req.body.title,
 		description: req.body.desc,
     propertyType: req.body.propertyType,

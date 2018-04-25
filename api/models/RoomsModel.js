@@ -27,22 +27,24 @@ const PropertyTypes = [
 
 // Define User Schema
 const RoomsSchema = new Schema({
+  ownerId: {type: mongoose.Schema.Types.ObjectId, ref: 'Users'},
   title: {type: String, required: [true, 'A title is required!']},
   description: {type: String, required: [true, 'A description is required!']},
-  homeType: {type: String, required: [true, 'A Room Type is required!']},
   propertyType: {type: String, required: [true, 'A Property Type is required!']},
+  roomType: {type: String, required: [true, 'A Room Type is required!']},
+  location: {
+    formatted_address: {type: String, required: [true, 'A formatted address is required!']},
+    lat: {type: Number, required: [true, 'A latitude is required!']},
+    lng: {type: Number, required: [true, 'A longtitude is required!']}
+  },
+  price: {type: Number, required: [true, 'A price is required!']},
+  guests: {
+    adults: {type: Number, required: [true, 'Number of adult guests is required!']},
+    children: {type: Number, required: [true, 'Number of children guests is required!']},
+    infants: {type: Number, required: [true, 'Number of infants guests is required!']}
+  },
   features: String,
   booked: Boolean,
-  numGuests: Number,
-  guests: {
-    adults: Number,
-    children: Number
-  },
-  price: Number,
-  location: {
-    lat: Number,
-    lng: Number,
-  },
   availability: {
     start: Date,
     end: Date

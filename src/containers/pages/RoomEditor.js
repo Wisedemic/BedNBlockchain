@@ -14,7 +14,9 @@ import {
 	FETCH_GMAPS_RESULTS,
 	UPDATE_LOCATION_FROM_SUGGESTION,
   ROOMEDITOR_FIELD_ERROR,
-  CLOSE_ERROR
+  CLOSE_ERROR,
+  INCREMENT_ROOMEDITOR_GUESTS,
+  DECREMENT_ROOMEDITOR_GUESTS
 } from '../../actions';
 
 const HomeTypes = [
@@ -39,11 +41,12 @@ const PropertyTypes = [
 
 const mapStateToProps = state => ({
   ...state,
+  userId: state.common.currentUser.id,
 	mode: state.roomEditor.mode,
   title: state.roomEditor.title,
   desc: state.roomEditor.desc,
   propertyType: state.roomEditor.propertyType,
-  homeType: state.roomEditor.homeType,
+  roomType: state.roomEditor.roomType,
   location: state.roomEditor.location,
   price: state.roomEditor.price,
   guests: state.roomEditor.guests
@@ -55,8 +58,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode });
   },
   onUnload: () => dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
-  handleSubmit: (title, desc) => {
-    const payload = agent.Rooms.add(title, desc);
+	closeError: () =>	dispatch({ type: CLOSE_ERROR }),
+  handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests) => {
+    const payload = agent.Rooms.add(userId, title, desc, propertyType, roomType, location, price, guests);
     console.log('PAYLOAD', payload);
     dispatch({ type: ADD_ROOM, payload });
   },
@@ -119,7 +123,7 @@ const mapDispatchToProps = dispatch => ({
 		}
   },
   onChangeHomeType: value => {
-    const key = 'homeType';
+    const key = 'roomType';
     if (!HomeTypes.includes(value)) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
@@ -129,12 +133,11 @@ const mapDispatchToProps = dispatch => ({
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value })
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value });
 		}
   },
-	onChangeGusts: (value) => {
-    const key = 'guests';
-  },
+	incrementGuests: (guestType) => dispatch({ type: INCREMENT_ROOMEDITOR_GUESTS, guestType }),
+  decrementGuests: (guestType) => dispatch({ type: DECREMENT_ROOMEDITOR_GUESTS, guestType }),
 	onChangeLocation: (value) => {
     const key = 'location';
 		if (value.length === 0) {
@@ -148,7 +151,7 @@ const mapDispatchToProps = dispatch => ({
 		} else {
 			const payload = agent.Maps.findAddress(value);
 			dispatch({ type: FETCH_GMAPS_RESULTS, payload });
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key: key, value: value });
+			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value });
 		}
   },
 	onClickLocation: (value) => {
@@ -190,19 +193,21 @@ class RoomEditor extends Component {
     this.onChangePrice = ev => this.props.onChangePrice(ev.target.value);
     this.onChangeGusts = value => this.props.onChangeGuests(value);
 
-    this.submitForm = (title, desc, propertyType, homeType, location, price, guests) => ev => {
+    this.incrementGuests = type => this.props.incrementGuests(type);
+    this.decrementGusts = type => this.props.decrementGuests(type);
+
+    this.submitForm = (title, desc, propertyType, roomType, location, price, guests) => ev => {
       ev.preventDefault();
       // Don't send form if required fields aren't filled out.
       if (
         this.props.title.valid &&
         this.props.desc.valid &&
         this.props.propertyType.valid &&
-        this.props.homeType.valid &&
+        this.props.roomType.valid &&
         this.props.location.valid &&
-        this.props.price.valid &&
-        this.props.guests.valid
+        this.props.price.valid
       ) {
-        this.props.handleSubmit(title, desc, propertyType, homeType, location, price, guests);
+        this.props.handleSubmit(this.props.userId, title, desc, propertyType, roomType, location, price, guests);
       }
     };
   }
@@ -219,7 +224,7 @@ class RoomEditor extends Component {
     const title = this.props.title.value;
     const desc = this.props.desc.value;
     const propertyType = this.props.propertyType.value;
-		const homeType = this.props.homeType.value;
+		const roomType = this.props.roomType.value;
 		const location = this.props.location.value;
     const price = this.props.price.value;
 		const guests = this.props.guests.value;
@@ -231,7 +236,7 @@ class RoomEditor extends Component {
             <h2 className="title is-2">Add A Room</h2>
             <div className="box">
 							<ErrorList handleClose={this.props.closeError} errors={this.props.errors} />
-              <form onSubmit={this.submitForm(title, desc, propertyType, homeType, location, price, guests)}>
+              <form onSubmit={this.submitForm(title, desc, propertyType, roomType, location, price, guests)}>
                 <Field
 									key={'title'}
 									type={'text'}
@@ -267,16 +272,16 @@ class RoomEditor extends Component {
                   message={this.props.propertyType.message}
                 />
                 <Field
-                  key={'homeType'}
+                  key={'roomType'}
                   label={'Home Type'}
                   type={'select'}
-                  value={this.props.homeType.value}
+                  value={this.props.roomType.value}
                   opts={HomeTypes}
                   placeholder={'Please Select'}
                   isHorizontal={true}
                   onChange={this.onChangeHomeType}
-                  inputState={this.props.homeType.inputState}
-                  message={this.props.homeType.message}
+                  inputState={this.props.roomType.inputState}
+                  message={this.props.roomType.message}
                 />
                 <Field
                   key={'location'}
@@ -308,7 +313,33 @@ class RoomEditor extends Component {
                   message={this.props.price.message}
                 />
 
-
+                <Field
+                  key={'adults'}
+                  label={'Adults'}
+                  type={'incrementer'}
+                  value={this.props.guests.value.adults}
+                  isHorizontal={true}
+                  hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('adults')}>+</a>)}
+                  hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('adults')}>-</a>)}
+                />
+                <Field
+                  key={'children'}
+                  label={'Children'}
+                  type={'incrementer'}
+                  value={this.props.guests.value.children}
+                  isHorizontal={true}
+                  hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('children')}>+</a>)}
+                  hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('children')}>-</a>)}
+                />
+                <Field
+                  key={'infants'}
+                  label={'Infants'}
+                  type={'incrementer'}
+                  value={this.props.guests.value.infants}
+                  isHorizontal={true}
+                  hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('infants')}>+</a>)}
+                  hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('infants')}>-</a>)}
+                />
 								<div className="field">
 									<p className="control">
 										<button
@@ -319,10 +350,9 @@ class RoomEditor extends Component {
                           this.props.title.valid &&
                           this.props.desc.valid &&
                           this.props.propertyType.valid &&
-                          this.props.homeType.valid &&
+                          this.props.roomType.valid &&
                           this.props.location.valid &&
-                          this.props.price.valid &&
-                          this.props.guests.valid
+                          this.props.price.valid
                         )
                          ? false : 'disabled'}
 											>

@@ -7,8 +7,11 @@ import {
   ROOMEDITOR_PAGE_UNLOADED,
   ROOMEDITOR_FIELD_ERROR,
   UPDATE_ROOMEDITOR_FIELD,
+	HANDLE_AJAX_ERROR,
 	FETCH_GMAPS_RESULTS,
-	UPDATE_LOCATION_FROM_SUGGESTION
+	UPDATE_LOCATION_FROM_SUGGESTION,
+	INCREMENT_ROOMEDITOR_GUESTS,
+	DECREMENT_ROOMEDITOR_GUESTS
 } from '../actions';
 
 const defaultInputState = {
@@ -23,29 +26,46 @@ const defaultState = {
   title: {...defaultInputState},
   desc: {...defaultInputState},
   propertyType: {...defaultInputState},
-	homeType: {...defaultInputState},
+	roomType: {...defaultInputState},
 	location: {...defaultInputState,
 		loading: false,
 		results: [],
 		value: {lat: 0, lng: 0, formatted_address: ''}
 	},
 	price: {...defaultInputState},
-	guests: {...defaultInputState, value: {adults: 0, children: 0, infants: 0}}
+	guests: {value: {adults: 0, children: 0, infants: 0}}
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
 		case ADD_ROOM:
 		case EDIT_ROOM:
-			return {
-				...state
+			return {...state,
+				inProgress: false,
+				errors: action.error ? action.payload.errors : null
 			};
     case ROOMEDITOR_PAGE_LOADED:
       return {
         ...state,
         mode: action.mode
       };
-    case ROOMEDITOR_FIELD_ERROR:
+		case INCREMENT_ROOMEDITOR_GUESTS:
+			return {...state,
+				guests: {...state.guests,
+					value: {...state.guests.value,
+						[action.guestType]: ++state.guests.value[action.guestType]
+					}
+				}
+			};
+		case DECREMENT_ROOMEDITOR_GUESTS:
+		return {...state,
+			guests: {...state.guests,
+				value: {...state.guests.value,
+					[action.guestType]: (state.guests.value[action.guestType] <= 0 ? 0 : --state.guests.value[action.guestType])
+				}
+			}
+		};
+		case ROOMEDITOR_FIELD_ERROR:
       return { ...state,
         [action.key]: {
           value: action.value,
@@ -107,6 +127,16 @@ export default (state = defaultState, action) => {
 					loading: false
 				}
 			};
+		case HANDLE_AJAX_ERROR:
+			if (action.subtype === FETCH_GMAPS_RESULTS) {
+				return {...state,
+					location: {...state.location,
+						loading: false
+					},
+					errors: action.errors
+				};
+			}
+			return state;
 	  case ROOMEDITOR_PAGE_UNLOADED:
       return defaultState;
     default:

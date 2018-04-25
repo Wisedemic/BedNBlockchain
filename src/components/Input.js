@@ -108,6 +108,10 @@ class BulmaInput extends Component {
             </select>
           </div>
         );
+      case 'incrementer':
+        return (
+          <div className="button is-static">{this.props.value}</div>
+        );
 			default:
 				return null;
 		}
