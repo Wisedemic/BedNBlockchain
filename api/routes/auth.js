@@ -25,7 +25,7 @@ auth.post('/login', function(req, res, next) {
 		if (err) return next(err); // will generate a 500 error
 
 		// Incorrect Username Error
-		if (!user) return res.json({error: true, message: [message] });
+		if (!user) return res.json({error: true, errors: [message]});
 
 		// Submit login request using the user found in this request.
 		req.logIn(user, function (err) {
@@ -34,41 +34,42 @@ auth.post('/login', function(req, res, next) {
 				console.log(req.user);
 				const token = helpers.generateAndStoreToken(req, user);
 				const payload = {user: {
+					id: user._id,
 					email: user.email,
-					updated_at: user.updated_at,
+					token: token.key,
 					created_at: user.created_at,
-					token: token.key
-				}}
+					updated_at: user.updated_at
+				}};
 				return res.json({payload});
 		});
 	})(req, res, next);
 });
 
-// Check Token for current Users request.
-auth.get('/', function(req, res, next) {
-	if (!req.headers.authorization && !req.headers.authorization.split(' ')[0] === 'Token') {
-		res.json({error: true, payload: {errors: 'This request did not have a valid token!'}})
-	} else {
-		let token = req.headers.authorization.split(' ')[1];
-		Users
-			.findOne({ 'token.key': token })
-			.lean()
-			.exec(function (err, user) {
-			if (err) {
-				console.log(err, user);
-				res.status(200).send({});
-				// res.json({error: true, payload: {errors: 'Token not associated to a User!'}});
-			}
-			if (user) {
-				console.log(err, user);
-				res.json({payload: {user}});
-			} else {
-				console.log(err, user);
-				res.status(200).send({});
-				// res.json({error: true, payload: {errors: 'Token not associated to a User!'}});
-			}
-		});
-	}
+auth.get('/', helpers.validateToken, function(req, res, next) {
+	let token = req.headers.authorization.split(' ')[1];
+	Users
+		.findOne({ 'token.key': token })
+		.lean()
+		.exec(function (err, user) {
+		if (err) {
+			console.log(err, user);
+			res.json({error: true, errors: ['Token not associated to a User!']});
+		}
+		if (user) {
+			console.log(err, user);
+			const payload = {user: {
+				id: user._id,
+				email: user.email,
+				token: user.token.key,
+				created_at: user.created_at,
+				updated_at: user.updated_at
+			}};
+			res.json({payload});
+		} else {
+			console.log(err, user);
+			res.json({error: true, errors: ['Token not associated to a User!']});
+		}
+	});
 });
 
 // Register a new User
@@ -96,9 +97,9 @@ auth.post('/signup', function(req, res, next) {
 			console.log('User Create function Complete.', err, user);
 			if (err) {
 				if (err.code === 11000) {
-					return res.json({error: true, payload: {errors: 'Email Already Registered!'}})
+					return res.json({error: true, errors: ['Email Already Registered!']});
 				} else {
-					return res.json({error: true, payload: {errors: Users.MongoErrors(err)}});
+					return res.json({error: true, errors: [Users.MongoErrors(err)]});
 				}
 			}
 			if (user.created_at) {
@@ -125,82 +126,6 @@ auth.post('/signup', function(req, res, next) {
 			}
 		});
 	}
-});
-
-// User selected to proceed as guest.
-auth.post('/guest', function(req, res, next) {
-	var guest = {
-		role: 'guest',
-		username: generateName.randomAdjective() + generateName.randomNoun(),
-		password: randomstring.generate({
-			length: 12,
-			charset: 'alphabetic'
-		})
-	};
-
-	Users.create(guest, function(err, user) {
-		if (err) return res.json({success: false, message: Users.MongoErrors(err)});
-		if (user.created_at) {
-			req.login(user, function (err) {
-				helpers.generateAndStoreToken(req, user);
-				if ( ! err ) return res.json({success: true});
-			});
-		}
-	});
-});
-
-// Validate the Username on the fly
-auth.post('/validusername', function(req, res, next) {
-
-	// Check length
-	if (req.body.username.length < 4 || req.body.username.length > 16) {
-		return res.json({
-			success: false,
-			message: [{el: '#username', error: "Must be Between 4-16 characters"}]
-		});
-
-	// Restrict characters usable.
-	// 'A-Z', 'a-z', '0-9', '_', '.' ONLY
-	} else if(/[^A-Za-z0-9_.]/.test(req.body.username)) {
-		return res.json({
-			success: false,
-			message: [{el: '#username', error: "Must Contain characters 'A-z', '0-9', '_', '-', '.'"}]
-		});
-
-	} else {
-		if (req.body.username.length > 0) {
-			// Check for user
-			Users.find({username: req.body.username}).exec(function(err, user) {
-				if (err) {console.log(err); }
-
-				if (user.length) {
-					return res.json({
-						success: false,
-						message: [{el: '#username', error: 'Username already exists!'}]
-					});
-				} else {
-					return res.json({
-						success: true,
-						message: [{el: '#username', error: 'Valid Username'}]
-					});
-				}
-			});
-			//otherwise return an error.
-		}
-		else {
-			return res.json({
-				success: false,
-				message: [{el: '#username', error: 'No Username Entered'}]
-			});
-		}
-	} // End else
-});
-
-// Logout Request Handling
-auth.post('/logout', function(req, res, next) {
-	req.logout();
-	req.session.destroy();
-	res.sendStatus(200);
 });
 
 module.exports = auth;

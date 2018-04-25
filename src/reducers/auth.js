@@ -18,7 +18,7 @@ const defaultInputState = {
   message: '',
   inputState: '',
   valid: false
-}
+};
 
 const defaultState = {
   email: {...defaultInputState},
@@ -72,7 +72,10 @@ export default (state = defaultState, action) => {
         }
       };
     case HANDLE_AJAX_ERROR:
-      return {...state, inProgress: false, errors: action.payload.errors};
+      if (action.subtype === SIGNUP || action.subtype === LOGIN) {
+        return {...state, inProgress: false, errors: action.errors};
+      }
+      break;
 		case LOGIN_PAGE_UNLOADED:
 		case SIGNUP_PAGE_UNLOADED:
 			return defaultState;

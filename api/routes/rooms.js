@@ -1,9 +1,18 @@
 /* Express Router */
-var express = require('express');
-var rooms = express.Router();
+const express = require('express');
+const rooms = express.Router();
 
 /* Necessary Models */
-var Rooms = require('../models/RoomsModel').RoomsModel;
+const Rooms = require('../models/RoomsModel').RoomsModel;
+//
+// /* Helpers */
+const helpers = require('../config/helpers.js');
+
+rooms.use(helpers.validateToken);
+
+rooms.get('/userId/:userId', function(req, res, next) {
+  // Rooms.find()
+});
 
 rooms.get('/:roomId', function(req, res, next) {
   console.log(req.params.roomId);
@@ -25,7 +34,6 @@ rooms.get('/:roomId', function(req, res, next) {
   }
 });
 
-
 // Check Token for current Users request.
 rooms.get('/all', function(req, res, next) {
   Rooms.find({}, function(err, rooms) {
@@ -41,12 +49,16 @@ rooms.get('/all', function(req, res, next) {
   });
 });
 
-
 // Check Token for current Users request.
 rooms.post('/add', function(req, res, next) {
 	const roomData = {
 		title: req.body.title,
-		description: req.body.desc
+		description: req.body.desc,
+    propertyType: req.body.propertyType,
+    roomType: req.body.roomType,
+    location: req.body.location,
+    price: req.body.price,
+    guests: req.body.guests
 	};
 	console.log(roomData);
 	if (!roomData.title) return res.send('A title is required!');

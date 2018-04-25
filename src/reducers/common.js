@@ -3,7 +3,8 @@ import {
   REDIRECT,
 	LOGIN,
 	SIGNUP,
-	LOGOUT
+	LOGOUT,
+  ADD_ROOM
 } from '../actions';
 
 const defaultState = {
@@ -25,12 +26,16 @@ export default (state = defaultState, action) => {
       return { ...state, redirectTo: null };
 		case LOGOUT:
 			return { ...state, redirectTo: '/', token: null, currentUser: null };
-		case LOGIN:
+    case ADD_ROOM:
+      return {...state,
+        redirectTo: action.error ? null : '/your-rooms'
+      };
+    case LOGIN:
     case SIGNUP:
       return {
         ...state,
         redirectTo: action.error ? null : '/bookings',
-        token: action.error ? null : action.payload.user.token.key,
+        token: action.error ? null : action.payload.user.token,
         currentUser: action.error ? null : action.payload.user
       };
     default:

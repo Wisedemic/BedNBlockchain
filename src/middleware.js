@@ -26,8 +26,8 @@ const promiseMiddleware = store => next => action => {
         store.dispatch({ type: ASYNC_END, promise: action.payload });
 
         if (res.error) {
-            action.error = res.error;
-            store.dispatch({ type: HANDLE_AJAX_ERROR, payload: action.payload });
+          action.errors = res.errors;
+          store.dispatch({ type: HANDLE_AJAX_ERROR, subtype: action.type, errors: action.errors });
         } else {
           store.dispatch(action);
         }
