@@ -61,10 +61,17 @@ const Rooms = {
 };
 
 const Uploads = {
-	asyncFileUpload: (file) => {
-		console.log(file);
-		requests.post('/uploads/', {file})
-	}
+	asyncFileUpload: (file) =>
+    superagent
+      .post(`${API_ROOT}/uploads/`)
+      // .use(tokenPlugin)
+      .send(file)
+      .on('progress', event => {
+        console.log(event);
+      })
+      .end((err, res) => {
+        console.log(err, res);
+      })
 };
 
 export default {

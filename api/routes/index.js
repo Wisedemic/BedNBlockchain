@@ -1,12 +1,12 @@
 module.exports = function(api) {
 	const cors = require('cors');
 	// Catch All
-	let corsOptions = {
-	  origin: ['http://localhost:3001', 'http://localhost:3000', ],
-	  optionsSuccessStatus: 200,
-		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-	}
-	api.all('*', cors(corsOptions));
+	// let corsOptions = {
+	//   origin: ['http://localhost:3001', 'http://localhost:3000', ],
+	//   optionsSuccessStatus: 200,
+	// 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+	// }
+	api.all('*', cors());
 
 	api.all('*', function(req, res, next) {
 		console.log('Path: ' + req.path);

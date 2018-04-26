@@ -210,10 +210,7 @@ const mapDispatchToProps = dispatch => ({
 			});
 		} else {
 			const formData = new FormData();
-			console.log(file);
-			console.log(formData);
-			formData.set('file', file);
-			console.log(formData);
+      formData.append('file', file);
 			const payload = agent.Uploads.asyncFileUpload(formData);
 			console.log('PAYLOAD', payload);
 			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: {name: file.name, size: file.size, type: file.type, file: file}});
@@ -235,10 +232,7 @@ class RoomEditor extends Component {
     this.onChangeGusts = value => this.props.onChangeGuests(value);
     this.incrementGuests = type => this.props.incrementGuests(type);
     this.decrementGusts = type => this.props.decrementGuests(type);
-		this.onChangeFeaturedImage = ev => {
-			console.log(ev);
-			this.props.onChangeFeaturedImage((ev.target.files[0]))
-		};
+		this.onChangeFeaturedImage = ev => this.props.onChangeFeaturedImage((ev.target.files[0]));
 
     this.submitForm = (title, desc, propertyType, roomType, location, price, guests) => ev => {
       ev.preventDefault();
