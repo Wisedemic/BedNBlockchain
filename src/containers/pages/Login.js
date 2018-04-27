@@ -25,7 +25,6 @@ const mapStateToProps = state => ({
 // Action Creators
 const mapDispatchToProps = dispatch => ({
 	onLoad: () => {
-		console.log('iran');
 		dispatch({ type: LOGIN_PAGE_LOADED }) },
 	unLoad: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
 	onChangeEmail: value => {

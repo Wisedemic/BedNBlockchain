@@ -11,7 +11,9 @@ rooms.use(helpers.validateToken);
 
 // Check Token for current Users request.
 rooms.get('/all', function(req, res, next) {
-  Rooms.find({}).populate('featuredImageId').populate('ownerId').exec(function(err, rooms) {
+  Rooms.find({})
+	// .populate('featuredImageId').populate('ownerId')
+	.exec(function(err, rooms) {
     if (err || !rooms) {
       res.send('WOOPS');
     } else {
@@ -70,7 +72,9 @@ rooms.post('/add', function(req, res, next) {
 rooms.get('/:roomId', function(req, res, next) {
   // if (!req.parmas.roomId) return res.json('A roomId is required!');
   if (req.params.roomId) {
-    Rooms.find({id: req.params.roomId}).populate('featuredImageId').populate('ownerId').exec(function(err, room) {
+    Rooms.find({id: req.params.roomId})
+		// .populate('featuredImageId').populate('ownerId')
+		.exec(function(err, room) {
       console.log(err, room);
       if (err) {
         return res.json('why');
@@ -102,7 +106,9 @@ rooms.get('/:roomId', function(req, res, next) {
 rooms.get('/ownerId/:ownerId', function(req, res, next) {
 	if (!req.params.ownerId) return res.json('An ownerId is required!');
 	if (req.params.ownerId) {
-		Rooms.find({ownerId: req.params.ownerId}).populate('featuredImageId').populate('ownerId').exec(function(err, rooms) {
+		Rooms.find({ownerId: req.params.ownerId})
+		// .populate('featuredImageId').populate('ownerId')
+		.exec(function(err, rooms) {
 			console.log(err, rooms)
 			if (err) {
         return res.json('why');

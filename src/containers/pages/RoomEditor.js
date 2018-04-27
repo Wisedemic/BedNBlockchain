@@ -277,14 +277,35 @@ class RoomEditor extends Component {
 		const featuredImageId = this.props.featuredImage.value.file_id;
 
     return (
-      <section id="rooms" className="hero is-light is-bold is-fullheight">
+      <section id="roomEditor" className="hero is-light is-bold is-fullheight">
         <div className="hero-body">
           <div className="container">
             <h2 className="title is-2">Add A Room</h2>
             <div className="box">
 							<ErrorList handleClose={this.props.closeError} errors={this.props.errors} />
               <form onSubmit={this.submitForm(title, desc, propertyType, roomType, location, price, guests, featuredImageId)}>
-                <Field
+								<div className="field is-horizontal">
+                  <label className="field-label is-normal">Preview</label>
+                  <div className="field-body">
+										<div className="card preview">
+											{this.props.featuredImage.value.file_id ? (
+												<div className="card-image">
+													<figure className="image is-4by3">
+														<img src={'http://localhost:3001/api/uploads/' + this.props.featuredImage.value.file_id} alt="Placeholder image" />
+													</figure>
+												</div>
+
+											) : null}
+											<div className="card-content">
+												<div className="content">
+													<h4 className="title is-4">{this.props.title.value}</h4>
+													{this.props.desc.value}
+												</div>
+											</div>
+										</div>
+                  </div>
+                </div>
+								<Field
 									key={'title'}
 									type={'text'}
                   label={'Title'}
@@ -398,18 +419,6 @@ class RoomEditor extends Component {
   								inputState={this.props.featuredImage.inputState}
   								message={this.props.featuredImage.message}
   							/>
-                <div className="field is-horizontal">
-                  <label class="field-label is-normal">Preview</label>
-                  <div className="field-body">
-                    {this.props.featuredImage.value.file_id ? (
-                      <div className="box image-preview">
-                        <figure className="image">
-                          <img src={'http://localhost:3001/api/uploads/' + this.props.featuredImage.value.file_id}/>
-                        </figure>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
 
 								<div className="field">
 									<p className="control">

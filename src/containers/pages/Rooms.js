@@ -1,5 +1,6 @@
 import React, {	Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import agent from '../../agent';
 
@@ -41,11 +42,11 @@ class Rooms extends Component {
 									this.props.roomsList.map((room, index) => {
 										return (
 											<div className="card room" key={index}>
-												<div className="card-image">
+												<Link to={'/room/' + room.id} className="card-image">
 											    <figure className="image is-4by3">
-											      <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
+											      <img src={'http://localhost:3001/api/uploads/' + room.featuredImageId} alt="Placeholder image" />
 											    </figure>
-											  </div>
+											  </Link>
 												<div className="card-content">
 													<div className="content">
 														<h4 className="title is-4">{room.title}</h4>

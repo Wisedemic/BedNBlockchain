@@ -31,7 +31,6 @@ class Home extends Component {
   }
 
   render() {
-		console.log(this.props);
     return (
 			<div>
 	      <section id="home" className="hero is-light is-fullheight">

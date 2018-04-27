@@ -29,12 +29,27 @@
 	font-weight: 700;
 }
 
+.is-info {
+	.room {
+		.title {
+			color: #4a4a4a !important;
+		}
+	}
+}
+#roomEditor {
+	.preview {
+		display: inline-flex;
+    flex-direction: column;
+		width: 30%;
+	}
+}
+
 #rooms {
 	flex-grow: 1;
 	justify-content: space-between;
 	.room {
 		display: inline-flex;
-		flex: 1;
+    flex-direction: column;
 		width: 30%;
 		margin: 1rem;
 	}

@@ -29,7 +29,6 @@ const defaultState = {
 };
 
 export default (state = defaultState, action) => {
-	console.log(action, Date.now());
   switch (action.type) {
 		case LOGIN_PAGE_LOADED:
 		case SIGNUP_PAGE_LOADED:
