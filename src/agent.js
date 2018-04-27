@@ -55,23 +55,31 @@ const Maps = {
 
 const Rooms = {
   all: () => requests.get('/rooms/all'),
-	add: (ownerId, title, desc, propertyType, roomType, location, price, guests) => requests.post('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests}),
+	add: (ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.post('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
   getRoom: (id) => requests.get('/rooms/'+id),
   roomByUserId: (id) => requests.get('/rooms/ownerId/'+id)
 };
 
 const Uploads = {
-	asyncFileUpload: (file) =>
-    superagent
+	asyncFileUpload: (file) => {
+    return superagent
       .post(`${API_ROOT}/uploads/`)
-      // .use(tokenPlugin)
+      .use(tokenPlugin)
       .send(file)
       .on('progress', event => {
         console.log(event);
       })
-      .end((err, res) => {
-        console.log(err, res);
-      })
+      .then(responseBody);
+	},
+	getFile: (id) => {
+		return superagent
+			.get(`${API_ROOT}/uploads/`+id)
+			.use(tokenPlugin)
+			.on('progress', event => {
+				console.log(event);
+			})
+			.then(responseBody);
+	}
 };
 
 export default {

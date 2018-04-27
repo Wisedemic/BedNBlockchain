@@ -2,7 +2,6 @@
 var mongoose = require('mongoose');
 var validators = require('mongoose-validators');
 var Schema = mongoose.Schema;
-mongoose.Promise = global.Promise;
 
 /* Utilities */
 var bcrypt = require('bcrypt');

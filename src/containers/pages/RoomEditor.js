@@ -64,8 +64,8 @@ const mapDispatchToProps = dispatch => ({
 		dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
 	closeError: () =>
 		dispatch({ type: CLOSE_ERROR }),
-  handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests) => {
-    const payload = agent.Rooms.add(userId, title, desc, propertyType, roomType, location, price, guests);
+  handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => {
+    const payload = agent.Rooms.add(userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
     console.log('PAYLOAD', payload);
     dispatch({ type: ADD_ROOM, payload });
   },
@@ -187,6 +187,10 @@ const mapDispatchToProps = dispatch => ({
 	onChangeFeaturedImage: (file) => {
 		const key = 'featuredImage';
 		console.log(file);
+		if (!file) {
+			console.log('No File!');
+			return;
+		}
 		if (file.size > 4000000) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
@@ -194,10 +198,9 @@ const mapDispatchToProps = dispatch => ({
 				message: 'File size can be no larger then 4MB\'s',
 				inputState: 'is-danger',
 				value: {
-					name: file.name,
-					size: file.size,
-					type: file.type,
-					file: ''
+					file_id: '',
+					file_name: '',
+					image: ''
 				}
 			});
 		} else if (file.size < 20) {
@@ -206,15 +209,18 @@ const mapDispatchToProps = dispatch => ({
 				key,
 				message: 'Must upload a featured image!',
 				inputState: 'is-danger',
-				value: {name: '', size: 0, type: '', file: ''}
+				value: {
+					file_id: '',
+					file_name: '',
+					image: ''
+				}
 			});
 		} else {
 			const formData = new FormData();
       formData.append('file', file);
 			const payload = agent.Uploads.asyncFileUpload(formData);
 			console.log('PAYLOAD', payload);
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: {name: file.name, size: file.size, type: file.type, file: file}});
-			dispatch({ type: UPLOAD_FEATURED_IMAGE, payload: payload });
+			dispatch({ type: UPLOAD_FEATURED_IMAGE, payload: payload});
 		}
 	}
 });
@@ -234,7 +240,7 @@ class RoomEditor extends Component {
     this.decrementGusts = type => this.props.decrementGuests(type);
 		this.onChangeFeaturedImage = ev => this.props.onChangeFeaturedImage((ev.target.files[0]));
 
-    this.submitForm = (title, desc, propertyType, roomType, location, price, guests) => ev => {
+    this.submitForm = (title, desc, propertyType, roomType, location, price, guests, featuredImageId) => ev => {
       ev.preventDefault();
       // Don't send form if required fields aren't filled out.
       if (
@@ -243,9 +249,11 @@ class RoomEditor extends Component {
         this.props.propertyType.valid &&
         this.props.roomType.valid &&
         this.props.location.valid &&
-        this.props.price.valid
+        this.props.price.valid &&
+				this.props.featuredImage.valid
+
       ) {
-        this.props.handleSubmit(this.props.userId, title, desc, propertyType, roomType, location, price, guests);
+        this.props.handleSubmit(this.props.userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
       }
     };
   }
@@ -266,7 +274,7 @@ class RoomEditor extends Component {
 		const location = this.props.location.value;
     const price = this.props.price.value;
 		const guests = this.props.guests.value;
-		const featuredImage = this.props.featuredImage.value;
+		const featuredImageId = this.props.featuredImage.value.file_id;
 
     return (
       <section id="rooms" className="hero is-light is-bold is-fullheight">
@@ -275,7 +283,7 @@ class RoomEditor extends Component {
             <h2 className="title is-2">Add A Room</h2>
             <div className="box">
 							<ErrorList handleClose={this.props.closeError} errors={this.props.errors} />
-              <form onSubmit={this.submitForm(title, desc, propertyType, roomType, location, price, guests)}>
+              <form onSubmit={this.submitForm(title, desc, propertyType, roomType, location, price, guests, featuredImageId)}>
                 <Field
 									key={'title'}
 									type={'text'}
@@ -384,6 +392,7 @@ class RoomEditor extends Component {
 								label={'Featured Image'}
 								type={'file'}
 								value={this.props.featuredImage.value}
+								isLoading={this.props.featuredImage.loading}
 								isHorizontal={true}
 								onChange={this.onChangeFeaturedImage}
 								inputState={this.props.featuredImage.inputState}
@@ -392,18 +401,28 @@ class RoomEditor extends Component {
 								<div className="field">
 									<p className="control">
 										<button
-											className={'button is-success' + (this.props.inProgress ? ' is-loading': '') + ((this.props.title.valid && this.props.desc.valid) ? '' : ' is-outlined')}
+											className={'button is-success' +
+												(this.props.inProgress ? ' is-loading': '') +
+												((this.props.title.valid &&
+													this.props.desc.valid &&
+													this.props.roomType.valid &&
+													this.props.propertyType.valid &&
+													this.props.location.valid &&
+													this.props.price.valid &&
+													this.props.featuredImage.valid) ?
+													'' : ' is-outlined')
+												}
 											onClick={this.submitForm}
 											disabled={
-                        (
-                          this.props.title.valid &&
+                        (this.props.title.valid &&
                           this.props.desc.valid &&
+													this.props.roomType.valid &&
                           this.props.propertyType.valid &&
-                          this.props.roomType.valid &&
                           this.props.location.valid &&
-                          this.props.price.valid
-                        )
-                         ? false : 'disabled'}
+                          this.props.price.valid &&
+													this.props.featuredImage.valid) ?
+													false : 'disabled'
+												}
 											>
 											Submit
 										</button>

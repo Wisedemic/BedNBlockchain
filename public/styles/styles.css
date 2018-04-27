@@ -103,3 +103,19 @@ footer {
 
 input {
   z-index: 3; }
+
+.control.is-loading .file-name:after {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+  position: absolute !important;
+  right: 0.625em;
+  top: 0.625em;
+  z-index: 4; }

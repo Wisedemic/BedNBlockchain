@@ -11,7 +11,8 @@ import {
 	FETCH_GMAPS_RESULTS,
 	UPDATE_LOCATION_FROM_SUGGESTION,
 	INCREMENT_ROOMEDITOR_GUESTS,
-	DECREMENT_ROOMEDITOR_GUESTS
+	DECREMENT_ROOMEDITOR_GUESTS,
+	UPLOAD_FEATURED_IMAGE
 } from '../actions';
 
 const defaultInputState = {
@@ -37,10 +38,9 @@ const defaultState = {
 	featuredImage: {
 		...defaultInputState,
 		value: {
-			name: '',
-			size: 0,
-			type: '',
-			file: ''
+			file_id: '',
+			image: '',
+			file_name: ''
 		},
 		loading: false,
 		message: '',
@@ -107,6 +107,12 @@ export default (state = defaultState, action) => {
 	        }
 	      };
 			}
+		case FETCH_GMAPS_RESULTS:
+			return { ...state,
+				location: {...state.location,
+					results: action.payload.results
+				}
+			};
 		case UPDATE_LOCATION_FROM_SUGGESTION:
 			return {
 				...state,
@@ -119,12 +125,19 @@ export default (state = defaultState, action) => {
 					}
 				}
 			};
-		case FETCH_GMAPS_RESULTS:
-			return { ...state,
-				location: {...state.location,
-					results: action.payload.results
+		case UPLOAD_FEATURED_IMAGE:
+			return {...state,
+				featuredImage: {...state.featuredImage,
+					value: {...state.featuredImage.value,
+						file_id: action.payload.file.file_id,
+						file_name: action.payload.file.file_name,
+					},
+					inputState: 'is-success',
+					message: 'Upload Successful!',
+					valid: true
 				}
 			};
+
 		case ASYNC_START:
 			if (action.subtype === FETCH_GMAPS_RESULTS) {
 				return { ...state,
@@ -132,11 +145,22 @@ export default (state = defaultState, action) => {
 						loading: true
 					}
 				};
+			} else if (action.subtype === UPLOAD_FEATURED_IMAGE) {
+				return {...state,
+					featuredImage: {...state.featuredImage,
+						loading: true,
+						message: 'Uploading...'
+					}
+				};
+			} else {
+				return {...state};
 			}
-			return {...state};
 		case ASYNC_END:
 			return { ...state,
 				location: {...state.location,
+					loading: false
+				},
+				featuredImage: {...state.featuredImage,
 					loading: false
 				}
 			};
@@ -148,8 +172,16 @@ export default (state = defaultState, action) => {
 					},
 					errors: action.errors
 				};
+			} else if (action.subtype === UPLOAD_FEATURED_IMAGE) {
+				return {...state,
+					featuredImage: {...state.location,
+						loading: false
+					},
+					errors: action.errors
+				};
+			} else {
+				return state;
 			}
-			return state;
 	  case ROOMEDITOR_PAGE_UNLOADED:
       return defaultState;
     default:

@@ -4,6 +4,7 @@ module.exports = function(api) {	/* DB Config */
 	const Grid = require('gridfs-stream');
 	const config = require('./config.js');
 
+	mongoose.Promise = global.Promise;
 	Grid.mongo = mongoose.mongo;
 
 	// Define Error Handler for All Mongo Errors
@@ -28,6 +29,8 @@ module.exports = function(api) {	/* DB Config */
 	    console.log('[DB] Successfully connected to MongoDB Server');
 			const gridfs = new Grid(mongoose.connection.db);
 			api.set('gridfs', gridfs);
+			// Setup Mongoose Model for GridFS for Other Models to reference.
+			const GFS = require('../models/GridFSModel');
 	  }
 	});
 }

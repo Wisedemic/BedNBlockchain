@@ -2,7 +2,6 @@
 const mongoose = require('mongoose');
 const validators = require('mongoose-validators');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise;
 
 const HomeTypes = [
   'Entire Place',
@@ -49,6 +48,7 @@ const RoomsSchema = new Schema({
     start: Date,
     end: Date
   },
+	featuredImageId: {type: mongoose.Schema.Types.ObjectId, ref: 'GridFS'},
   // banner: {},
   // gallery: [],
   created_at: Date,

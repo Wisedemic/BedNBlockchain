@@ -6,19 +6,30 @@ let uploads = express.Router();
 let multer = require('multer');
 let upload = multer({ storage: multer.memoryStorage() });
 
-// Upload a file
-uploads.post('/', upload.array(), function(req, res, next) {
-	console.log(req.file, req.body, req.files);
+/* Necessary Models */
+const Users = require('../models/UserModel').UserModel;
 
+const moment = require('moment');
+
+/* Helpers */
+const helpers = require('../config/helpers.js');
+uploads.use(helpers.validateToken);
+
+// Upload a file
+uploads.post('/', upload.single('file'), function(req, res, next) {
+	console.log(req.file);
 	if (!req.file) return res.send({error: true, errors: ['File uploaded failed to be retrieved by the server.']});
 	const gridfs = req.app.get('gridfs');
+
 	let writeStream = gridfs.createWriteStream({
-      filename: req.body.name
+      filename: (req.file.originalname)
   });
-	console.log(writeStream);
 	writeStream.on('close', function (file) {
-		console.log(file);
-		  res.send(`File has been uploaded ${file._id}`);
+		const payload = {
+			file_id: file._id,
+			file_name: file.filename
+		};
+		  res.send({payload: {file: payload}});
   });
 	req.pipe(writeStream);
 });

@@ -28,9 +28,10 @@ class BulmaInput extends Component {
 		switch (this.props.type) {
 			case 'file':
 				return (
-					<div className="file is-info is-fullwidth">
+					<div className="file is-info">
 						<label className="file-label">
 							<input
+								name={this.props.key}
 								className="file-input"
 								type="file"
 								onChange={this.props.onChange}
@@ -44,7 +45,7 @@ class BulmaInput extends Component {
 					      </span>
 							</span>
 							<span className="file-name">
-								{this.props.value.name || ''}
+								{this.props.value.file_name || ''}
 							</span>
 						</label>
 					</div>

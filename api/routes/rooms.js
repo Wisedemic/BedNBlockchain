@@ -5,13 +5,13 @@ const rooms = express.Router();
 /* Necessary Models */
 const Rooms = require('../models/RoomsModel').RoomsModel;
 
-// /* Helpers */
+/* Helpers */
 const helpers = require('../config/helpers.js');
 rooms.use(helpers.validateToken);
 
 // Check Token for current Users request.
 rooms.get('/all', function(req, res, next) {
-  Rooms.find({}, function(err, rooms) {
+  Rooms.find({}).populate('featuredImageId').populate('ownerId').exec(function(err, rooms) {
     if (err || !rooms) {
       res.send('WOOPS');
     } else {
@@ -19,6 +19,7 @@ rooms.get('/all', function(req, res, next) {
 				return {
 					id: room._id,
 					ownerId: room.ownerId,
+					featuredImageId: room.featuredImageId,
 					title: room.title,
 					description: room.description,
 					propertyType: room.propertyType,
@@ -39,6 +40,7 @@ rooms.get('/all', function(req, res, next) {
 rooms.post('/add', function(req, res, next) {
 	const roomData = {
     ownerId: req.body.ownerId,
+		featuredImageId: req.body.featuredImageId,
 		title: req.body.title,
 		description: req.body.desc,
     propertyType: req.body.propertyType,
@@ -47,12 +49,10 @@ rooms.post('/add', function(req, res, next) {
     price: req.body.price,
     guests: req.body.guests
 	};
-	console.log(roomData);
 	if (!roomData.title) return res.send('A title is required!');
 	if (!roomData.description) return res.send('A description is required!');
 	Rooms.create(roomData, function(err, room) {
-    console.log(err, room);
-    if (err || !room) {
+   if (err || !room) {
       res.send('WOOPS');
     } else {
 			room.save(function(err) {
@@ -70,7 +70,7 @@ rooms.post('/add', function(req, res, next) {
 rooms.get('/:roomId', function(req, res, next) {
   // if (!req.parmas.roomId) return res.json('A roomId is required!');
   if (req.params.roomId) {
-    Rooms.find({id: req.params.roomId}, function(err, room) {
+    Rooms.find({id: req.params.roomId}).populate('featuredImageId').populate('ownerId').exec(function(err, room) {
       console.log(err, room);
       if (err) {
         return res.json('why');
@@ -80,6 +80,7 @@ rooms.get('/:roomId', function(req, res, next) {
 				const payload = {
 					id: room._id,
 					ownerId: room.ownerId,
+					featuredImageId: room.featuredImageId,
 					title: room.title,
 					description: room.description,
 					propertyType: room.propertyType,
@@ -101,7 +102,7 @@ rooms.get('/:roomId', function(req, res, next) {
 rooms.get('/ownerId/:ownerId', function(req, res, next) {
 	if (!req.params.ownerId) return res.json('An ownerId is required!');
 	if (req.params.ownerId) {
-		Rooms.find({ownerId: req.params.ownerId}, function(err, rooms) {
+		Rooms.find({ownerId: req.params.ownerId}).populate('featuredImageId').populate('ownerId').exec(function(err, rooms) {
 			console.log(err, rooms)
 			if (err) {
         return res.json('why');
@@ -112,6 +113,7 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
 					return {
 						id: room._id,
 						ownerId: room.ownerId,
+						featuredImageId: room.featuredImageId,
 						title: room.title,
 						description: room.description,
 						propertyType: room.propertyType,
