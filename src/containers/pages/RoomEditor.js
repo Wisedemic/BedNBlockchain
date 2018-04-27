@@ -387,17 +387,30 @@ class RoomEditor extends Component {
                   hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('infants')}>+</a>)}
                   hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('infants')}>-</a>)}
                 />
-							<Field
-								key={'featuredImage'}
-								label={'Featured Image'}
-								type={'file'}
-								value={this.props.featuredImage.value}
-								isLoading={this.props.featuredImage.loading}
-								isHorizontal={true}
-								onChange={this.onChangeFeaturedImage}
-								inputState={this.props.featuredImage.inputState}
-								message={this.props.featuredImage.message}
-							/>
+                <Field
+  								key={'featuredImage'}
+  								label={'Featured Image'}
+  								type={'file'}
+  								value={this.props.featuredImage.value}
+  								isLoading={this.props.featuredImage.loading}
+  								isHorizontal={true}
+  								onChange={this.onChangeFeaturedImage}
+  								inputState={this.props.featuredImage.inputState}
+  								message={this.props.featuredImage.message}
+  							/>
+                <div className="field is-horizontal">
+                  <label class="field-label is-normal">Preview</label>
+                  <div className="field-body">
+                    {this.props.featuredImage.value.file_id ? (
+                      <div className="box image-preview">
+                        <figure className="image">
+                          <img src={'http://localhost:3001/api/uploads/' + this.props.featuredImage.value.file_id}/>
+                        </figure>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
 								<div className="field">
 									<p className="control">
 										<button
