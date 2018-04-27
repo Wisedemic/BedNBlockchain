@@ -3,6 +3,12 @@
 // desktop: from 1024px
 // widescreen: from 1216px
 // fullhd: from 1408px
+.image-preview {
+    .image img{
+      max-height: 250px;
+      width: auto;
+    }
+}
 
 .file-name {
   background-color: white;

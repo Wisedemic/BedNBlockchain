@@ -22,7 +22,7 @@ class BulmaInput extends Component {
     this.setState({hover: true});
   }
   offHover() {
-    this.setState({hover: false})
+    this.setState({hover: false});
   }
   render() {
 		switch (this.props.type) {

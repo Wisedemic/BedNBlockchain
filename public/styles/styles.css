@@ -1,3 +1,7 @@
+.image-preview .image img {
+  max-height: 250px;
+  width: auto; }
+
 .file-name {
   background-color: white; }
 
