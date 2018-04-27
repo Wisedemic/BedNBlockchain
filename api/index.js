@@ -44,4 +44,5 @@ api.use(bodyParser.json());
 
 // Routes
 const routes = require('./routes/')(api);
+api.use('/api/', routes);
 console.log('[SERVER] Bed\'N\'Blockchain API started on port ' + api.get('port'));

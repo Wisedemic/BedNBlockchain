@@ -1,14 +1,17 @@
-module.exports = function(api) {
-	const cors = require('cors');
-	// Catch All
-	// let corsOptions = {
-	//   origin: ['http://localhost:3001', 'http://localhost:3000', ],
-	//   optionsSuccessStatus: 200,
-	// 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-	// }
-	api.all('*', cors());
+const router = require('express').Router();
+const cors = require('cors');
 
-	api.all('*', function(req, res, next) {
+module.exports = function(api) {
+	// Catch All
+	let corsOptions = {
+	  origin: ['http://localhost:3001', 'http://localhost:3000', ],
+	  optionsSuccessStatus: 200,
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+	};
+
+	router.all('*', cors(corsOptions));
+
+	router.all('*', function(req, res, next) {
 		console.log('Path: ' + req.path);
 		console.log('Method: ' + req.method);
 		console.log('Params: ', req.params);
@@ -20,28 +23,28 @@ module.exports = function(api) {
 	});
 
 	// Restrict All Post Requests to JSON
-	api.post('*', function(req, res, next) {
+	router.post('*', function(req, res, next) {
 		// Restrict Request to JSON
 		req.accepts('application/json');
 		next();
 	})
 
 	// Define Exports
-	const exports = {
+	const routes = {
 		auth: require('./auth'),
 		rooms: require('./rooms'),
 		uploads: require('./uploads')
 	};
 
 	// Define All Other Routes Here
-	api.use('/api/auth/', exports.auth);
-	api.use('/api/rooms/', exports.rooms);
-	api.use('/api/uploads/', exports.uploads);
+	router.use('/auth/', routes.auth);
+	router.use('/rooms/', routes.rooms);
+	router.use('/uploads/', routes.uploads);
 
   // Handle 404's (Final Route)
-	api.use(function(req, res, next) {
+	router.use(function(req, res, next) {
 		res.sendStatus(404);
 	});
 
-	return exports;
+	return router;
 };

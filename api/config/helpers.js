@@ -8,8 +8,11 @@ var expiresDefault = '1d';
 // Validation middleware to check for a token in the req.header.
 function validateToken(req, res, next) {
   // Ensure a token was provided.
-  if (!req.headers.authorization && !req.headers.authorization.split(' ')[0] === 'Token') {
+  if (!req.headers.authorization) {
     console.log('[REQUEST VERIFICATION] -- Bad request headers!', req.headers);
+    res.json({error: true, errors: ['This request did not have a valid token!']});
+  } else if(!req.headers.authorization.split(' ')[0] === 'Token') {
+    console.log('[REQUEST VERIFICATION] -- Missing Token in auth header!', req.headers);
     res.json({error: true, errors: ['This request did not have a valid token!']});
   } else {
     // Parse token from string

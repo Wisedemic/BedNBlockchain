@@ -133,9 +133,10 @@ class Header extends Component {
 			          <Link className="navbar-item" to="/rooms">
 			            Browse
 			          </Link>
-                <Link className="navbar-item" to="/your-rooms/add">
+                {this.props.currentUser ?
+                (<Link className="navbar-item" to="/your-rooms/add">
 			            Add A Room
-			          </Link>
+			          </Link>) : null}
 			        </div>
 			      </div>
 					</div>

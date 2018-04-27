@@ -25,7 +25,7 @@ export default (state = defaultState, action) => {
 					currentUser: null
 				};
 			}
-			break;
+      return {...state};
     case APP_LOAD:
       return {
         ...state,
