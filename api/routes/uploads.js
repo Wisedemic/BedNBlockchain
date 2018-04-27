@@ -69,13 +69,12 @@ uploads.get('/:fileId', function(req, res, next) {
 			let file = 'data:'+fileMeta.contentType+';base64,'+Buffer(data).toString('base64');
 			console.log(data);
 			console.log(fileMeta);
-			res.end(file);
+			res.send(file);
 		});
 		readstream.on('error', function(err) {
 			console.log(err);
 			throw err;
 		});
-		res.pipe(readstream);
 	});
 });
 

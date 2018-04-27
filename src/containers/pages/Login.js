@@ -138,7 +138,7 @@ export class Login extends Component {
 								<div className="field is-grouped">
 									<p className="control">
 										<button
-											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '')}
+											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '') + (this.props.email.valid && this.props.password.valid ? '' : ' is-outlined')}
 											onClick={this.submitForm}
 											disabled={(this.props.email.valid && this.props.password.valid) ? false : 'disabled'}
 										>

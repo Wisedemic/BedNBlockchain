@@ -32,7 +32,7 @@ class Rooms extends Component {
 
   render() {
     return (
-			<section id="browse" className="hero is-fullheight">
+			<section id="browse" className="hero is-info is-bold is-fullheight">
 				<div className="hero-body">
 					<div className="container has-text-centered">
 						<h2 className="title is-2">Browse Rooms</h2>
