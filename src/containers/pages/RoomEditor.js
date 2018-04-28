@@ -400,15 +400,6 @@ class RoomEditor extends Component {
                   hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('children')}>-</a>)}
                 />
                 <Field
-                  key={'infants'}
-                  label={'Infants'}
-                  type={'incrementer'}
-                  value={this.props.guests.value.infants}
-                  isHorizontal={true}
-                  hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('infants')}>+</a>)}
-                  hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('infants')}>-</a>)}
-                />
-                <Field
   								key={'featuredImage'}
   								label={'Featured Image'}
   								type={'file'}

@@ -1,13 +1,15 @@
 import React, {	Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import agent from '../../agent';
 
 import {
   ROOMS_PAGE_LOADED,
   ROOMS_PAGE_UNLOADED
 } from '../../actions';
+
+
+import parser from 'parse-address';
 
 const mapStateToProps = state => ({
   roomsList: state.rooms.roomsList
@@ -33,13 +35,15 @@ class Rooms extends Component {
 
   render() {
     return (
-			<section id="browse" className="hero is-info is-bold is-fullheight">
+			<section id="browse" className="hero is-light is-bold is-fullheight">
 				<div className="hero-body">
-					<div className="container has-text-centered">
+					<div className="container is-fluid has-text-centered">
 						<h2 className="title is-2">Browse Rooms</h2>
 							<div id="rooms">
 								{this.props.roomsList ? (
 									this.props.roomsList.map((room, index) => {
+                    const location = room.location.formatted_address.split(', ');
+                    console.log(location);
 										return (
 											<div className="card room" key={index}>
 												<Link to={'/room/' + room.id} className="card-image">
@@ -48,9 +52,14 @@ class Rooms extends Component {
 											    </figure>
 											  </Link>
 												<div className="card-content">
-													<div className="content">
-														<h4 className="title is-4">{room.title}</h4>
-														{room.description}
+													<div className="details-header">
+														<h5 className="title is-5">{room.title}</h5>
+                          </div>
+                          <div className="details-body">
+                            <div className="location">
+                              <span>{location[0] + ', ' + location[1]} | <span className="price">{'$' + room.price + '/ Day'}</span></span>
+                            </div>
+                            <button className="button is-info">Instant Book</button>
 											    </div>
 												</div>
 											</div>

@@ -39,8 +39,7 @@ const RoomsSchema = new Schema({
   price: {type: Number, required: [true, 'A price is required!']},
   guests: {
     adults: {type: Number, required: [true, 'Number of adult guests is required!']},
-    children: {type: Number, required: [true, 'Number of children guests is required!']},
-    infants: {type: Number, required: [true, 'Number of infants guests is required!']}
+    children: {type: Number, required: [true, 'Number of children guests is required!']}
   },
   features: String,
   booked: Boolean,

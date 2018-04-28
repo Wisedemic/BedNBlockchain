@@ -34,7 +34,7 @@ const defaultState = {
 		value: {lat: 0, lng: 0, formatted_address: ''}
 	},
 	price: {...defaultInputState},
-	guests: {value: {adults: 0, children: 0, infants: 0}},
+	guests: {value: {adults: 0, children: 0}},
 	featuredImage: {
 		...defaultInputState,
 		value: {

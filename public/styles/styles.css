@@ -31,7 +31,34 @@
     display: inline-flex;
     flex-direction: column;
     width: 30%;
-    margin: 1rem; }
+    margin: 1rem;
+    text-align: left; }
+    #rooms .room .details-header, #rooms .room .details-body {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between; }
+    #rooms .room .title {
+      margin-bottom: .7rem; }
+    #rooms .room .price {
+      color: red;
+      font-size: 14px;
+      font-weight: 700; }
+    #rooms .room .location {
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      font-weight: 400;
+      font-size: 14px; }
+    #rooms .room .guests {
+      display: inline-flex;
+      flex-direction: row; }
+      #rooms .room .guests .guest {
+        flex-direction: column;
+        text-align: center;
+        padding: 0.2rem; }
+        #rooms .room .guests .guest .fa {
+          display: flex;
+          font-size: 16px; }
 
 @media (max-width: 768px) {
   #rooms .room {

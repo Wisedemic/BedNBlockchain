@@ -52,6 +52,40 @@
     flex-direction: column;
 		width: 30%;
 		margin: 1rem;
+    text-align: left;
+    .details-header, .details-body {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .title {
+      margin-bottom: .7rem;
+    }
+    .price {
+      color: red;
+       font-size: 14px;
+      font-weight: 700;
+    }
+    .location {
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      font-weight: 400;
+      font-size: 14px;
+    }
+    .guests {
+      display: inline-flex;
+      flex-direction: row;
+      .guest {
+        flex-direction: column;
+        text-align: center;
+        padding: 0.2rem;
+        .fa {
+          display: flex;
+          font-size: 16px;
+        }
+      }
+    }
 	}
 }
 
