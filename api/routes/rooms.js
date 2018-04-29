@@ -7,7 +7,6 @@ const Rooms = require('../models/RoomsModel').RoomsModel;
 
 /* Helpers */
 const helpers = require('../config/helpers.js');
-rooms.use(helpers.validateToken);
 
 // Check Token for current Users request.
 rooms.get('/all', function(req, res, next) {
@@ -39,7 +38,7 @@ rooms.get('/all', function(req, res, next) {
 });
 
 // Check Token for current Users request.
-rooms.post('/add', function(req, res, next) {
+rooms.post('/add', helpers.validateToken, function(req, res, next) {
 	const roomData = {
     ownerId: req.body.ownerId,
 		featuredImageId: req.body.featuredImageId,
@@ -69,11 +68,41 @@ rooms.post('/add', function(req, res, next) {
   });
 });
 
-rooms.get('/:roomId', function(req, res, next) {
-  // if (!req.parmas.roomId) return res.json('A roomId is required!');
+// Check Token for current Users request.
+rooms.post('/edit/:roomId', helpers.validateToken, function(req, res, next) {
+  console.log(req.params);
+  if (!req.params.roomId) return res.json({error: true, errors: ['No RoomID Provided!']});
   if (req.params.roomId) {
-    Rooms.find({id: req.params.roomId})
-		// .populate('featuredImageId').populate('ownerId')
+    const roomData = {
+  		featuredImageId: req.body.featuredImageId,
+  		title: req.body.title,
+  		description: req.body.desc,
+      propertyType: req.body.propertyType,
+      roomType: req.body.roomType,
+      location: req.body.location,
+      price: req.body.price,
+      guests: req.body.guests
+  	};
+    console.log('before update', req.params.roomId)
+    Rooms.findByIdAndUpdate(req.params.roomId, {$set: roomData}, {new: true, runValidators: true}, function(err, room) {
+      if (err || !room) return res.json({success: false, message: Customers.MongoErrors(err)})
+    	if (room) {
+        const payload = {
+	        room: room
+	      };
+	      res.send({payload});
+      }
+    });
+  } else {
+    return res.json({error: true, errors: ['No RoomID Provided!']});
+  }
+});
+
+rooms.get('/:roomId', function(req, res, next) {
+  if (!req.params.roomId) return res.json('A roomId is required!');
+  if (req.params.roomId) {
+    Rooms.findOne({_id: req.params.roomId})
+    .populate('ownerId')
 		.exec(function(err, room) {
       console.log(err, room);
       if (err) {
