@@ -56,6 +56,7 @@ const Maps = {
 const Rooms = {
   all: () => requests.get('/rooms/all'),
 	add: (ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.post('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
+  editRoom: (roomId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.post('/rooms/edit/'+ roomId, {title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
   getRoom: (id) => requests.get('/rooms/'+id),
   roomByUserId: (id) => requests.get('/rooms/ownerId/'+id)
 };

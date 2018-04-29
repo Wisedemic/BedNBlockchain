@@ -19,52 +19,73 @@
 .is-info .room .title {
   color: #4a4a4a !important; }
 
+#yourRooms .box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start; }
+  #yourRooms .box figure {
+    padding: .5rem; }
+  #yourRooms .box .details {
+    flex-direction: 'column';
+    text-align: left;
+    flex-grow: 1;
+    padding-top: 1rem; }
+  #yourRooms .box .buttons {
+    align-self: flex-end; }
+
 #roomEditor .preview {
   display: inline-flex;
   flex-direction: column;
-  width: 30%; }
+  width: 35%; }
 
 #rooms {
   flex-grow: 1;
   justify-content: space-between; }
-  #rooms .room {
-    display: inline-flex;
+
+.room {
+  display: inline-flex;
+  flex-direction: column;
+  width: 30%;
+  margin: 1rem;
+  text-align: left; }
+  .room .card-content {
+    padding: 1rem; }
+  .room .details-header, .room .details-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; }
+  .room .details-body {
+    padding-top: 0.3rem; }
+  .room .price {
+    font-size: 14px;
+    font-weight: 700; }
+  .room .location {
+    display: flex;
     flex-direction: column;
-    width: 30%;
-    margin: 1rem;
-    text-align: left; }
-    #rooms .room .details-header, #rooms .room .details-body {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between; }
-    #rooms .room .title {
-      margin-bottom: .7rem; }
-    #rooms .room .price {
-      color: red;
-      font-size: 14px;
-      font-weight: 700; }
-    #rooms .room .location {
-      display: flex;
+    align-self: center;
+    font-weight: 400;
+    font-size: 14px;
+    font-style: italic; }
+  .room .guests {
+    display: inline-flex;
+    flex-direction: row; }
+    .room .guests .guest {
       flex-direction: column;
-      align-self: center;
-      font-weight: 400;
-      font-size: 14px; }
-    #rooms .room .guests {
-      display: inline-flex;
-      flex-direction: row; }
-      #rooms .room .guests .guest {
-        flex-direction: column;
-        text-align: center;
-        padding: 0.2rem; }
-        #rooms .room .guests .guest .fa {
-          display: flex;
-          font-size: 16px; }
+      text-align: center;
+      padding: 0.2rem; }
+      .room .guests .guest .fa {
+        display: flex;
+        font-size: 16px; }
 
 @media (max-width: 768px) {
+  #previewer {
+    display: none; }
   #rooms .room {
     width: 98% !important; } }
 
 @media (max-width: 1024px) {
+  #previewer {
+    display: none; }
   #rooms .room {
     width: 45%; } }
 

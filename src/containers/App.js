@@ -115,7 +115,7 @@ class App extends React.Component {
             <Route exact path="/bookings" component={Bookings} />
             <Route exact path="/your-rooms" component={YourRooms} />
             <Route exact path="/your-rooms/add" component={RoomEditor} />
-  					<Route exact path="/your-rooms/edit" component={RoomEditor} />
+  					<Route exact path="/your-rooms/edit/:roomId" component={RoomEditor} />
             <Route component={Four_Oh_Four} />
           </AnimatedSwitch>
         ) : (

@@ -36,61 +36,93 @@
 		}
 	}
 }
+
+#yourRooms {
+  .box {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    figure {
+      padding: .5rem;
+    }
+    .details {
+      flex-direction: 'column';
+      text-align: left;
+      flex-grow: 1;
+      padding-top: 1rem;
+    }
+    .buttons {
+      align-self: flex-end;
+    }
+  }
+}
+
 #roomEditor {
-	.preview {
+  .preview {
 		display: inline-flex;
     flex-direction: column;
-		width: 30%;
+		width: 35%;
 	}
 }
 
 #rooms {
 	flex-grow: 1;
 	justify-content: space-between;
-	.room {
-		display: inline-flex;
+}
+
+.room {
+  display: inline-flex;
+  flex-direction: column;
+  width: 30%;
+  margin: 1rem;
+  text-align: left;
+  .card-content {
+    padding: 1rem;
+  }
+  .details-header, .details-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .details-body {
+    padding-top: 0.3rem;
+  }
+  .title {
+    // margin-bottom: .7rem;
+  }
+  .price {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .location {
+    display: flex;
     flex-direction: column;
-		width: 30%;
-		margin: 1rem;
-    text-align: left;
-    .details-header, .details-body {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-    .title {
-      margin-bottom: .7rem;
-    }
-    .price {
-      color: red;
-       font-size: 14px;
-      font-weight: 700;
-    }
-    .location {
-      display: flex;
+    align-self: center;
+    font-weight: 400;
+    font-size: 14px;
+    font-style: italic;
+  }
+  .guests {
+    display: inline-flex;
+    flex-direction: row;
+    .guest {
       flex-direction: column;
-      align-self: center;
-      font-weight: 400;
-      font-size: 14px;
-    }
-    .guests {
-      display: inline-flex;
-      flex-direction: row;
-      .guest {
-        flex-direction: column;
-        text-align: center;
-        padding: 0.2rem;
-        .fa {
-          display: flex;
-          font-size: 16px;
-        }
+      text-align: center;
+      padding: 0.2rem;
+      .fa {
+        display: flex;
+        font-size: 16px;
       }
     }
-	}
+  }
 }
 
 @media(max-width: 768px) {
-	#rooms {
+  #previewer {
+    display: none;
+  }
+
+  #rooms {
 		.room {
 			width: 98% !important;
 		}
@@ -98,7 +130,11 @@
 }
 
 @media(max-width: 1024px) {
-	#rooms {
+
+  #previewer {
+    display: none;
+  }
+  #rooms {
 		.room {
 			width: 45%;
 		}

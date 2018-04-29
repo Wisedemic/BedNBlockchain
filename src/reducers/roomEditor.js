@@ -23,7 +23,8 @@ const defaultInputState = {
 };
 
 const defaultState = {
-	mode: 'edit',
+	mode: 'add',
+	message: '',
   title: {...defaultInputState},
   desc: {...defaultInputState},
   propertyType: {...defaultInputState},
@@ -52,16 +53,64 @@ const defaultState = {
 export default (state = defaultState, action) => {
   switch (action.type) {
 		case ADD_ROOM:
-		case EDIT_ROOM:
 			return {...state,
 				inProgress: false,
 				errors: action.error ? action.payload.errors : null
 			};
+
+		case EDIT_ROOM:
+			return {...state,
+				inProgress: false,
+				errors: action.error ? action.payload.errors : null,
+				message: 'Room Updated Successfully!'
+			};
     case ROOMEDITOR_PAGE_LOADED:
-      return {
-        ...state,
-        mode: action.mode
-      };
+			if (action.mode == 'edit') {
+				return {
+	        ...state,
+	        mode: 'edit',
+					title: {...state.title,
+						value: action.payload.room.title,
+						valid: true
+					},
+					desc: {...state.desc,
+						value: action.payload.room.description,
+						valid: true
+					},
+					propertyType: {...state.propertyType,
+						value: action.payload.room.propertyType,
+						valid: true
+					},
+					roomType: {...state.roomType,
+						value: action.payload.room.roomType,
+						valid: true
+					},
+					location: {...state.location,
+						value: action.payload.room.location,
+						valid: true
+					},
+					price: {...state.price,
+						value: action.payload.room.price,
+						valid: true
+					},
+					guests: {...state.guests,
+						value: action.payload.room.guests,
+						valid: true
+					},
+					featuredImage: {...state.featuredImage,
+						value: {...state.featuredImage.value,
+							file_id: action.payload.room.featuredImageId
+						},
+						valid: true
+					}
+
+	      };
+			} else {
+				return {
+	        ...state,
+	        mode: 'add'
+	      };
+			}
 		case INCREMENT_ROOMEDITOR_GUESTS:
 			return {...state,
 				guests: {...state.guests,

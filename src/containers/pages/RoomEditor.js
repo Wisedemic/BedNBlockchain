@@ -8,6 +8,7 @@ import agent from '../../agent';
 
 import {
   ADD_ROOM,
+  EDIT_ROOM,
   ROOMEDITOR_PAGE_LOADED,
   ROOMEDITOR_PAGE_UNLOADED,
   UPDATE_ROOMEDITOR_FIELD,
@@ -45,6 +46,7 @@ const mapStateToProps = state => ({
   ...state,
   userId: state.common.currentUser.id,
 	mode: state.roomEditor.mode,
+  message: state.roomEditor.message,
   title: state.roomEditor.title,
   desc: state.roomEditor.desc,
   propertyType: state.roomEditor.propertyType,
@@ -57,17 +59,30 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (url) => {
-		const mode = (url === '/your-rooms/add') ? 'add' : 'edit';
-    dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode });
+    console.log(url);
+    if (url.path === '/your-rooms/add') {
+      dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode: 'add' });
+    } else if(url.params.roomId) {
+      const payload = agent.Rooms.getRoom(url.params.roomId);
+      dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode: 'edit', payload });
+    } else {
+      // Something wrong
+      console.log(url);
+    }
   },
   onUnload: () =>
 		dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
 	closeError: () =>
 		dispatch({ type: CLOSE_ERROR }),
-  handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => {
-    const payload = agent.Rooms.add(userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
-    console.log('PAYLOAD', payload);
-    dispatch({ type: ADD_ROOM, payload });
+  handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId, mode, roomId) => {
+
+    if (mode === 'edit') {
+      const payload = agent.Rooms.editRoom(roomId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
+      dispatch({ type: EDIT_ROOM, payload });
+    } else if (mode === 'add') {
+      const payload = agent.Rooms.add(userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
+      dispatch({ type: ADD_ROOM, payload });
+    }
   },
   onChangeTitle: value => {
 		const key = 'title';
@@ -79,11 +94,11 @@ const mapDispatchToProps = dispatch => ({
 				inputState: 'is-danger',
 				value: value
 			});
-		} else if (value.length < 6 || value.length > 140) {
+		} else if (value.length < 6 || value.length > 90) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
 				key,
-				message: 'Must be between 4-140 characters!',
+				message: 'Must be between 4-90 characters!',
 				inputState: 'is-warning',
 				value: value
 			});
@@ -101,11 +116,11 @@ const mapDispatchToProps = dispatch => ({
 				inputState: 'is-danger',
 				value: value
 			});
-		} else if (value.length < 6 || value.length > 500) {
+		} else if (value.length < 6 || value.length > 300) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
 				key,
-				message: 'Must be between 6-500 characters!',
+				message: 'Must be between 6-300 characters!',
 				inputState: 'is-warning',
 				value: value
 			});
@@ -191,11 +206,11 @@ const mapDispatchToProps = dispatch => ({
 			console.log('No File!');
 			return;
 		}
-		if (file.size > 4000000) {
+		if (file.size > 16000000) {
 			dispatch({
 				type: ROOMEDITOR_FIELD_ERROR,
 				key,
-				message: 'File size can be no larger then 4MB\'s',
+				message: 'File size can be no larger then 16MB\'s',
 				inputState: 'is-danger',
 				value: {
 					file_id: '',
@@ -253,13 +268,17 @@ class RoomEditor extends Component {
 				this.props.featuredImage.valid
 
       ) {
-        this.props.handleSubmit(this.props.userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
+        if (this.props.match.params.roomId) {
+          this.props.handleSubmit(this.props.userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId, this.props.mode, this.props.match.params.roomId);
+        } else {
+          this.props.handleSubmit(this.props.userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId, this.props.mode);
+        }
       }
     };
   }
 
   componentDidMount() {
-		this.props.onLoad(this.props.match.url);
+		this.props.onLoad(this.props.match);
   }
 
   componentWillUnmount() {
@@ -276,6 +295,8 @@ class RoomEditor extends Component {
 		const guests = this.props.guests.value;
 		const featuredImageId = this.props.featuredImage.value.file_id;
 
+    const locationObj = this.props.location.value.formatted_address.split(', ');
+
     return (
       <section id="roomEditor" className="hero is-light is-bold is-fullheight">
         <div className="hero-body">
@@ -284,26 +305,37 @@ class RoomEditor extends Component {
             <div className="box">
 							<ErrorList handleClose={this.props.closeError} errors={this.props.errors} />
               <form onSubmit={this.submitForm(title, desc, propertyType, roomType, location, price, guests, featuredImageId)}>
-								<div className="field is-horizontal">
+								<div id="previewer" className="field is-horizontal">
                   <label className="field-label is-normal">Preview</label>
                   <div className="field-body">
-										<div className="card preview">
-											{this.props.featuredImage.value.file_id ? (
-												<div className="card-image">
-													<figure className="image is-4by3">
-														<img src={'http://localhost:3001/api/uploads/' + this.props.featuredImage.value.file_id} alt="Placeholder image" />
-													</figure>
-												</div>
-
-											) : null}
+                  	<div className="card room preview">
+											<div className="card-image">
+										    <figure className="image is-4by3">
+										      <img src={this.props.featuredImage.value.file_id ? 'http://localhost:3001/api/uploads/' + this.props.featuredImage.value.file_id : 'https://bulma.io/images/placeholders/640x480.png'} alt="Placeholder image" />
+										    </figure>
+										  </div>
 											<div className="card-content">
-												<div className="content">
-													<h4 className="title is-4">{this.props.title.value}</h4>
-													{this.props.desc.value}
-												</div>
+												<div className="details-header">
+                          <span style={{flexDirection: 'column'}}>
+                            <h5 className="title is-5">{this.props.title.value ? this.props.title.value : 'An Example Title!'}</h5>
+                            <h6 className="subtitle room-type is-6">{this.props.roomType.value ? this.props.roomType.value : 'Entire Place'} | {this.props.propertyType.value ? this.props.propertyType.value : 'Bungalow'}</h6>
+                        </span>
+                          <span className="price">{'$' + (this.props.price.value ? this.props.price.value : '0') + '/ Day'}</span>
+                        </div>
+                        <div className="details-body">
+                          <div className="location">
+                            <span>{(locationObj[0] ? (locationObj[0] + ', ' + locationObj[1]) : 'Toronto, Canada')}</span>
+                          </div>
+
+													<div className="guests">
+                            <span id="adult" className="guest"><i className="fa fa-male"></i><span>{this.props.guests.value.adults}</span></span>
+                            <span id="child" className="guest"><i className="fa fa-child"></i><span>{this.props.guests.value.children}</span></span>
+                          </div>
+                          <button className="button is-info" disabled>Instant Book</button>
+										    </div>
 											</div>
 										</div>
-                  </div>
+									</div>
                 </div>
 								<Field
 									key={'title'}
@@ -440,6 +472,7 @@ class RoomEditor extends Component {
 											Submit
 										</button>
                   </p>
+                  <p className="help is-success">{this.props.message ? this.props.message : null}</p>
 								</div>
 							</form>
             </div>

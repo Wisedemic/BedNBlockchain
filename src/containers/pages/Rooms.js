@@ -8,9 +8,6 @@ import {
   ROOMS_PAGE_UNLOADED
 } from '../../actions';
 
-
-import parser from 'parse-address';
-
 const mapStateToProps = state => ({
   roomsList: state.rooms.roomsList
 });
@@ -20,11 +17,18 @@ const mapDispatchToProps = dispatch => ({
     const payload = agent.Rooms.all();
     dispatch({ type: ROOMS_PAGE_LOADED, payload })
   },
-  onUnload: () =>
-    dispatch({ type: ROOMS_PAGE_UNLOADED })
+  onUnload: () => dispatch({ type: ROOMS_PAGE_UNLOADED }),
+  bookRoom: (id) => {
+    console.log('Booking room: ', id);
+  }
 });
 
 class Rooms extends Component {
+  constructor() {
+    super();
+    this.bookRoom = id => this.props.bookRoom(id);
+  }
+
   componentDidMount() {
     this.props.onLoad();
   }
@@ -43,7 +47,6 @@ class Rooms extends Component {
 								{this.props.roomsList ? (
 									this.props.roomsList.map((room, index) => {
                     const location = room.location.formatted_address.split(', ');
-                    console.log(location);
 										return (
 											<div className="card room" key={index}>
 												<Link to={'/room/' + room.id} className="card-image">
@@ -53,13 +56,23 @@ class Rooms extends Component {
 											  </Link>
 												<div className="card-content">
 													<div className="details-header">
-														<h5 className="title is-5">{room.title}</h5>
+                            <span style={{flexDirection: 'column'}}>
+                              <h5 className="title is-5">{room.title}</h5>
+                              <h6 className="subtitle room-type is-6">{room.roomType} | {room.propertyType}</h6>
+                            </span>
+                            <span className="price">
+                              {'$' + room.price + '/ Day'}
+                            </span>
                           </div>
                           <div className="details-body">
                             <div className="location">
-                              <span>{location[0] + ', ' + location[1]} | <span className="price">{'$' + room.price + '/ Day'}</span></span>
+                              <span>{location[0] + ', ' + location[1]}</span>
                             </div>
-                            <button className="button is-info">Instant Book</button>
+														<div className="guests">
+                              <span id="adult" className="guest"><i className="fa fa-male"></i><span>{room.guests.adults}</span></span>
+                              <span id="child" className="guest"><i className="fa fa-child"></i><span>{room.guests.children}</span></span>
+                            </div>
+                            <button onClick={() => this.bookRoom(room.id)} className="button is-info">Instant Book</button>
 											    </div>
 												</div>
 											</div>
