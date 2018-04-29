@@ -6,10 +6,15 @@ import { Link } from 'react-router-dom';
 // Actions
 import { LOGOUT } from '../actions';
 
+import Field from '../components/Field';
+
 // Assets
 import defaultUserAvatar from './assets/defaultUserAvatar.png';
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  results: state.common.search.results,
+  searchValue: state.common.search.value
+});
 
 const mapDispatchToProps = dispatch => ({
   handleLogout: () => dispatch({ type: LOGOUT })
@@ -25,6 +30,25 @@ const Avatar = props => {
       <img src={defaultUserAvatar} alt='User Avatar' />
     );
   }
+};
+
+const SearchBar = props => {
+  return(
+    <div className="navbar-item" id="search">
+      <Field
+        key={'search'}
+        type={'search'}
+        size={'is-medium'}
+        value={props.value}
+        placeholder={'Location, city, address'}
+        hasIconLeft={'search'}
+        onChange={props.onSearch}
+        onClick={props.onClickResult}
+        results={props.results}
+        isLoading={props.loading}
+      />
+    </div>
+  );
 };
 
 const NavButtons = props => {
@@ -48,6 +72,9 @@ const NavButtons = props => {
             <Avatar avatar={props.currentUser.avatar} />
           </p>
           <div className="navbar-dropdown is-right is-boxed">
+            <Link className="navbar-item" to="/your-rooms/add">
+              Add Room
+            </Link>
             <Link className="navbar-item" to="/your-rooms">
               Your Rooms
             </Link>
@@ -126,19 +153,11 @@ class Header extends Component {
         <div id="navbarMenu" className={'navbar-menu' + (this.state.toggled ? ' is-active' : '')}>
           <div className="navbar-start">
 						<div className="navbar-item has-dropdown is-hoverable">
-			        <p className="navbar-link">
-			          Rooms
-			        </p>
-			        <div className="navbar-dropdown is-boxed">
-			          <Link className="navbar-item" to="/rooms">
-			            Browse
-			          </Link>
-                {this.props.currentUser ?
-                (<Link className="navbar-item" to="/your-rooms/add">
-			            Add A Room
-			          </Link>) : null}
-			        </div>
-			      </div>
+		          <Link className="navbar-item" to="/rooms">
+		            Browse
+		          </Link>
+            </div>
+            <SearchBar />
 					</div>
           <NavButtons
             appLoaded={this.props.appLoaded}

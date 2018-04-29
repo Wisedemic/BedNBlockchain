@@ -79,9 +79,30 @@ class BulmaField extends Component {
 						inputState={this.props.inputState}
 						results={this.props.results}
 					/>
+					{this.props.type === 'search' ? (
+						this.props.results ?
+						(
+							<div className="results">
+								{this.props.results.map((room, index) => {
+									const searchObj = {
+										resultId: index,
+									}
+									return (
+										<div
+											key={index}
+											className="suggestion"
+											onClick={() => this.props.onClick(room.resultId)}
+										>
+										</div>
+									);
+								}, this)}
+							</div>
+						) : null
+					) : null}
 					{(this.props.results) ? (
 						<div className="results">
 							{this.props.results.map((result, key) => {
+
 								const locationObj = {
 									resultId: key,
 									lat: result.geometry.location.lat,

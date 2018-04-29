@@ -51,6 +51,7 @@ class BulmaInput extends Component {
 					</div>
 				);
       case 'location':
+      case 'search':
         return (
           <input type={this.props.type}
 						className={'input' +

@@ -11,7 +11,12 @@ import {
 const defaultState = {
   appName: "Bed'N'Blockchain",
   token: null,
-  viewChangeCounter: 0
+  viewChangeCounter: 0,
+  search: {
+    loading: false,
+    value: '',
+    results: []
+  }
 };
 
 export default (state = defaultState, action) => {
