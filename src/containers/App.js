@@ -13,6 +13,7 @@ import Room from './pages/Room';
 import YourRooms from './pages/YourRooms';
 import RoomEditor from './pages/RoomEditor';
 import Bookings from './pages/Bookings';
+import Settings from './pages/Settings';
 import Four_Oh_Four from '../components/404';
 import Loading from '../components/Loading';
 
@@ -113,6 +114,7 @@ class App extends React.Component {
             <Route exact path="/rooms" component={Rooms} />
             <Route exact path="/room/:roomId" component={Room} />
             <Route exact path="/bookings" component={Bookings} />
+            <Route exact path="/settings" component={Settings} />
             <Route exact path="/your-rooms" component={YourRooms} />
             <Route exact path="/your-rooms/add" component={RoomEditor} />
   					<Route exact path="/your-rooms/edit/:roomId" component={RoomEditor} />

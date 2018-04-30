@@ -91,7 +91,7 @@ class BulmaField extends Component {
 										<div
 											key={index}
 											className="suggestion"
-											onClick={() => this.props.onClick(room.resultId)}
+											onClick={() => this.props.onClick(searchObj.resultId)}
 										>
 										</div>
 									);

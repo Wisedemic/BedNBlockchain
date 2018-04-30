@@ -81,9 +81,6 @@ const NavButtons = props => {
             <Link className="navbar-item" to="/bookings">
               Your Reservations
             </Link>
-            <Link className="navbar-item" to="/profile/">
-              Profile
-            </Link>
             <Link className="navbar-item" to="/settings">
               Settings
             </Link>
@@ -123,10 +120,10 @@ class Header extends Component {
     this.state = {
       toggled: false
     }
-    this.onClick = this.onClick.bind(this);
+    this.onClickMenu = this.onClickMenu.bind(this);
   }
 
-  onClick() {
+  onClickMenu() {
     this.setState((prevState) => {
       return {toggled: !prevState.toggled};
     });
@@ -142,7 +139,7 @@ class Header extends Component {
           <div
             className={'navbar-burger burger' + (this.state.toggled ? ' is-active' : '')}
             data-target="navbarMenu"
-            onClick={this.onClick}
+            onClick={this.onClickMenu}
             >
             <span></span>
             <span></span>
