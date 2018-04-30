@@ -30,13 +30,10 @@ auth.post('/login', function(req, res, next) {
 		// Submit login request using the user found in this request.
 		req.logIn(user, function (err) {
 		    if (err) return next(err);
-				console.log('req.login successful!');
-				console.log(req.user);
-				const token = helpers.generateAndStoreToken(req, user);
 				const payload = {user: {
 					id: user._id,
 					email: user.email,
-					token: token.key,
+					token: helpers.generateAndStoreToken(req, user),
 					created_at: user.created_at,
 					updated_at: user.updated_at
 				}};

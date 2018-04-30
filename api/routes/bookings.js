@@ -145,7 +145,7 @@ bookings.get('/buyerId/:buyerId', function(req, res, next) {
 		.exec(function(err, bookings) {
 			console.log(err, bookings)
       if (err || !booking) return res.json({success: false, message: Bookings.MongoErrors(err)});
-      } else if (bookings) {
+      if (bookings) {
 				const payload = bookings.map((booking, index) => {
 					return {
 						id: booking._id,

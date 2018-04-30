@@ -1,29 +1,26 @@
-import superagentPromise from 'superagent-promise';
+// Grab Superagent for handling outbound requests.
 import _superagent from 'superagent';
+import superagentPromise from 'superagent-promise';
 
+// Promisifiy superagent
 const superagent = superagentPromise(_superagent, global.Promise);
 
+// Define constants
 const API_ROOT = 'http://localhost:3001/api';
 const GMAPS_ROOT = 'https://maps.googleapis.com/maps/api/geocode/';
 // const encode = encodeURIComponent;
 const responseBody = res => res.body;
-
 let token = null;
 let GMAPSKEY = 'AIzaSyAeUUJdV1tvsAu8J63PvZVFEQAKvg8thVI';
 
+// Used to add a token to request headers.
 const tokenPlugin = req => {
   if (token) {
     req.set('authorization', `Token ${token}`);
   }
 };
 
-const GMapsAPIRequest = {
-	post: address =>
-		superagent.post(`${GMAPS_ROOT}json?address=${address}&key=${GMAPSKEY}`),
-	get: address =>
-		superagent.get(`${GMAPS_ROOT}json?address=${address}&key=${GMAPSKEY}`)
-};
-
+// Define a general request handler to add the user's token if it exists.
 const requests = {
   del: url =>
     superagent.del(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
@@ -35,6 +32,15 @@ const requests = {
     superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody)
 };
 
+// Define general GMAPS requests for standardized calls to the API
+const GMapsAPIRequest = {
+	post: address =>
+	superagent.post(`${GMAPS_ROOT}json?address=${address}&key=${GMAPSKEY}`),
+	get: address =>
+	superagent.get(`${GMAPS_ROOT}json?address=${address}&key=${GMAPSKEY}`)
+};
+
+// Authentication requests
 const Auth = {
   current: () =>
     requests.get('/auth'),
@@ -46,6 +52,7 @@ const Auth = {
     requests.put('/user', {user})
 };
 
+// Handle requests to GMaps API
 const Maps = {
 	findAddress: (value) => {
 		const json = encodeURIComponent(JSON.stringify(value));
@@ -53,6 +60,7 @@ const Maps = {
 	}
 };
 
+// Room Requests
 const Rooms = {
   all: () => requests.get('/rooms/all'),
 	add: (ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.put('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
@@ -63,6 +71,7 @@ const Rooms = {
   deleteRoom: (id) => requests.del('/rooms/delete/'+id)
 };
 
+// Bookings Requests
 const Bookings = {
   all: () => requests.get('/bookings/all'),
 	bookRoom: (buyerId, ownerId, roomId, price, guests) => requests.put('/bookings/add', {buyerId, ownerId, roomId, price, guests}),
@@ -72,6 +81,7 @@ const Bookings = {
   deleteBooking: (bookingId) => requests.del('/bookings/delete/'+bookingId)
 };
 
+// Requests to the file server
 const Uploads = {
 	asyncFileUpload: (file) => {
     return superagent
@@ -94,6 +104,7 @@ const Uploads = {
 	}
 };
 
+// Exports
 export default {
   Auth,
   Rooms,

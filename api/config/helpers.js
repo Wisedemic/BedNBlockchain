@@ -60,18 +60,19 @@ function generateAndStoreToken(req, user, opts) {
  	// Save token to user.
 	user.set('token', record);
   user.save(function (err, user) {
-		console.log('[REQUEST VERIFICATION] -- Token saved to user!', err, user);
+		console.log('[REQUEST VERIFICATION] -- Token saved to user!');
     if (err || !user) return err;
 		if (user) {
-			// Return out
-			return record;
+
 		}
   });
+	// Return token
+	return record.key;
 }
 
 // Token verifier
 function verify(token) {
-  const decoded = false;
+  let decoded = false;
 
 	// Attempt to decode our token and verify.
 	try {

@@ -1,4 +1,7 @@
+// Grab Requests Agent so we can add the users token if found.
 import agent from './agent';
+
+// Actions
 import {
   ASYNC_START,
   ASYNC_END,
@@ -8,7 +11,7 @@ import {
   HANDLE_AJAX_ERROR
 } from './actions';
 
-// If an actions payload is a Promise
+// Allow an action to a Promise
 const promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
     store.dispatch({ type: ASYNC_START, subtype: action.type });
@@ -22,13 +25,19 @@ const promiseMiddleware = store => next => action => {
           return;
         }
         console.log('RESULT', res);
+
+				// Grab a known payload if it exists.
         action.payload = (res.payload || res.body);
+
+				// Tell the app the request finished.
         store.dispatch({ type: ASYNC_END, promise: action.payload });
 
+				// Send an error to react/redux.
         if (res.error) {
           action.errors = res.errors;
           store.dispatch({ type: HANDLE_AJAX_ERROR, subtype: action.type, errors: action.errors });
         } else {
+					// continue to next action
           store.dispatch(action);
         }
       },
@@ -57,6 +66,7 @@ const promiseMiddleware = store => next => action => {
 const localStorageMiddleware = store => next => action => {
   if (action.type === SIGNUP || action.type === LOGIN) {
     if (!action.error) {
+			console.log('token middleware time', action);
       window.localStorage.setItem('jwt', action.payload.user.token);
 			action.token = action.payload.user.token;
       agent.setToken(action.payload.user.token);

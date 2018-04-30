@@ -37,7 +37,6 @@
     "jest": "20.0.4",
     "jsonwebtoken": "^8.2.1",
     "moment": "^2.22.1",
-    "mongod": "^2.0.0",
     "mongodb": "^3.0.6",
     "mongoose": "^5.0.14",
     "mongoose-validators": "^0.1.0",

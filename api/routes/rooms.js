@@ -15,7 +15,7 @@ rooms.get('/all', function(req, res, next) {
 	// .populate('featuredImageId').populate('ownerId')
 	.exec(function(err, rooms) {
 		// Throw errors
-		if (err || !room) return res.json({success: false, message: Rooms.MongoErrors(err)});
+		if (err || !rooms) return res.json({success: false, message: Rooms.MongoErrors(err)});
 
 		// If we recieved a valid Room array
 		if (rooms) {
@@ -141,7 +141,7 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
 		// .populate('featuredImageId').populate('ownerId')
 		.exec(function(err, rooms) {
 			console.log(err, rooms)
-			if (err || !room) return res.json({success: false, message: Rooms.MongoErrors(err)});
+			if (err || !rooms) return res.json({success: false, message: Rooms.MongoErrors(err)});
       if (rooms) {
 				const payload = rooms.map((room, index) => {
 					return {
