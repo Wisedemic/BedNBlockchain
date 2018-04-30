@@ -55,10 +55,21 @@ const Maps = {
 
 const Rooms = {
   all: () => requests.get('/rooms/all'),
-	add: (ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.post('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
+	add: (ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.put('/rooms/add', {ownerId, title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
   editRoom: (roomId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.post('/rooms/edit/'+ roomId, {title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
   getRoom: (id) => requests.get('/rooms/'+id),
-  roomByUserId: (id) => requests.get('/rooms/ownerId/'+id)
+  roomByUserId: (id) => requests.get('/rooms/ownerId/'+id),
+  bookRoom: (roomId, userId) => requests.post('/rooms/bookRoom/'+roomId, {userId}),
+  deleteRoom: (id) => requests.del('/rooms/delete/'+id)
+};
+
+const Bookings = {
+  all: () => requests.get('/bookings/all'),
+	bookRoom: (buyerId, ownerId, roomId, price, guests) => requests.put('/bookings/add', {buyerId, ownerId, roomId, price, guests}),
+  editBooking: (bookingId, guests) => requests.post('/rooms/edit/'+ bookingId, {guests}),
+  getBooking: (id) => requests.get('/bookings/'+id),
+  bookingsByUserId: (id) => requests.get('/bookings/ownerId/'+id),
+  deleteBooking: (bookingId) => requests.del('/bookings/delete/'+bookingId)
 };
 
 const Uploads = {
@@ -86,6 +97,7 @@ const Uploads = {
 export default {
   Auth,
   Rooms,
+  Bookings,
 	Maps,
 	Uploads,
   setToken: _token => { token = _token; }

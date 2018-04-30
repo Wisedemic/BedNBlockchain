@@ -33,12 +33,14 @@ module.exports = function(api) {
 	const routes = {
 		auth: require('./auth'),
 		rooms: require('./rooms'),
+		bookings: require('./bookings'),
 		uploads: require('./uploads')
 	};
 
 	// Define All Other Routes Here
 	router.use('/auth/', routes.auth);
 	router.use('/rooms/', routes.rooms);
+	router.use('/bookings/', routes.bookings);
 	router.use('/uploads/', routes.uploads);
 
   // Handle 404's (Final Route)
