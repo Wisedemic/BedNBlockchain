@@ -77,7 +77,7 @@ const Bookings = {
 	bookRoom: (buyerId, ownerId, roomId, price, guests) => requests.put('/bookings/add', {buyerId, ownerId, roomId, price, guests}),
   editBooking: (bookingId, guests) => requests.post('/rooms/edit/'+ bookingId, {guests}),
   getBooking: (id) => requests.get('/bookings/'+id),
-  bookingsByUserId: (id) => requests.get('/bookings/ownerId/'+id),
+  bookingsByOwnerId: (ownerId) => requests.get('/bookings/ownerId/'+ownerId),
   deleteBooking: (bookingId) => requests.del('/bookings/delete/'+bookingId)
 };
 

@@ -1,49 +1,45 @@
-import React, {	Component } from 'react';
-import { connect } from 'react-redux';
-
-import agent from '../../agent';
-
 import {
+  ASYNC_START,
+  ASYNC_END,
+  HOME_PAGE_LOADED,
   BOOKINGS_PAGE_LOADED,
-  BOOKINGS_PAGE_UNLOADED
-} from '../../actions';
+  BOOKINGS_PAGE_UNLOADED,
+  DELETE_BOOKING
+} from '../actions';
 
-const mapStateToProps = state => ({
-  ...state.rooms,
+const defaultState = {
+  reload: false,
+	errors: null,
+  yourBookings: [],
+	loading: false
+};
 
-});
-
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => {
-    const payload = agent.Bookings.byUserID();
-    dispatch({ type: BOOKINGS_PAGE_LOADED, payload })
-  },
-  onUnload: () => dispatch({ type: BOOKINGS_PAGE_UNLOADED })
-});
-
-class Bookings extends Component {
-  componentDidMount() {
-    // this.props.onLoad();
+export default (state = defaultState, action) => {
+  switch (action.type) {
+    case BOOKINGS_PAGE_LOADED:
+      return {
+        ...state,
+        yourBookings: action.payload.bookings ? action.payload.bookings : []
+      };
+    case ASYNC_START:
+      if (action.subtype === DELETE_BOOKING) {
+        return {...state,
+          loading: true
+        };
+      }
+      return {...state};
+    case ASYNC_END:
+      return {...state,
+        loading: false
+      };
+    case DELETE_BOOKING:
+      return {...state,
+        reload: action.payload.error ? false : true,
+        errors: action.payload.error ? action.payload.errors : null
+      };
+    case BOOKINGS_PAGE_UNLOADED:
+      return state;
+    default:
+      return state;
   }
-
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
-
-  render() {
-    return (
-			<section id="browse" className="hero is-info is-bold is-fullheight">
-				<div className="hero-body">
-					<div className="container has-text-centered">
-						<h2 className="title is-2">Bookings</h2>
-						<div className="box">
-							<code>Your Bookings Data</code>
-						</div>
-					</div>
-				</div>
-			</section>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Bookings);
+};
