@@ -38,7 +38,7 @@ rooms.get('/all', function(req, res, next) {
 });
 
 // Check Token for current Users request.
-rooms.post('/add', helpers.validateToken, function(req, res, next) {
+rooms.put('/add', helpers.validateToken, function(req, res, next) {
 	const roomData = {
     ownerId: req.body.ownerId,
 		featuredImageId: req.body.featuredImageId,
@@ -50,8 +50,6 @@ rooms.post('/add', helpers.validateToken, function(req, res, next) {
     price: req.body.price,
     guests: req.body.guests
 	};
-	if (!roomData.title) return res.send('A title is required!');
-	if (!roomData.description) return res.send('A description is required!');
 	Rooms.create(roomData, function(err, room) {
    if (err || !room) {
       res.send('WOOPS');
@@ -166,6 +164,23 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
       }
 		});
 	}
+});
+
+rooms.delete('/delete/:roomId', helpers.validateToken, function(req, res, next) {
+  if (!req.params.roomId) return res.json('A roomId is required!');
+  if (req.params.roomId) {
+    Rooms.deleteOne({_id: req.params.roomId})
+		.exec(function(err) {
+      console.log(err);
+      if (err) return res.json('why');
+      if (!err) {
+        console.log('Deleted', req.params.roomId);
+				return res.status(200).send({payload: {error: false}});
+      } else {
+        return res.json('huh?');
+      }
+    });
+  }
 });
 
 module.exports = rooms;
