@@ -73,6 +73,7 @@ class Rooms extends Component {
                       price={room.price}
                       guests={room.guests}
                       location={locationObj}
+                      booked={room.booked}
                       currentUser={this.props.currentUser}
                     />
 									);

@@ -35,9 +35,13 @@ const Room = props => {
           </div>
           {props.currentUser ? (
             props.currentUser.id !== props.ownerId ? (
-              <button onClick={props.onClick ? props.onClick(props.ownerId, props.roomId, props.price, props.guests) : null} className="button is-info">
-                Instant Book
-              </button>
+              props.booked ? (
+                <button className="button is-warning" disabled={'disabled'}>Booked!</button>
+              ) : (
+                <button onClick={props.onClick ? () => props.onClick(props.ownerId, props.roomId, props.price, props.guests) : null} className="button is-info">
+                  Instant Book
+                </button>
+              )
             ) : (
               <button className="button is-text" disabled={'disabled'}>You own this!</button>
             )

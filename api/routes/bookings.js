@@ -4,6 +4,7 @@ const bookings = express.Router();
 
 /* Necessary Models */
 const Bookings = require('../models/BookingsModel').BookingsModel;
+const Rooms = require('../models/RoomsModel').RoomsModel;
 
 /* Helpers */
 const helpers = require('../config/helpers.js');
@@ -51,14 +52,24 @@ bookings.put('/add', helpers.validateToken, function(req, res, next) {
    if (err || !booking) {
       res.send('WOOPS');
     } else {
-			booking.save(function(err) {
-				if (err) res.send('Idk');
-				const payload = {
-					success: true,
-	        booking: booking
-	      };
-	      res.send({payload});
-			})
+      Rooms.findByIdAndUpdate(
+        bookingData.roomId,
+        {$set: {booked: true}},
+        {new: true, runValidators: true}
+      ).exec(function(err, room) {
+        if (err || !room) {
+          console.log(err, room);
+        } else {
+    			booking.save(function(err) {
+    				if (err) res.send('Idk');
+    				const payload = {
+    					success: true,
+    	        booking: booking
+    	      };
+    	      res.send({payload});
+    			});
+        }
+      });
     }
   });
 });

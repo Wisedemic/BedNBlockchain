@@ -28,6 +28,7 @@ rooms.get('/all', function(req, res, next) {
 					location: room.location,
 					price: room.price,
 					guests: room.guests,
+          booked: room.booked,
 					updated_at: room.updated_at,
 					created_at: room.created_at
 				};
@@ -119,6 +120,7 @@ rooms.get('/:roomId', function(req, res, next) {
 					location: room.location,
 					price: room.price,
 					guests: room.guests,
+          booked: room.booked,
 					updated_at: room.updated_at,
 					created_at: room.created_at
 				};
@@ -137,9 +139,7 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
 		// .populate('featuredImageId').populate('ownerId')
 		.exec(function(err, rooms) {
 			console.log(err, rooms)
-			if (err) {
-        return res.json('why');
-      } else if (!rooms) {
+			if (err || !room) {
         return res.json('idk');
       } else if (rooms) {
 				const payload = rooms.map((room, index) => {
@@ -154,6 +154,7 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
 						location: room.location,
 						price: room.price,
 						guests: room.guests,
+            booked: room.booked,
 						updated_at: room.updated_at,
 						created_at: room.created_at
 					};

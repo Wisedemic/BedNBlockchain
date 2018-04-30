@@ -42,7 +42,7 @@ const RoomsSchema = new Schema({
     children: {type: Number, required: [true, 'Number of children guests is required!']}
   },
   features: String,
-  booked: Boolean,
+  booked: {type: Boolean, default: false},
   availability: {
     start: Date,
     end: Date

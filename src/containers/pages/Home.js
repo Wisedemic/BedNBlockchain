@@ -8,7 +8,8 @@ import agent from '../../agent';
 
 import {
   HOME_PAGE_LOADED,
-  HOME_PAGE_UNLOADED
+  HOME_PAGE_UNLOADED,
+  BOOK_ROOM
 } from '../../actions';
 
 import Banner from '../assets/banner.jpg';
@@ -26,10 +27,20 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: HOME_PAGE_LOADED, payload });
   },
   onUnload: () =>
-    dispatch({ type: HOME_PAGE_UNLOADED })
+    dispatch({ type: HOME_PAGE_UNLOADED }),
+  bookRoom: (buyerId, ownerId, roomId, price, guests) => {
+    console.log('Booking room', buyerId, ownerId, roomId, price, guests);
+    const payload = agent.Bookings.bookRoom(buyerId, ownerId, roomId, price, guests);
+    dispatch({ type: BOOK_ROOM, payload });
+  }
 });
 
 class Home extends Component {
+  constructor() {
+    super();
+    this.bookRoom = (ownerId, roomId, price, guests) => this.props.bookRoom(this.props.currentUser.id, ownerId, roomId, price, guests);
+  }
+
   componentDidMount() {
     this.props.onLoad();
   }
@@ -77,6 +88,7 @@ class Home extends Component {
   									return (
                       <Room
                         key={index}
+                        onClick={this.bookRoom}
                         roomId={room.id}
                         ownerId={room.ownerId}
                         title={room.title}
@@ -86,6 +98,7 @@ class Home extends Component {
                         price={room.price}
                         guests={room.guests}
                         location={locationObj}
+                        booked={room.booked}
                         currentUser={this.props.currentUser}
                       />
   									);
