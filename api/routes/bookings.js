@@ -138,13 +138,13 @@ bookings.get('/ownerId/:ownerId', function(req, res, next) {
 
 // Get a booking by buyerID (User)
 bookings.get('/buyerId/:buyerId', function(req, res, next) {
-	if (!req.params.ownerId) return res.json('An buyerId is required!');
-	if (req.params.ownerId) {
+	if (!req.params.buyerId) return res.json('A buyerId is required!');
+	if (req.params.buyerId) {
 		Bookings.find({buyerId: req.params.buyerId})
 		// .populate('featuredImageId').populate('ownerId')
 		.exec(function(err, bookings) {
 			console.log(err, bookings)
-      if (err || !booking) return res.json({success: false, message: Bookings.MongoErrors(err)});
+      if (err || !bookings) return res.json({success: false, message: Bookings.MongoErrors(err)});
       if (bookings) {
 				const payload = bookings.map((booking, index) => {
 					return {

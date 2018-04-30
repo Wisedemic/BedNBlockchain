@@ -79,7 +79,7 @@ const NavButtons = props => {
               Your Rooms
             </Link>
             <Link className="navbar-item" to="/bookings">
-              Your Reservations
+              Your Bookings
             </Link>
             <Link className="navbar-item" to="/settings">
               Settings
