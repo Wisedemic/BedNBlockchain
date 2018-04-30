@@ -22,7 +22,7 @@ const extend = require('util')._extend;
 auth.post('/login', function(req, res, next) {
 	passport.authenticate('local', function(err, user, message) {
 		// Throw Any Errors
-		if (err) return next(err); // will generate a 500 error
+		if (err) return res.json({error: true, errors: [message]});
 
 		// Incorrect Username Error
 		if (!user) return res.json({error: true, errors: [message]});

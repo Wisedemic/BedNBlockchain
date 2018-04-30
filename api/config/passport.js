@@ -1,6 +1,7 @@
 /* Necessary Models */
 var Users = require('../models/UserModel').UserModel;
 
+// Passort.js
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
@@ -20,7 +21,6 @@ passport.deserializeUser(function(user, done) {
 
 // Proccess user login
 /* Accepets:
-
   Username @string
   Password @string
 */

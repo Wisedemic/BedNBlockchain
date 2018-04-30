@@ -8,14 +8,17 @@ const Rooms = require('../models/RoomsModel').RoomsModel;
 /* Helpers */
 const helpers = require('../config/helpers.js');
 
-// Check Token for current Users request.
+// Return all rooms in collection.
 rooms.get('/all', function(req, res, next) {
+	// Grab all rooms
   Rooms.find({})
 	// .populate('featuredImageId').populate('ownerId')
 	.exec(function(err, rooms) {
-    if (err || !rooms) {
-      res.send('WOOPS');
-    } else {
+		// Throw errors
+		if (err || !room) return res.json({success: false, message: Rooms.MongoErrors(err)});
+
+		// If we recieved a valid Room array
+		if (rooms) {
 			const payload = rooms.map((room, index) => {
 				return {
 					id: room._id,
@@ -38,8 +41,9 @@ rooms.get('/all', function(req, res, next) {
   });
 });
 
-// Check Token for current Users request.
+// Add A Room
 rooms.put('/add', helpers.validateToken, function(req, res, next) {
+	// Define a schema safe object
 	const roomData = {
     ownerId: req.body.ownerId,
 		featuredImageId: req.body.featuredImageId,
@@ -51,10 +55,11 @@ rooms.put('/add', helpers.validateToken, function(req, res, next) {
     price: req.body.price,
     guests: req.body.guests
 	};
+
+	// Create the room
 	Rooms.create(roomData, function(err, room) {
-   if (err || !room) {
-      res.send('WOOPS');
-    } else {
+  	if (err || !room) return res.json({success: false, message: Rooms.MongoErrors(err)});
+ 		if (room) {
 			room.save(function(err) {
 				if (err) res.send('Idk');
 				const payload = {
@@ -70,8 +75,10 @@ rooms.put('/add', helpers.validateToken, function(req, res, next) {
 // Check Token for current Users request.
 rooms.post('/edit/:roomId', helpers.validateToken, function(req, res, next) {
   console.log(req.params);
+
   if (!req.params.roomId) return res.json({error: true, errors: ['No RoomID Provided!']});
   if (req.params.roomId) {
+		// Define a schema safe object
     const roomData = {
   		featuredImageId: req.body.featuredImageId,
   		title: req.body.title,
@@ -82,9 +89,9 @@ rooms.post('/edit/:roomId', helpers.validateToken, function(req, res, next) {
       price: req.body.price,
       guests: req.body.guests
   	};
-    console.log('before update', req.params.roomId)
+    console.log('before update', req.params.roomId);
     Rooms.findByIdAndUpdate(req.params.roomId, {$set: roomData}, {new: true, runValidators: true}, function(err, room) {
-      if (err || !room) return res.json({success: false, message: Customers.MongoErrors(err)})
+      if (err || !room) return res.json({success: false, message: Rooms.MongoErrors(err)});
     	if (room) {
         const payload = {
 	        room: room
@@ -92,11 +99,10 @@ rooms.post('/edit/:roomId', helpers.validateToken, function(req, res, next) {
 	      res.send({payload});
       }
     });
-  } else {
-    return res.json({error: true, errors: ['No RoomID Provided!']});
   }
 });
 
+// Find room by param ID
 rooms.get('/:roomId', function(req, res, next) {
   if (!req.params.roomId) return res.json('A roomId is required!');
   if (req.params.roomId) {
@@ -104,11 +110,8 @@ rooms.get('/:roomId', function(req, res, next) {
     .populate('ownerId')
 		.exec(function(err, room) {
       console.log(err, room);
-      if (err) {
-        return res.json('why');
-      } else if (!room) {
-        return res.json('idk');
-      } else if (room) {
+      if (err || !room) return res.json({success: false, message: Rooms.MongoErrors(err)});
+      if (room) {
 				const payload = {
 					id: room._id,
 					ownerId: room.ownerId,
@@ -125,13 +128,12 @@ rooms.get('/:roomId', function(req, res, next) {
 					created_at: room.created_at
 				};
 				return res.json({payload: {room: payload}});
-      } else {
-        return res.json('huh?');
       }
     });
   }
 });
 
+// Get Rooms by the owner's ID
 rooms.get('/ownerId/:ownerId', function(req, res, next) {
 	if (!req.params.ownerId) return res.json('An ownerId is required!');
 	if (req.params.ownerId) {
@@ -139,9 +141,8 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
 		// .populate('featuredImageId').populate('ownerId')
 		.exec(function(err, rooms) {
 			console.log(err, rooms)
-			if (err || !room) {
-        return res.json('idk');
-      } else if (rooms) {
+			if (err || !room) return res.json({success: false, message: Rooms.MongoErrors(err)});
+      if (rooms) {
 				const payload = rooms.map((room, index) => {
 					return {
 						id: room._id,
@@ -160,28 +161,26 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
 					};
 				});
         return res.json({payload: {rooms: payload}});
-      } else {
-        return res.json('huh?');
       }
 		});
 	}
 });
 
+// Delete a room by ID
 rooms.delete('/delete/:roomId', helpers.validateToken, function(req, res, next) {
   if (!req.params.roomId) return res.json('A roomId is required!');
   if (req.params.roomId) {
     Rooms.deleteOne({_id: req.params.roomId})
 		.exec(function(err) {
       console.log(err);
-      if (err) return res.json('why');
+      if (err) return res.json({success: false, message: Rooms.MongoErrors(err)});
       if (!err) {
         console.log('Deleted', req.params.roomId);
 				return res.status(200).send({payload: {error: false}});
-      } else {
-        return res.json('huh?');
       }
     });
   }
 });
 
+// Export router
 module.exports = rooms;

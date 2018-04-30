@@ -14,10 +14,13 @@ const moment = require('moment');
 
 /* Helpers */
 const helpers = require('../config/helpers.js');
+
 // Upload a file
 uploads.post('/', helpers.validateToken, upload.single('file'), function(req, res, next) {
 	console.log('req.file', req.file);
 	if (!req.file) return res.send({error: true, errors: ['File uploaded failed to be retrieved by the server.']});
+
+	// Grab GridFS for file parsing into MongoDB
 	const gridfs = req.app.get('gridfs');
 
 	// Define a filename that is unique.
@@ -32,28 +35,28 @@ uploads.post('/', helpers.validateToken, upload.single('file'), function(req, re
 
 	writeStream.on('close', function (file) {
 		console.log(file);
-
 		// Send data back to the user
 		const payload = {
 			file_id: file._id,
 			file_name: file.filename
-		};
+		}; // Finished writing the file to gridfs.
 
 		// Finish this request
 		res.send({payload: {file: payload}});
   });
 
-	// write data to our write stream
+	// write current file buffer to our GridFS writeStream
 	writeStream.write(req.file.buffer, () => {
-    writeStream.end();
+    writeStream.end(); // On complete, end the stream.
   });
 
-	// Send our request back into our writeStream
+	// Loop until the stream ends.
 	req.pipe(writeStream);
 });
 
 // Fetch a file
 uploads.get('/:fileId', function(req, res, next) {
+	// Grab GridFS for file parsing into MongoDB
 	const gridfs = req.app.get('gridfs');
 
 	// Find the requested file by it's ID
@@ -72,7 +75,7 @@ uploads.get('/:fileId', function(req, res, next) {
 
 		readStream.on('open', function() {
 	    console.log("Reading File from DB");
-		});//open
+		}); // On stream start
 
 		readStream.on('data', function(chunk) {
 			chunks.push(chunk);
@@ -81,24 +84,24 @@ uploads.get('/:fileId', function(req, res, next) {
 
 		readStream.on("end", function() {
 		  console.log("File ready!");
-			// Create a single buffer from the array of chunks.
+			// Create a single buffer from the array of chunks(buffers).
 			const buff = Buffer.concat(chunks);
-
-			// convert to base64 string
+			// Convert to base64 string
 			const base64 = buff.toString('base64');
+			// Return browser readable data
 			let file = 'data:' + fileMeta.contentType + ';base64,' + base64;
-			// console.log(file);
-
 			// End this request
 			res.end(file);
-		});
+		}); // On stream end.
 
 		readStream.on('error', function (err) {
 	    console.log(err);
-		});
-		// Pipe the request back into our readStream
+		}); // Catch errors
+
+		// Loop until the stream ends.
 		readStream.pipe(res);
 	});
 });
 
+// Export
 module.exports = uploads;

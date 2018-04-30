@@ -3,11 +3,23 @@ const mongoose = require('mongoose');
 const validators = require('mongoose-validators');
 const Schema = mongoose.Schema;
 
-// Define User Schema
+// Define Booking Schema
 const BookingsSchema = new Schema({
-  ownerId: {type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: [true, 'An ownerId is required!']},
-  roomId: {type: mongoose.Schema.Types.ObjectId, ref: 'Rooms', required: [true, 'A roomId is required!']},
-  buyerId: {type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: [true, 'A buyerId is required!']},
+  ownerId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Users',
+		required: [true, 'An ownerId is required!']
+	},
+  roomId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Rooms',
+		required: [true, 'A roomId is required!']
+	},
+  buyerId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Users',
+		required: [true, 'A buyerId is required!']
+	},
   price: {type: Number, required: [true, 'A price is required!']},
   guests: {
     adults: {type: Number, required: [true, 'Number of adult guests is required!']},
@@ -17,10 +29,10 @@ const BookingsSchema = new Schema({
 	updated_at: Date
 });
 
-// Before a user is saved into the Database
+// Before a booking is saved into the Database
 BookingsSchema.pre('save', function(next) {
 
-	// Grab the user during this request
+	// Grab the booking during this request
   const booking = this;
 
 	console.log(booking);

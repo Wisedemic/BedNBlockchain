@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const validators = require('mongoose-validators');
 const Schema = mongoose.Schema;
 
+// Valid Select Field Types
 const HomeTypes = [
   'Entire Place',
   'Private Room',
   'Shared Room'
 ];
-
 const PropertyTypes = [
   'House',
   'Bed and Breakfast',
@@ -24,7 +24,7 @@ const PropertyTypes = [
   'Villa'
 ];
 
-// Define User Schema
+// Define Room Schema
 const RoomsSchema = new Schema({
   ownerId: {type: mongoose.Schema.Types.ObjectId, ref: 'Users'},
   title: {type: String, required: [true, 'A title is required!']},
@@ -48,16 +48,14 @@ const RoomsSchema = new Schema({
     end: Date
   },
 	featuredImageId: {type: mongoose.Schema.Types.ObjectId, ref: 'GridFS'},
-  // banner: {},
-  // gallery: [],
   created_at: Date,
 	updated_at: Date
 });
 
-// Before a user is saved into the Database
+// Before a room is saved into the Database
 RoomsSchema.pre('save', function(next) {
 
-	// Grab the user during this request
+	// Grab the room during this request
   const room = this;
 
 	console.log(room);
