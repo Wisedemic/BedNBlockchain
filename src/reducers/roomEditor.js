@@ -65,7 +65,7 @@ export default (state = defaultState, action) => {
 				message: 'Room Updated Successfully!'
 			};
     case ROOMEDITOR_PAGE_LOADED:
-			if (action.mode == 'edit') {
+			if (action.mode === 'edit') {
 				return {
 	        ...state,
 	        mode: 'edit',

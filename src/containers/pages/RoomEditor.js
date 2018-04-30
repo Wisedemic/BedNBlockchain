@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import ErrorList from '../../components/ErrorList';
 import Field from '../../components/Field';
+import Room from '../../components/Room';
 
 import agent from '../../agent';
 
@@ -294,7 +295,6 @@ class RoomEditor extends Component {
     const price = this.props.price.value;
 		const guests = this.props.guests.value;
 		const featuredImageId = this.props.featuredImage.value.file_id;
-
     const locationObj = this.props.location.value.formatted_address.split(', ');
 
     return (
@@ -308,33 +308,16 @@ class RoomEditor extends Component {
 								<div id="previewer" className="field is-horizontal">
                   <label className="field-label is-normal">Preview</label>
                   <div className="field-body">
-                  	<div className="card room preview">
-											<div className="card-image">
-										    <figure className="image is-4by3">
-										      <img src={this.props.featuredImage.value.file_id ? 'http://localhost:3001/api/uploads/' + this.props.featuredImage.value.file_id : 'https://bulma.io/images/placeholders/640x480.png'} alt="Placeholder image" />
-										    </figure>
-										  </div>
-											<div className="card-content">
-												<div className="details-header">
-                          <span style={{flexDirection: 'column'}}>
-                            <h5 className="title is-5">{this.props.title.value ? this.props.title.value : 'An Example Title!'}</h5>
-                            <h6 className="subtitle room-type is-6">{this.props.roomType.value ? this.props.roomType.value : 'Entire Place'} | {this.props.propertyType.value ? this.props.propertyType.value : 'Bungalow'}</h6>
-                        </span>
-                          <span className="price">{'$' + (this.props.price.value ? this.props.price.value : '0') + '/ Day'}</span>
-                        </div>
-                        <div className="details-body">
-                          <div className="location">
-                            <span>{(locationObj[0] ? (locationObj[0] + ', ' + locationObj[1]) : 'Toronto, Canada')}</span>
-                          </div>
-
-													<div className="guests">
-                            <span id="adult" className="guest"><i className="fa fa-male"></i><span>{this.props.guests.value.adults}</span></span>
-                            <span id="child" className="guest"><i className="fa fa-child"></i><span>{this.props.guests.value.children}</span></span>
-                          </div>
-                          <button className="button is-info" disabled>Instant Book</button>
-										    </div>
-											</div>
-										</div>
+                    <Room
+                      preview={true}
+                      title={this.props.title.value}
+                      featuredImage={this.props.featuredImage.value.file_id}
+                      roomType={this.props.roomType.value}
+                      propertyType={this.props.propertyType.value}
+                      price={this.props.price.value}
+                      guests={this.props.guests.value}
+                      location={locationObj}
+                    />
 									</div>
                 </div>
 								<Field
