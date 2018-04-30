@@ -104,7 +104,7 @@ class Bookings extends Component {
                         <h6 className="subtitle booking-type is-6">{booking.bookingType} | {booking.propertyType}</h6>
                       </div>
                       <p className="buttons">
-                        <Link to={'/your-bookings/edit/'+booking.id} className="button is-info"><span>Edit</span></Link>
+                        <Link to={'/bookings/edit/'+booking.id} className="button is-info"><span>Edit</span></Link>
                         <button onClick={() => this.activateModal(booking.id)} className="button is-danger is-outlined">
                           <span className="icon">
                             <i className="fa fa-exclamation-triangle"></i>
@@ -117,8 +117,8 @@ class Bookings extends Component {
 								}, this)
 							) : (
                 <div className="box has-text-centered" style={{flexDirection: 'column'}}>
-                  <p className="content">You haven't added any bookings!</p>
-                  <Link to="/your-bookings/add" className="button is-info">Add A Booking</Link>
+                  <p className="content">You haven't booked a room yet!</p>
+                  <Link to="/browse" className="button is-info">Book a room!</Link>
                 </div>
 						)}
 						</div>

@@ -23,22 +23,20 @@ bookings.put('/add', helpers.validateToken, function(req, res, next) {
 	// Create a booking
 	Bookings.create(bookingData, function(err, booking) {
   	console.log(err, booking);
-  	if (err || !booking) return res.json({success: false, message: Bookings.MongoErrors(err)});
+  	if (err || !booking) return res.json({error: true, errors: Bookings.MongoErrors(err)});
 		if (booking) {
-
 			// Quick update the Room booked to have a {booked: true} status.
       Rooms.findByIdAndUpdate(
-        bookingData.roomId,
+        booking.roomId,
         {$set: {booked: true}},
         {new: true, runValidators: true}
       ).exec(function(err, room) {
-      	if (err || !booking) return res.json({success: false, message: Bookings.MongoErrors(err)});
-    		if (booking) {
+      	if (err || !room) return res.json({error: true, errors: Rooms.MongoErrors(err)});
+    		if (room) {
 					// If we Successfully updated the room, then save our booking.
 					booking.save(function(err) {
-    				if (err) res.send('Idk');
+    				if (err) return res.json({error: true, errors: Rooms.MongoErrors(err)});
     				const payload = {
-    					success: true,
     	        booking: booking
     	      };
     	      res.send({payload});
@@ -67,7 +65,7 @@ bookings.post('/edit/:bookingId', helpers.validateToken, function(req, res, next
 			{$set: bookingData},
 			{new: true, runValidators: true}
 		).exec(function(err, booking) {
-      if (err || !booking) return res.json({success: false, message: Bookings.MongoErrors(err)});
+      if (err || !booking) return res.json({error: true, errors: Bookings.MongoErrors(err)});
     	if (booking) {
         const payload = {
 	        booking: booking
@@ -86,7 +84,7 @@ bookings.get('/:bookingId', function(req, res, next) {
     .populate('ownerId').populate('buyerId').populate('roomId')
 		.exec(function(err, booking) {
       console.log(err, booking);
-      if (err || !booking) return res.json({success: false, message: Bookings.MongoErrors(err)});
+      if (err || !booking) return res.json({error: true, errors: Bookings.MongoErrors(err)});
 			if (booking) {
 				const payload = {
 					id: booking._id,
@@ -112,7 +110,7 @@ bookings.get('/ownerId/:ownerId', function(req, res, next) {
 		// .populate('featuredImageId').populate('ownerId')
 		.exec(function(err, bookings) {
 			console.log(err, bookings)
-      if (err || !booking) return res.json({success: false, message: Bookings.MongoErrors(err)});
+      if (err || !booking) return res.json({errors: true, errors: Bookings.MongoErrors(err)});
       if (bookings) {
 				const payload = bookings.map((booking, index) => {
 					return {
@@ -144,7 +142,7 @@ bookings.get('/buyerId/:buyerId', function(req, res, next) {
 		// .populate('featuredImageId').populate('ownerId')
 		.exec(function(err, bookings) {
 			console.log(err, bookings)
-      if (err || !bookings) return res.json({success: false, message: Bookings.MongoErrors(err)});
+      if (err || !bookings) return res.json({error: false, errors: Bookings.MongoErrors(err)});
       if (bookings) {
 				const payload = bookings.map((booking, index) => {
 					return {
@@ -172,13 +170,28 @@ bookings.get('/buyerId/:buyerId', function(req, res, next) {
 bookings.delete('/delete/:bookingId', helpers.validateToken, function(req, res, next) {
   if (!req.params.bookingId) return res.json('A bookingId is required!');
   if (req.params.bookingId) {
-    Bookings.deleteOne({_id: req.params.bookingId})
-		.exec(function(err) {
+    Bookings.findOne({_id: req.params.bookingId})
+		.exec(function(err, booking) {
       console.log(err);
-      if (err) return res.json({success: false, message: Bookings.MongoErrors(err)});
-      if (!err) {
-        console.log('Deleted', req.params.bookingId);
-				return res.status(200).send({payload: {error: false}});
+      if (err || !booking) return res.json({error: true, errors: Bookings.MongoErrors(err)});
+      if (booking) {
+				Rooms.findByIdAndUpdate(
+	        booking.roomId,
+	        {$set: {booked: false}},
+	        {new: true, runValidators: true}
+	      ).exec(function(err, room) {
+	      	if (err || !room) return res.json({error: true, errors: Rooms.MongoErrors(err)});
+	    		if (room) {
+						Bookings.deleteOne({_id: req.params.bookingId})
+						.exec(function(err) {
+							if (err) return res.json({error: true, errors: Rooms.MongoErrors(err)});
+							if (!err) {
+								console.log('Deleted', req.params.bookingId);
+								return res.status(200).send({payload: {success: true}});
+							}
+						});
+					}
+				});
       }
     });
   }
