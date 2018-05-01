@@ -18,7 +18,7 @@ import App from './containers/App';
 // Render DOM with React + Redux + Routing.
 ReactDOM.render((
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <ConnectedRouter history={history} onUpdate={() => window.scrollTo(0, 0)}>
       <Switch>
         <Route path="/" component={App} />
       </Switch>
