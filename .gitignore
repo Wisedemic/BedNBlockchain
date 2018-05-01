@@ -7,7 +7,7 @@
 /coverage
 
 # api
-/api/config/
+/api/config/config.js
 
 # production
 /build
