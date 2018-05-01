@@ -88,7 +88,7 @@ class Home extends Component {
 					<div className="hero-body">
 						<div className="container has-text-centered">
 							<h2 className="title is-2">Featured Rooms</h2>
-							<div id="featured">
+							<div id="rooms">
                 {this.props.roomsList ? (
   								this.props.roomsList.map((room, index) => {
                     const locationObj = room.location.formatted_address.split(', ');
