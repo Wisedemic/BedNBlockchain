@@ -117,13 +117,13 @@
 @media (max-width: 768px) {
   #previewer {
     display: none; }
-  #rooms .room {
+  .room {
     width: 98% !important; } }
 
 @media (max-width: 1024px) {
   #previewer {
     display: none; }
-  #rooms .room {
+  .room {
     width: 45%; } }
 
 #home .title,
