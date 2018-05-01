@@ -225,12 +225,14 @@
 #room-details {
   .hero-body {
     align-items: flex-start;
+		.subtitle {
+			color: #e84c3d;
+		}
     #price {
       font-weight: 700;
     }
     #booked {
       margin-bottom: 2rem;
-      color: #e84c3d;
     }
   }
 }

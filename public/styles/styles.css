@@ -171,11 +171,12 @@
 
 #room-details .hero-body {
   align-items: flex-start; }
+  #room-details .hero-body .subtitle {
+    color: #e84c3d; }
   #room-details .hero-body #price {
     font-weight: 700; }
   #room-details .hero-body #booked {
-    margin-bottom: 2rem;
-    color: #e84c3d; }
+    margin-bottom: 2rem; }
 
 .banner {
   width: 100%;
