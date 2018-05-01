@@ -18,7 +18,8 @@ const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
   appName: state.common.appName,
   token: state.common.token,
-  roomsList: state.rooms.roomsList
+  roomsList: state.rooms.roomsList,
+  reload: state.rooms.reload
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -47,6 +48,12 @@ class Home extends Component {
 
   componentWillUnmount() {
     this.props.onUnload();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.reload === true) {
+      this.props.onLoad();
+    }
   }
 
   render() {

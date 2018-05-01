@@ -8,7 +8,8 @@ import {
   ROOM_PAGE_UNLOADED,
   YOURROOMS_PAGE_LOADED,
   YOURROOMS_PAGE_UNLOADED,
-  DELETE_ROOM
+  DELETE_ROOM,
+  BOOK_ROOM
 } from '../actions';
 
 const defaultState = {
@@ -24,13 +25,13 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         roomsList: action.payload.rooms ? action.payload.rooms : []
-      }
+      };
     case ROOM_PAGE_LOADED:
       return {
         ...state,
         reload: false,
         currentRoomInView: action.payload.room
-      }
+      };
     case ROOMS_PAGE_LOADED:
       return {
         ...state,
@@ -52,12 +53,13 @@ export default (state = defaultState, action) => {
           loading: true
         };
       }
-      return {...state};
+      return state;
     case ASYNC_END:
       return {...state,
         loading: false
       };
     case DELETE_ROOM:
+    case BOOK_ROOM:
       return {...state,
         reload: action.payload.error ? false : true,
         errors: action.payload.error ? action.payload.errors : null

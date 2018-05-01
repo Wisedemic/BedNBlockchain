@@ -2,6 +2,8 @@ import React, {	Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import Modal from '../../components/Modal';
+
 import agent from '../../agent';
 
 import {
@@ -47,6 +49,7 @@ class Bookings extends Component {
     this.activateModal = (bookingId) => {
       this.setState({isModalActive: true, bookingId: bookingId});
     };
+
     this.editBooking = id => this.props.editBooking(id);
     this.deleteBooking = id => this.props.deleteBooking(id);
   }
@@ -69,25 +72,14 @@ class Bookings extends Component {
   render() {
     return (
 			<section id="bookings" className="hero is-light is-bold is-fullheight">
-        {this.state.isModalActive ? (
-          <div className="modal is-active">
-            <div className="modal-background"></div>
-            <div className="modal-card">
-              <header className="modal-card-head">
-                <button onClick={this.closeModal} className="modal-close is-large" aria-label="close"></button>
-              </header>
-              <section className="modal-card-body">
-                Are you sure you would like to delete this booking?
-              </section>
-              <div className="modal-card-foot">
-                <div className="buttons">
-                  <button onClick={() => this.props.deleteBooking(this.state.bookingId)} className={'button is-danger ' + (this.props.loading ? 'is-loading' : '')}>DELETE</button>
-                  <button onClick={this.closeModal} className="button">Cancel</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : null}
+        <Modal
+          isActive={this.state.isModalActive}
+          isLoading={this.props.loading}
+          content={'Are you sure you would like to cancel this booking?'}
+          confirmText={'Confirm'}
+          onClose={this.closeModal}
+          onClickConfirm={() => this.props.deleteBooking(this.state.bookingId)}
+        />
 				<div className="hero-body">
 					<div className="container has-text-centered">
 						<h2 className="title is-2">Your Bookings</h2>
