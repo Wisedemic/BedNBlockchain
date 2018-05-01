@@ -89,19 +89,20 @@ class Bookings extends Component {
 									return (
 										<div className="box" key={index}>
                       <figure className="image">
-                        <img src={'http://localhost:3001/api/uploads/' + booking.featuredImageId} alt="Placeholder image" />
+                        <img src={'http://localhost:3001/api/uploads/' + booking.room.featuredImageId} alt="Placeholder image" />
                       </figure>
                       <div className="details">
-                        <h5 className="title is-5">{booking.title}</h5>
-                        <h6 className="subtitle booking-type is-6">{booking.bookingType} | {booking.propertyType}</h6>
-                      </div>
+                        <h3 id="title" className="title is-5">{booking.room.title}</h3>
+                        <h4 id="roomType" className="subtitle booking-type is-6">{booking.room.roomType} | {booking.room.propertyType}</h4>
+                        <h4 id="price" className="title is-5">${booking.price} <span className="units" style={{fontSize: '20px'}}>/ Day</span></h4>
+                    </div>
                       <p className="buttons">
                         <Link to={'/bookings/edit/'+booking.id} className="button is-info"><span>Edit</span></Link>
                         <button onClick={() => this.activateModal(booking.id)} className="button is-danger is-outlined">
                           <span className="icon">
                             <i className="fa fa-exclamation-triangle"></i>
                           </span>
-                          <span>Delete</span>
+                          <span>Cancel</span>
                         </button>
                       </p>
 										</div>

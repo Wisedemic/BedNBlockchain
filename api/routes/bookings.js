@@ -102,44 +102,13 @@ bookings.get('/:bookingId', function(req, res, next) {
   }
 });
 
-// Get bookings by the room's Owner's ID (a User)
-bookings.get('/ownerId/:ownerId', function(req, res, next) {
-	if (!req.params.ownerId) return res.json('An ownerId is required!');
-	if (req.params.ownerId) {
-		Bookings.find({ownerId: req.params.ownerId})
-		// .populate('featuredImageId').populate('ownerId')
-		.exec(function(err, bookings) {
-			console.log(err, bookings)
-      if (err || !booking) return res.json({errors: true, errors: Bookings.MongoErrors(err)});
-      if (bookings) {
-				const payload = bookings.map((booking, index) => {
-					return {
-						id: booking._id,
-						ownerId: booking.ownerId,
-						featuredImageId: booking.featuredImageId,
-						title: booking.title,
-						description: booking.description,
-						propertyType: booking.propertyType,
-						bookingType: booking.bookingType,
-						location: booking.location,
-						price: booking.price,
-						guests: booking.guests,
-						updated_at: booking.updated_at,
-						created_at: booking.created_at
-					};
-				});
-        return res.json({payload: {bookings: payload}});
-      }
-		});
-	}
-});
-
 // Get a booking by buyerID (User)
 bookings.get('/buyerId/:buyerId', function(req, res, next) {
 	if (!req.params.buyerId) return res.json('A buyerId is required!');
 	if (req.params.buyerId) {
 		Bookings.find({buyerId: req.params.buyerId})
-		// .populate('featuredImageId').populate('ownerId')
+		// .populate('featuredImageId')
+		.populate('roomId')
 		.exec(function(err, bookings) {
 			console.log(err, bookings)
       if (err || !bookings) return res.json({error: false, errors: Bookings.MongoErrors(err)});
@@ -147,13 +116,9 @@ bookings.get('/buyerId/:buyerId', function(req, res, next) {
 				const payload = bookings.map((booking, index) => {
 					return {
 						id: booking._id,
+						buyerId: booking.buyerId,
+						room: booking.roomId,
 						ownerId: booking.ownerId,
-						featuredImageId: booking.featuredImageId,
-						title: booking.title,
-						description: booking.description,
-						propertyType: booking.propertyType,
-						bookingType: booking.bookingType,
-						location: booking.location,
 						price: booking.price,
 						guests: booking.guests,
 						updated_at: booking.updated_at,

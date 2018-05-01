@@ -50,7 +50,7 @@ const Room = props => {
               <button className="button is-primary" disabled={'disabled'}>Instant Book</button>
             ) : (
               <div>
-                <Link title="Signup Required!" to="/signup" className="button is-primary" disabled={'disabled'}>Instant Book</Link>
+                <a title="Signup Required!" className="button is-primary" disabled={'disabled'}>Instant Book</a>
                 <p className="help is-danger">*Signup Required!</p>
               </div>
             )

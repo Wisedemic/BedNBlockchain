@@ -398,7 +398,7 @@ class RoomEditor extends Component {
 
                 <Field
                   key={'adults'}
-                  label={'Adults'}
+                  label={'Max Adults'}
                   type={'incrementer'}
                   value={this.props.guests.value.adults}
                   isHorizontal={true}
@@ -407,7 +407,7 @@ class RoomEditor extends Component {
                 />
                 <Field
                   key={'children'}
-                  label={'Children'}
+                  label={'Max Children'}
                   type={'incrementer'}
                   value={this.props.guests.value.children}
                   isHorizontal={true}

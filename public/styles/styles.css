@@ -1,9 +1,40 @@
+.box {
+  background: rgba(255, 255, 255, 0.5) !important; }
+
+.help {
+  font-size: 0.9rem !important; }
+
+.modal .modal-background {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: rgba(10, 10, 10, 0.86); }
+
+.modal .modal-content {
+  background-color: white; }
+
 .image-preview .image img {
   max-height: 250px;
   width: auto; }
 
-.file-name {
-  background-color: white; }
+.or {
+  padding: 0.3rem; }
+
+.results {
+  position: absolute;
+  z-index: 5;
+  width: 100%;
+  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.2);
+  background: white; }
+  .results .suggestion {
+    padding: .5rem;
+    font-size: 16px;
+    border: 1px whitesmoke solid; }
+    .results .suggestion:hover {
+      cursor: pointer;
+      background: whitesmoke; }
 
 #search .control:hover:after {
   transform: scaleX(0.9); }
@@ -28,13 +59,8 @@
     max-height: 150px;
     max-width: 150px; }
 
-.field-label {
-  font-weight: 700; }
-
-.is-info .room .title {
-  color: #4a4a4a !important; }
-
-#yourRooms .rooms {
+#yourRooms .rooms,
+#bookings .rooms {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,25 +69,30 @@
   max-width: 900px;
   margin: 0 auto; }
 
-#yourRooms .box {
+#yourRooms .box,
+#bookings .box {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
   justify-content: center;
   align-items: center; }
-  #yourRooms .box figure {
+  #yourRooms .box figure,
+  #bookings .box figure {
     max-width: 200px;
     padding: .5rem; }
-    #yourRooms .box figure img {
+    #yourRooms .box figure img,
+    #bookings .box figure img {
       border-radius: 4px;
       border: 4px solid white; }
-  #yourRooms .box .details {
+  #yourRooms .box .details,
+  #bookings .box .details {
     flex-direction: column;
     text-align: left;
     flex-grow: 1;
     padding-top: 1rem; }
-  #yourRooms .box .buttons {
+  #yourRooms .box .buttons,
+  #bookings .box .buttons {
     align-self: flex-end; }
 
 #roomEditor .preview {
@@ -72,6 +103,9 @@
 #rooms {
   flex-grow: 1;
   justify-content: space-between; }
+
+.is-info .room .title {
+  color: #4a4a4a !important; }
 
 .room {
   display: inline-flex;
@@ -113,18 +147,6 @@
       .room .guests .guest .fa {
         display: flex;
         font-size: 16px; }
-
-@media (max-width: 768px) {
-  #previewer {
-    display: none; }
-  .room {
-    width: 98% !important; } }
-
-@media (max-width: 1024px) {
-  #previewer {
-    display: none; }
-  .room {
-    width: 45%; } }
 
 #home .title,
 #home .subtitle {
@@ -198,23 +220,6 @@
     padding-bottom: 220px;
     color: white !important; }
 
-.box {
-  background: rgba(255, 255, 255, 0.5) !important; }
-
-.help {
-  font-size: 0.9rem !important; }
-
-.modal .modal-background {
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  background-color: rgba(10, 10, 10, 0.86); }
-
-.modal .modal-content {
-  background-color: white; }
-
 footer {
   padding: 1.5rem !important; }
   footer .title {
@@ -239,22 +244,11 @@ footer {
   footer a:hover {
     color: #066db1; }
 
-.or {
-  padding: 0.3rem; }
+.field-label {
+  font-weight: 700; }
 
-.results {
-  position: absolute;
-  z-index: 5;
-  width: 100%;
-  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.2);
-  background: white; }
-  .results .suggestion {
-    padding: .5rem;
-    font-size: 16px;
-    border: 1px whitesmoke solid; }
-    .results .suggestion:hover {
-      cursor: pointer;
-      background: whitesmoke; }
+.file-name {
+  background-color: white; }
 
 input {
   z-index: 3; }
@@ -274,3 +268,15 @@ input {
   right: 0.625em;
   top: 0.625em;
   z-index: 4; }
+
+@media (max-width: 768px) {
+  #previewer {
+    display: none; }
+  .room {
+    width: 98% !important; } }
+
+@media (max-width: 1024px) {
+  #previewer {
+    display: none; }
+  .room {
+    width: 45%; } }
