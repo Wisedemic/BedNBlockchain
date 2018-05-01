@@ -41,19 +41,24 @@ class Room extends Component {
     if (this.props.currentRoom) {
       return (
         <div>
-  	      <section id="room" className="hero is-info is-bold">
-  					<div className="banner room-banner" style={{backgroundImage: 'url(http://localhost:3001/api/uploads/'+this.props.currentRoom.featuredImageId+')'}}></div>
-  					<div className="hero-body">
-  						<div className="container has-text-centered">
+  	      <section id="room-header" className="hero is-info is-bold">
+            <div className="banner room-banner" style={{backgroundImage: 'url(http://localhost:3001/api/uploads/'+this.props.currentRoom.featuredImageId+')'}}></div>
+			      <div className="hero-body">
+              <div className="container has-text-centered">
   		          <h1 className="title is-1">{this.props.currentRoom.title}</h1>
   							<h4 className="subtitle is-4">{this.props.currentRoom.propertyType} | {this.props.currentRoom.roomType}</h4>
   						</div>
   	        </div>
   	      </section>
-  				<section id="details" className="hero is-fullheight">
+  				<section id="room-details" className="hero is-fullheight">
   					<div className="hero-body">
   						<div className="container">
-  							<h4 className="subtitle is-4">${this.props.currentRoom.price} / Day</h4>
+                <h5 id="booked" className="subtitle is-5">{this.props.currentRoom.booked ? 'Available for booking!' : (<span style={{color: '#e84c3d'}}>This room is booked!</span>)}</h5>
+  							<h3 id="price" className="title is-3">${this.props.currentRoom.price} / Day</h3>
+                <p id="address" className="content">
+                  <strong>Address: </strong>{this.props.currentRoom.location.formatted_address}
+                </p>
+                <hr />
   						</div>
   					</div>
   				</section>

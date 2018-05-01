@@ -133,9 +133,27 @@
 #home .button {
   font-weight: 600; }
 
-.room-banner {
-  width: 100% !important;
-  height: 100% !important; }
+#room-header {
+  min-height: 500px; }
+  #room-header .room-banner {
+    max-height: 500px;
+    width: 100% !important;
+    height: 100% !important; }
+  #room-header .hero-body {
+    position: absolute;
+    margin-top: 3.5rem;
+    padding-top: 150px;
+    max-height: 500px;
+    min-height: 500px;
+    min-width: 100%; }
+
+#room-details .hero-body {
+  align-items: flex-start; }
+  #room-details .hero-body #price {
+    font-weight: 600;
+    color: #e84c3d; }
+  #room-details .hero-body #booked {
+    margin-bottom: 2rem; }
 
 .banner {
   width: 100%;
@@ -149,11 +167,11 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  -webkit-filter: blur(5px);
-  -moz-filter: blur(5px);
-  -o-filter: blur(5px);
-  -ms-filter: blur(5px);
-  filter: blur(5px); }
+  -webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  -o-filter: blur(3px);
+  -ms-filter: blur(3px);
+  filter: blur(3px); }
 
 .hero-head {
   flex-grow: 1; }
