@@ -97,7 +97,8 @@ class Bookings extends Component {
                         <h4 id="price" className="title is-5">${booking.price} <span className="units" style={{fontSize: '20px'}}>/ Day</span></h4>
                     </div>
                       <p className="buttons">
-                        <Link to={'/bookings/edit/'+booking.id} className="button is-info"><span>Edit</span></Link>
+												<Link to={'/room/'+booking.room._id} className="button is-info"><span>View Room Details</span></Link>
+                        <Link to={'/bookings/edit/'+booking.id} className="button is-info"><span>Edit Booking</span></Link>
                         <button onClick={() => this.activateModal(booking.id)} className="button is-danger is-outlined">
                           <span className="icon">
                             <i className="fa fa-exclamation-triangle"></i>

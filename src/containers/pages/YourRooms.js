@@ -96,7 +96,7 @@ class YourRooms extends Component {
                         <h6 className="subtitle room-type is-6">{room.roomType} | {room.propertyType}</h6>
                       </div>
                       <p className="buttons">
-                        <Link to={'/your-rooms/edit/'+room.id} className="button is-info"><span>Edit</span></Link>
+                        <Link to={'/your-rooms/edit/'+room.id} className="button is-info"><span>Edit Room</span></Link>
                         <button onClick={() => this.activateModal(room.id)} className="button is-danger is-outlined">
                           <span className="icon">
                             <i className="fa fa-exclamation-triangle"></i>
