@@ -52,13 +52,26 @@ class Room extends Component {
   	      </section>
   				<section id="room-details" className="hero is-fullheight">
   					<div className="hero-body">
-  						<div className="container">
-                <h5 id="booked" className="subtitle is-5">{this.props.currentRoom.booked ? 'Available for booking!' : (<span style={{color: '#e84c3d'}}>This room is booked!</span>)}</h5>
-  							<h3 id="price" className="title is-3">${this.props.currentRoom.price} / Day</h3>
-                <p id="address" className="content">
-                  <strong>Address: </strong>{this.props.currentRoom.location.formatted_address}
-                </p>
-                <hr />
+  						<div className="container is-fluid">
+                <div className="columns">
+                  <div className="column">
+                    <h5 id="booked" className="subtitle is-5">{this.props.currentRoom.booked ? 'Available for booking!' : (<span style={{color: '#e84c3d'}}>This room is booked!</span>)}</h5>
+      							<h2 id="price" className="title is-2">${this.props.currentRoom.price} <span className="units" style={{fontSize: '20px'}}>/ Day</span></h2>
+                    <p id="address" className="content">
+                      <strong>Address: </strong>{this.props.currentRoom.location.formatted_address}
+                    </p>
+                    <hr />
+                    <div id="details">
+                      <h5 className="subtitle is-5">Room Details</h5>
+                      <p className="content">{this.props.currentRoom.description}</p>
+                    </div>
+                  </div>
+                  <div className="column sidebar is-one-third">
+                    <div className="box">
+
+                    </div>
+                  </div>
+                </div>
   						</div>
   					</div>
   				</section>

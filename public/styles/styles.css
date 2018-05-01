@@ -150,10 +150,10 @@
 #room-details .hero-body {
   align-items: flex-start; }
   #room-details .hero-body #price {
-    font-weight: 600;
-    color: #e84c3d; }
+    font-weight: 700; }
   #room-details .hero-body #booked {
-    margin-bottom: 2rem; }
+    margin-bottom: 2rem;
+    color: #e84c3d; }
 
 .banner {
   width: 100%;
