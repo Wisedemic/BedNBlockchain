@@ -20,7 +20,8 @@ const mapStateToProps = state => ({
 	...state.auth,
 	email: state.auth.email,
 	password: state.auth.password,
-	passwordConfirm: state.auth.passwordConfirm
+	passwordConfirm: state.auth.passwordConfirm,
+	errors: state.auth.errors
 });
 
 // Action Creators
@@ -109,7 +110,7 @@ const mapDispatchToProps = dispatch => ({
 	closeError: () => dispatch({ type: CLOSE_ERROR })
 });
 
-export class Settings extends Component {
+export class Signup extends Component {
 	constructor() {
 		super();
 		// Grab the input on input Change Events
@@ -136,56 +137,60 @@ export class Settings extends Component {
     const password = this.props.password.value;
     const passwordConfirm = this.props.passwordConfirm.value;
     return (
-      <section id="settings" className="hero is-light is-fullheight">
+      <section id="signup" className="hero is-light is-fullheight">
         <div className="hero-body">
 					<div className="columns is-centered" style={{flexGrow: 1}}>
 						<div className="column is-half">
 							<ErrorList
 								handleClose={this.props.closeError}
 								errors={this.props.errors} />
-              <h1 className="title is-1">Settings</h1>
-              <div className="box">
-  							{/*<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
-  								<Field
-  									key={'email'}
-  									type={'text'}
-  									value={this.props.email.value}
-  									placeholder={'Enter your email'}
-  									onChange={this.onChangeEmail}
-  									inputState={this.props.email.inputState}
-  									message={this.props.email.message}
-  								/>
-  								<Field
-  									key={'password'}
-  									type={'password'}
-  									value={this.props.password.value}
-  									placeholder={'Enter your password'}
-  									onChange={this.onChangePassword}
-  									inputState={this.props.password.inputState}
-  									message={this.props.password.message}
-  								/>
-  								<Field
-  									key={'passwordConfirm'}
-  									type={'password'}
-  									value={this.props.passwordConfirm.value}
-  									placeholder={'Re-enter password'}
-  									onChange={this.onChangePasswordConfirm}
-  									inputState={this.props.passwordConfirm.inputState}
-  									message={this.props.passwordConfirm.message}
-  								/>
-  								<div className="field">
-  									<p className="control">
-  										<button
-  											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '') + (this.props.email.valid && this.props.password.valid && this.props.passwordConfirm.valid ? '' : ' is-outlined')}
-  											onClick={this.submitForm}
-  											disabled={(this.props.email.valid && this.props.password.valid && this.props.passwordConfirm.valid) ? false : 'disabled'}
+							<h1 className="title is-1">Sign Up</h1>
+							<form onSubmit={this.submitForm(email, password, passwordConfirm)}>
+								<Field
+									key={'email'}
+									type={'text'}
+									value={this.props.email.value}
+									placeholder={'Enter your email'}
+									onChange={this.onChangeEmail}
+									inputState={this.props.email.inputState}
+									message={this.props.email.message}
+								/>
+								<Field
+									key={'password'}
+									type={'password'}
+									value={this.props.password.value}
+									placeholder={'Enter your password'}
+									onChange={this.onChangePassword}
+									inputState={this.props.password.inputState}
+									message={this.props.password.message}
+								/>
+								<Field
+									key={'passwordConfirm'}
+									type={'password'}
+									value={this.props.passwordConfirm.value}
+									placeholder={'Re-enter password'}
+									onChange={this.onChangePasswordConfirm}
+									inputState={this.props.passwordConfirm.inputState}
+									message={this.props.passwordConfirm.message}
+								/>
+								<div className="field is-grouped">
+									<p className="control">
+										<button
+											className={'button is-primary' + (this.props.inProgress ? ' is-loading': '') + (this.props.email.valid && this.props.password.valid && this.props.passwordConfirm.valid ? '' : ' is-outlined')}
+											onClick={this.submitForm}
+											disabled={(this.props.email.valid && this.props.password.valid && this.props.passwordConfirm.valid) ? false : 'disabled'}
 											>
-  											Save
-  										</button>
-  									</p>
-  								</div>
-  							</form> */}
-              </div>
+											Sign Up
+										</button>
+									</p>
+									<p className="or">or</p>
+									<p className="control">
+										<Link className={'button is-text'} to="/login">
+											Log In
+										</Link>
+                  </p>
+								</div>
+							</form>
 						</div>
 					</div>
         </div>
@@ -194,4 +199,4 @@ export class Settings extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

@@ -25,7 +25,7 @@ const defaultState = {
   password: {...defaultInputState},
   passwordConfirm: {...defaultInputState},
   inProgress: false,
-  errors: null
+  errors: []
 };
 
 export default (state = defaultState, action) => {
@@ -72,7 +72,7 @@ export default (state = defaultState, action) => {
       };
     case HANDLE_AJAX_ERROR:
       if (action.subtype === SIGNUP || action.subtype === LOGIN) {
-        return {...state, inProgress: false, errors: action.errors};
+        return {...state, errors: action.errors};
       }
       break;
 		case LOGIN_PAGE_UNLOADED:

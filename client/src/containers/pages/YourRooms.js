@@ -89,7 +89,7 @@ class YourRooms extends Component {
 									return (
 										<div className="box" key={index}>
                       <figure className="image">
-                        <img src={'http://localhost:3001/api/uploads/' + room.featuredImageId} alt="Placeholder image" />
+                        <img src={'http://localhost:3001/api/uploads/' + room.featuredImageId} alt="Placeholder" />
                       </figure>
                       <div className="details">
                         <h5 className="title is-5">{room.title}</h5>

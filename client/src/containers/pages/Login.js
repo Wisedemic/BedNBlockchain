@@ -19,7 +19,8 @@ import {
 const mapStateToProps = state => ({
 	...state.auth,
 	email: state.auth.email,
-	password: state.auth.password
+	password: state.auth.password,
+	errors: state.auth.errors
 });
 
 // Action Creators

@@ -89,7 +89,7 @@ class Bookings extends Component {
 									return (
 										<div className="box" key={index}>
                       <figure className="image">
-                        <img src={'http://localhost:3001/api/uploads/' + booking.room.featuredImageId} alt="Placeholder image" />
+                        <img src={'http://localhost:3001/api/uploads/' + booking.room.featuredImageId} alt="Placeholder" />
                       </figure>
                       <div className="details">
                         <h3 id="title" className="title is-5">{booking.room.title}</h3>

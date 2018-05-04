@@ -16,8 +16,14 @@ import Bookings from './pages/Bookings';
 import Settings from './pages/Settings';
 import Four_Oh_Four from '../components/404';
 import Loading from '../components/Loading';
+import GlobalErrors from '../components/GlobalErrors';
 
-import { APP_LOAD, REDIRECT } from '../actions';
+import {
+	APP_LOAD,
+	REDIRECT,
+	CLOSE_ERROR
+} from '../actions';
+
 import agent from '../agent';
 
 import { store } from '../store';
@@ -28,11 +34,13 @@ const mapStateToProps = state => {
     appLoaded: state.common.appLoaded,
     appName: state.common.appName,
     currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo
+    redirectTo: state.common.redirectTo,
+		errors: state.common.errors
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+	closeError: () => dispatch({ type: CLOSE_ERROR }),
   onLoad: (payload, token) => {
 	  dispatch({ type: APP_LOAD, payload, token, skipTracking: true })
 	},
@@ -41,7 +49,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class App extends React.Component {
-  componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
       store.dispatch(push(nextProps.redirectTo));
       this.props.onRedirect();
@@ -92,11 +100,15 @@ class App extends React.Component {
 
     return (
       <div className="app">
+
         <Header
           appName={this.props.appName}
           currentUser={this.props.currentUser}
           appLoaded={this.props.appLoaded}
         />
+				{this.props.errors ? (
+					<GlobalErrors errors={this.props.errors} handleClose={this.props.closeError} />
+				) : null}
         {this.props.currentUser ? (
           <AnimatedSwitch
             atEnter={bounceTransition.atEnter}

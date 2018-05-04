@@ -24,9 +24,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class Room extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     console.log(this.props)
     this.props.onLoad(this.props.match.params.roomId);

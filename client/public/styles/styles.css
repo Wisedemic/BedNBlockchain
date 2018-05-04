@@ -1,3 +1,9 @@
+#global {
+  position: absolute;
+  width: 100%;
+  margin-top: .5rem;
+  z-index: 5; }
+
 .box {
   background: rgba(255, 255, 255, 0.5) !important; }
 

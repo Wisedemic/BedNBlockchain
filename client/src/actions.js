@@ -2,7 +2,7 @@
 export const ASYNC_START = 'ASYNC_START';
 export const ASYNC_END = 'ASYNC_END';
 export const HANDLE_AJAX_ERROR = 'HANDLE_AJAX_ERROR';
-
+export const CONNECTION_ERROR = 'CONNECTION_ERROR';
 // Actions that do things
 export const APP_LOAD = 'APP_LOAD';
 export const LOGIN = 'LOGIN';

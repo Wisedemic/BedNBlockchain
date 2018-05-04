@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 class ErrorsList extends Component {
   render() {
     if (this.props.errors) {
-      this.props.errors.map((error, index) => {
+      return this.props.errors.map((error, index) => {
+				console.log(error, index);
         return (
           <div key={index} className="notification is-danger">
             <button className="delete" onClick={() => this.props.handleClose} />
-            <span>{this.props.errors[index]}</span>
+            <span>{error}</span>
           </div>
         );
       }, this);

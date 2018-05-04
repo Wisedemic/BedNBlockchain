@@ -1,6 +1,6 @@
 import React, {	Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import agent from '../../agent';
 
 import Room from '../../components/Room';
@@ -62,9 +62,9 @@ class Rooms extends Component {
           </div>
         </div>
 				<div className="hero-body">
-					<div className="container is-fluid">
+					<div className="container">
 						<div id="rooms">
-							{this.props.roomsList ? (
+							{this.props.roomsList.length > 0 ? (
 								this.props.roomsList.map((room, index) => {
                   const locationObj = room.location.formatted_address.split(', ');
 									return (

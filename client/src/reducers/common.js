@@ -1,6 +1,7 @@
 import {
   APP_LOAD,
 	HANDLE_AJAX_ERROR,
+	CONNECTION_ERROR,
   REDIRECT,
 	LOGIN,
 	SIGNUP,
@@ -12,6 +13,7 @@ const defaultState = {
   appName: "Bed'N'Blockchain",
   token: null,
   viewChangeCounter: 0,
+	errors: [],
   search: {
     loading: false,
     value: '',
@@ -21,13 +23,19 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+		case CONNECTION_ERROR:
+			return {
+				...state,
+				errors: action.errors || []
+			};
 		case HANDLE_AJAX_ERROR:
 			if (action.subtype === APP_LOAD) {
 				return {
 					...state,
 					token: null,
 					appLoaded: true,
-					currentUser: null
+					currentUser: null,
+					errors: action.errors
 				};
 			}
       return {...state};
@@ -36,7 +44,8 @@ export default (state = defaultState, action) => {
         ...state,
         token: action.token || null,
         appLoaded: true,
-        currentUser: action.payload ? action.payload.user : null
+        currentUser: action.payload ? action.payload.user : null,
+				errors: action.error ? action.errors : []
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
