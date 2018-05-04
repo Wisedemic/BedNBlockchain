@@ -108,7 +108,6 @@ rooms.get('/:roomId', function(req, res, next) {
     Rooms.findOne({_id: req.params.roomId})
     .populate('ownerId')
 		.exec(function(err, room) {
-      console.log(err, room);
       if (err || !room) return res.json({error: true, errors: Rooms.MongoErrors(err)});
       if (room) {
 				const payload = {room: {
@@ -139,7 +138,6 @@ rooms.get('/ownerId/:ownerId', function(req, res, next) {
 		Rooms.find({ownerId: req.params.ownerId})
 		// .populate('featuredImageId').populate('ownerId')
 		.exec(function(err, rooms) {
-			console.log(err, rooms)
 			if (err || !rooms) return res.json({error: true, errors: Rooms.MongoErrors(err)});
       if (rooms) {
 				const payload = rooms.map((room, index) => {

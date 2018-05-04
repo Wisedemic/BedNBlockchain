@@ -1,4 +1,4 @@
-console.log('[SERVER] Bed\'N\'Blockchain API starting.');
+console.log('[SERVER] Bed\'N\'Blockchain API starting....');
 
 // Setup Express Server
 const express = require('express');
@@ -64,7 +64,6 @@ api.use(bodyParser.json());
 
 // Routes
 const routes = require('./routes/')(api);
-console.log(process.env.NODE_ENV)
 api.use('/api/', routes);
 
 console.log('[SERVER] Bed\'N\'Blockchain API started on port ' + api.get('port'));

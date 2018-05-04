@@ -79,7 +79,6 @@ uploads.get('/:fileId', function(req, res, next) {
 
 		readStream.on('data', function(chunk) {
 			chunks.push(chunk);
-		  console.log('Retrieving chunks...', chunk);
 		}); //loading
 
 		readStream.on("end", function() {

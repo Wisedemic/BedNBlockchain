@@ -14,7 +14,6 @@ import {
 
 // Allow an action to a Promise
 const promiseMiddleware = store => next => action => {
-	console.log('Promise Processing for', action);
 	// If the action has a payload that is a promise.
   if (isPromise(action.payload)) {
 		// Tell react that we started an ASYNC action with it's subtype.
@@ -62,7 +61,6 @@ const promiseMiddleware = store => next => action => {
       }
     );
 	} else {
-		console.log('Push next action', action);
 		next(action);
 	}
 };
@@ -71,7 +69,6 @@ const promiseMiddleware = store => next => action => {
 const localStorageMiddleware = store => next => action => {
 	if (action.type === SIGNUP || action.type === LOGIN) {
     if (!action.error) {
-			console.log('token middleware time', action);
       window.localStorage.setItem('jwt', action.payload.user.token);
 			action.token = action.payload.user.token;
       agent.setToken(action.payload.user.token);

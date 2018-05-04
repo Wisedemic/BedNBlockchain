@@ -44,29 +44,22 @@ auth.post('/login', function(req, res, next) {
 
 auth.get('/', helpers.validateToken, function(req, res, next) {
 	let token = req.headers.authorization.split(' ')[1];
-	Users
-		.findOne({ 'token.key': token })
-		.lean()
-		.exec(function (err, user) {
-		if (err) {
-			console.log(err, user);
-			res.json({error: true, errors: ['Token not associated to a User!']});
-		}
-		if (user) {
-			console.log(err, user);
-			const payload = {user: {
-				id: user._id,
-				email: user.email,
-				token: user.token.key,
-				created_at: user.created_at,
-				updated_at: user.updated_at
-			}};
-			res.json({payload});
-		} else {
-			console.log(err, user);
-			res.json({error: true, errors: ['Token not associated to a User!']});
-		}
-	});
+
+	Users.findOne({ 'token.key': token }).lean().exec(function (err, user) {
+			if (err || !user) {
+				res.json({error: true, errors: ['Token not associated to a User!']});
+			}
+			if (user) {
+				const payload = {user: {
+					id: user._id,
+					email: user.email,
+					token: user.token.key,
+					created_at: user.created_at,
+					updated_at: user.updated_at
+				}};
+				res.json({payload});
+			}
+		});
 });
 
 // Register a new User
@@ -91,7 +84,6 @@ auth.post('/signup', function(req, res, next) {
 
 		// Create the user
 		Users.create(req.body, function(err, user) {
-			console.log('User Create function Complete.', err, user);
 			if (err) {
 				if (err.code === 11000) {
 					return res.json({error: true, errors: ['Email Already Registered!']});
@@ -103,7 +95,6 @@ auth.post('/signup', function(req, res, next) {
 				// Authenticate them through Passport.js through our API.
 				req.login(user, function (err) {
 					if (!err) {
-						console.log('req.login successful!');
 						const payload = {user: {
 							id: user._id,
 							email: user.email,
@@ -111,10 +102,8 @@ auth.post('/signup', function(req, res, next) {
 							created_at: user.created_at,
 							token: helpers.generateAndStoreToken(req, user)
 						}}
-						console.log(user)
 						return res.json({payload});
 					} else {
-						console.log('req.login errors: ', err);
 						return res.json({
 							error: true,
 							payload: {errors: 'Something Unexpected Happened'}
