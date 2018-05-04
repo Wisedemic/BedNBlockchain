@@ -1,29 +1,8 @@
 /* Requires */
 const router = require('express').Router();
-const cors = require('cors');
 
 // Export all routes to express
 module.exports = function(api) {
-
-	// CORS Configuration is done here!
-	let corsOptions = {
-	  origin: ['http://localhost:3001', 'http://localhost:3000', ],
-	  optionsSuccessStatus: 200,
-		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-	};
-
-	// Run all routes through these middleware fn's
-	router.all('*', cors(corsOptions), function(req, res, next) {
-		req.accepts('application/json');
-		console.log('Path: ' + req.path);
-		console.log('Method: ' + req.method);
-		console.log('Params: ', req.params);
-		console.log('Body: ');
-		console.log(req.body);
-		console.log('Headers: ');
-		console.log(req.headers);
-		next();
-	});
 
 	// Define All Other Routes Here
 	router.use('/auth/', require('./auth'));
