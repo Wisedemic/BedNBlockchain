@@ -105,6 +105,7 @@ auth.post('/signup', function(req, res, next) {
 					if (!err) {
 						console.log('req.login successful!');
 						const payload = {user: {
+							id: user._id,
 							email: user.email,
 							updated_at: user.updated_at,
 							created_at: user.created_at,

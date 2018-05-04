@@ -17,7 +17,7 @@ module.exports = function(api) {
 		for (var label in errs.errors) {
 			console.log(errs)
 			const msg = errs.errors[label].properties.message;
-	    data[counter] = {label: msg};
+	    data[counter] = msg;
 			counter++;
 		}
 		return data;

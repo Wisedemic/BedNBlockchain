@@ -30,25 +30,25 @@ passport.use(new LocalStrategy({usernameField: 'email'}, function(username, pass
     Users.findOne({ email: username }).select('+salt').exec(function (err, user) {
       // If the User is not Found
       if (err) {
-        return done({message: 'User Not Found'});
+        return done('User Not Found');
       }
 
       // Check for user data
       if (!user) {
-        return done(null, false, {message: 'Incorrect username.'});
+        return done(null, false, 'Incorrect username.');
       }
 
       // Validate PW
       user.validPassword(password, function(err, isMatch) {
         // If the password was false
-        if (err) return done(null, false, {message: 'Authentication Error'});
+        if (err) return done(null, false, 'Authentication Error');
 
         // If the password was correct
         if (isMatch) {
           // Send Success Message, along with the user data
-          return done(null, user, {message: 'Login Successful'});
+          return done(null, user, 'Login Successful');
         } else {
-          return done(null, false, {message: 'Incorrect Password'})
+          return done(null, false, 'Incorrect Password')
         }
       });
     });
