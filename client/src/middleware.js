@@ -32,7 +32,7 @@ const promiseMiddleware = store => next => action => {
 				// Grab a known payload if it exists.
         action.payload = (res.payload || res.body);
 
-				// Tell the app the request finished.
+				// Tell the react the request finished.
         store.dispatch({ type: ASYNC.END, subtype: action.type, promise: action.payload });
 
 				// Send an error to react/redux.
@@ -57,7 +57,7 @@ const promiseMiddleware = store => next => action => {
 				action.errors = ['A connection error occured! If this continues, please report it!'];
 				action.payload = {error: action.error, errors: action.errors};
 				store.dispatch({ type: ASYNC.END, subtype: action.type, promise: action.payload });
-        store.dispatch({ type: ASYNC.CONNECTION_ERROR, errors: action.errors, killSession: true });
+        store.dispatch({ type: ASYNC.CONNECTION_ERROR, errors: action.errors });
       }
     );
 	} else {
