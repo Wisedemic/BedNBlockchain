@@ -43,7 +43,7 @@ export default (state = defaultState, action) => {
       }
       break;
     case AUTH.CLOSE_ERROR:
-      return {...state, errors: null};
+      return {...state, errors: state.errors.filter((item, index) => action.index !== index)};
     case AUTH.FIELD_ERROR:
       return {...state,
         [action.key]: {

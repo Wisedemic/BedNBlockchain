@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: LOAD_PAGE.YOURROOMS, payload })
   },
   onUnload: () => dispatch({ type: UNLOAD_PAGE.YOURROOMS }),
-  closeError: () => dispatch({ type: ROOMS.CLOSE_ERROR }),
+  closeError: (index) => dispatch({ type: ROOMS.CLOSE_ERROR, index: index }),
   deleteRoom: (id) => {
     const payload = agent.Rooms.deleteRoom(id);
     dispatch({ type: ROOMS.DELETE, payload });

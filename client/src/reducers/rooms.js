@@ -9,7 +9,8 @@ const defaultState = {
   reload: false,
   roomsList: [],
   currentRoomInView: null,
-  yourRooms: []
+  yourRooms: [],
+  errors: null
 };
 
 export default (state = defaultState, action) => {

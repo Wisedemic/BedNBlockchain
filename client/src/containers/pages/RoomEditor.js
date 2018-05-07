@@ -63,10 +63,8 @@ const mapDispatchToProps = dispatch => ({
       console.log(url);
     }
   },
-  onUnload: () =>
-		dispatch({ type: UNLOAD_PAGE.ROOMEDITOR }),
-	closeError: () =>
-		dispatch({ type: ROOMEDITOR.CLOSE_ERROR }),
+  onUnload: () =>	dispatch({ type: UNLOAD_PAGE.ROOMEDITOR }),
+	closeError: (index) => dispatch({ type: ROOMEDITOR.CLOSE_ERROR, index: index }),
   handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId, mode, roomId) => {
 
     if (mode === 'edit') {

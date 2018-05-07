@@ -22,6 +22,7 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
+	closeError: (index) => dispatch({ type: AUTH.CLOSE_ERROR, index: index }),
 	onLoad: () => dispatch({ type: LOAD_PAGE.LOGIN }),
 	unLoad: () => dispatch({ type: UNLOAD_PAGE.LOGIN }),
 	onChangeEmail: value => {
@@ -48,9 +49,7 @@ const mapDispatchToProps = dispatch => ({
 		const payload = agent.Auth.login(email, password);
 		console.log('PAYLOAD', payload);
 		dispatch({ type: AUTH.LOGIN, payload })
-	},
-	closeError: () =>
-		dispatch({ type: AUTH.CLOSE_ERROR })
+	}
 });
 
 export class Login extends Component {

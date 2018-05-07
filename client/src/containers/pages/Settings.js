@@ -23,7 +23,7 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
-	closeError: () => dispatch({ type: SETTINGS.CLOSE_ERROR }),
+	closeError: (index) => dispatch({ type: SETTINGS.CLOSE_ERROR, index: index }),
 	onLoad: () => dispatch({ type: LOAD_PAGE.SETTINGS }),
 	onUnload: () => dispatch({ type: UNLOAD_PAGE.SETTINGS }),
 	onChangeEmail: value => {

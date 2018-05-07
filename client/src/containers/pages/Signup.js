@@ -23,6 +23,7 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
+	closeError: (index) => dispatch({ type: AUTH.CLOSE_ERROR, index: index }),
 	onLoad: () => dispatch({ type: LOAD_PAGE.SIGNUP }),
 	onUnload: () => dispatch({ type: UNLOAD_PAGE.SIGNUP }),
 	onChangeEmail: value => {
@@ -61,8 +62,7 @@ const mapDispatchToProps = dispatch => ({
 		const payload = agent.Auth.signup(email, password, passwordConfirm);
 		console.log('PAYLOAD', payload);
 		dispatch({ type: AUTH.SIGNUP, payload })
-	},
-	closeError: () => dispatch({ type: AUTH.CLOSE_ERROR })
+	}
 });
 
 export class Signup extends Component {
