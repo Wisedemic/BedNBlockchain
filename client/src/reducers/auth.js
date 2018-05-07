@@ -1,16 +1,8 @@
 import {
-  LOGIN,
-  SIGNUP,
-	LOGIN_PAGE_LOADED,
-	LOGIN_PAGE_UNLOADED,
-	SIGNUP_PAGE_LOADED,
-	SIGNUP_PAGE_UNLOADED,
-  ASYNC_START,
-  ASYNC_END ,
-  UPDATE_AUTH_FIELD,
-  FIELD_ERROR,
-  CLOSE_ERROR,
-  HANDLE_AJAX_ERROR
+  AUTH,
+  ASYNC,
+  LOAD_PAGE,
+  UNLOAD_PAGE
 } from '../actions';
 
 const defaultInputState = {
@@ -30,29 +22,29 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-		case LOGIN_PAGE_LOADED:
-		case SIGNUP_PAGE_LOADED:
+		case LOAD_PAGE.LOGIN:
+		case LOAD_PAGE.SIGNUP:
 			return defaultState;
-    case LOGIN:
-    case SIGNUP:
+    case AUTH.LOGIN:
+    case AUTH.SIGNUP:
       return {
         ...state,
         inProgress: false,
         errors: action.error ? action.payload.errors : null
       };
-    case ASYNC_START:
-      if (action.subtype === LOGIN || action.subtype === SIGNUP) {
+    case ASYNC.START:
+      if (action.subtype === AUTH.LOGIN || action.subtype === AUTH.SIGNUP) {
         return {...state, inProgress: true, errors: null};
       }
       break;
-    case ASYNC_END:
-      if (action.subtype === LOGIN || action.subtype === SIGNUP) {
+    case ASYNC.END:
+      if (action.subtype === AUTH.LOGIN || action.subtype === AUTH.SIGNUP) {
         return {...state, inProgress: false};
       }
       break;
-    case CLOSE_ERROR:
+    case AUTH.CLOSE_ERROR:
       return {...state, errors: null};
-    case FIELD_ERROR:
+    case AUTH.FIELD_ERROR:
       return {...state,
         [action.key]: {
           message: action.message,
@@ -61,7 +53,7 @@ export default (state = defaultState, action) => {
           valid: false
         }
       };
-    case UPDATE_AUTH_FIELD:
+    case AUTH.UPDATE_FIELD:
       return { ...state,
         [action.key]: {
           value: action.value,
@@ -70,13 +62,13 @@ export default (state = defaultState, action) => {
           valid: true
         }
       };
-    case HANDLE_AJAX_ERROR:
-      if (action.subtype === SIGNUP || action.subtype === LOGIN) {
+    case ASYNC.ERROR:
+      if (action.subtype === AUTH.SIGNUP || action.subtype === AUTH.LOGIN) {
         return {...state, errors: action.errors};
       }
       break;
-		case LOGIN_PAGE_UNLOADED:
-		case SIGNUP_PAGE_UNLOADED:
+		case UNLOAD_PAGE.LOGIN:
+		case UNLOAD_PAGE.SIGNUP:
 			return defaultState;
     default:
       return state;

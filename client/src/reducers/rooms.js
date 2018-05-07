@@ -1,15 +1,8 @@
 import {
-  ASYNC_START,
-  ASYNC_END,
-  HOME_PAGE_LOADED,
-  ROOMS_PAGE_LOADED,
-  ROOMS_PAGE_UNLOADED,
-  ROOM_PAGE_LOADED,
-  ROOM_PAGE_UNLOADED,
-  YOURROOMS_PAGE_LOADED,
-  YOURROOMS_PAGE_UNLOADED,
-  DELETE_ROOM,
-  BOOK_ROOM
+  ASYNC,
+  LOAD_PAGE,
+  UNLOAD_PAGE,
+  ROOMS
 } from '../actions';
 
 const defaultState = {
@@ -21,25 +14,21 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case HOME_PAGE_LOADED:
-      return {
-        ...state,
-        roomsList: action.payload.rooms ? action.payload.rooms : []
-      };
-    case ROOM_PAGE_LOADED:
+    case LOAD_PAGE.ROOM:
       return {
         ...state,
         reload: false,
         currentRoomInView: action.payload.room
       };
-    case ROOMS_PAGE_LOADED:
+    case LOAD_PAGE.HOME:
+    case LOAD_PAGE.ROOMS:
       return {
         ...state,
         reload: false,
         currentRoomInView: null,
         roomsList: action.payload.rooms ? action.payload.rooms : []
       };
-    case YOURROOMS_PAGE_LOADED:
+    case LOAD_PAGE.YOURROOMS:
       return {
         ...state,
         reload: false,
@@ -47,26 +36,26 @@ export default (state = defaultState, action) => {
         yourRooms: action.payload.rooms ? action.payload.rooms : []
       };
 
-    case ASYNC_START:
-      if (action.subtype === DELETE_ROOM) {
+    case ASYNC.START:
+      if (action.subtype === ROOMS.DELETE) {
         return {...state,
           loading: true
         };
       }
       return state;
-    case ASYNC_END:
+    case ASYNC.END:
       return {...state,
         loading: false
       };
-    case DELETE_ROOM:
-    case BOOK_ROOM:
+    case ROOMS.DELETE:
+    case ROOMS.BOOK:
       return {...state,
         reload: action.payload.error ? false : true,
         errors: action.payload.error ? action.payload.errors : null
       };
-    case ROOMS_PAGE_UNLOADED:
-    case ROOM_PAGE_UNLOADED:
-    case YOURROOMS_PAGE_UNLOADED:
+    case UNLOAD_PAGE.ROOMS:
+    case UNLOAD_PAGE.ROOM:
+    case UNLOAD_PAGE.YOURROOMS:
       return state;
     default:
       return state;

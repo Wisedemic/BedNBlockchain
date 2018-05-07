@@ -7,10 +7,9 @@ import Modal from '../../components/Modal';
 import agent from '../../agent';
 
 import {
-  BOOKINGS_PAGE_LOADED,
-  BOOKINGS_PAGE_UNLOADED,
-  DELETE_BOOKING,
-  CLOSE_ERROR
+  LOAD_PAGE,
+  UNLOAD_PAGE,
+  BOOKINGS
 } from '../../actions';
 
 const mapStateToProps = state => ({
@@ -23,13 +22,13 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: (userId) => {
     const payload = agent.Bookings.bookingsByBuyerId(userId);
-    dispatch({ type: BOOKINGS_PAGE_LOADED, payload })
+    dispatch({ type: LOAD_PAGE.BOOKINGS, payload })
   },
-  onUnload: () => dispatch({ type: BOOKINGS_PAGE_UNLOADED }),
-  closeError: () => dispatch({ type: CLOSE_ERROR }),
+  onUnload: () => dispatch({ type: UNLOAD_PAGE.BOOKINGS }),
+  closeError: () => dispatch({ type: BOOKINGS.CLOSE_ERROR }),
   deleteBooking: (bookingId) => {
     const payload = agent.Bookings.deleteBooking(bookingId);
-    dispatch({ type: DELETE_BOOKING, payload });
+    dispatch({ type: BOOKINGS.DELETE, payload });
   }
 });
 
@@ -112,7 +111,7 @@ class Bookings extends Component {
 							) : (
                 <div className="box has-text-centered" style={{flexDirection: 'column'}}>
                   <p className="content">You haven't booked a room yet!</p>
-                  <Link to="/browse" className="button is-info">Book a room!</Link>
+                  <Link to="/rooms" className="button is-info">Book a room!</Link>
                 </div>
 						)}
 						</div>

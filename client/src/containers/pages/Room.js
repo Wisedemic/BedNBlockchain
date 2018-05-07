@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import agent from '../../agent';
 
 import {
-  ROOM_PAGE_LOADED,
-  ROOM_PAGE_UNLOADED
+  LOAD_PAGE,
+  UNLOAD_PAGE
 } from '../../actions';
 
 const mapStateToProps = state => ({
@@ -17,10 +17,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: (id) => {
     const payload = agent.Rooms.getRoom(id);
-    dispatch({ type: ROOM_PAGE_LOADED, payload });
+    dispatch({ type: LOAD_PAGE.ROOM, payload });
   },
   onUnload: () =>
-    dispatch({ type: ROOM_PAGE_UNLOADED })
+    dispatch({ type: UNLOAD_PAGE.ROOM })
 });
 
 class Room extends Component {

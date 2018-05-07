@@ -7,9 +7,9 @@ import Room from '../../components/Room';
 import agent from '../../agent';
 
 import {
-  HOME_PAGE_LOADED,
-  HOME_PAGE_UNLOADED,
-  BOOK_ROOM
+  LOAD_PAGE,
+  UNLOAD_PAGE,
+  ROOMS
 } from '../../actions';
 
 import Banner from '../assets/banner.jpg';
@@ -25,14 +25,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: () => {
     const payload = agent.Rooms.all();
-    dispatch({ type: HOME_PAGE_LOADED, payload });
+    dispatch({ type: LOAD_PAGE.HOME, payload });
   },
   onUnload: () =>
-    dispatch({ type: HOME_PAGE_UNLOADED }),
+    dispatch({ type: UNLOAD_PAGE.HOME }),
   bookRoom: (buyerId, ownerId, roomId, price, guests) => {
     console.log('Booking room', buyerId, ownerId, roomId, price, guests);
     const payload = agent.Bookings.bookRoom(buyerId, ownerId, roomId, price, guests);
-    dispatch({ type: BOOK_ROOM, payload });
+    dispatch({ type: ROOMS.BOOK, payload });
   }
 });
 

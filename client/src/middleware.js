@@ -3,21 +3,18 @@ import agent from './agent';
 
 // Actions
 import {
-  ASYNC_START,
-  ASYNC_END,
-  LOGIN,
-  LOGOUT,
-  SIGNUP,
-  HANDLE_AJAX_ERROR,
-	CONNECTION_ERROR
+  APP,
+  ASYNC,
+  AUTH
 } from './actions';
 
 // Allow an action to a Promise
 const promiseMiddleware = store => next => action => {
+  console.log(action);
 	// If the action has a payload that is a promise.
   if (isPromise(action.payload)) {
 		// Tell react that we started an ASYNC action with it's subtype.
-    store.dispatch({ type: ASYNC_START, subtype: action.type });
+    store.dispatch({ type: ASYNC.START, subtype: action.type });
     const currentView = store.getState().viewChangeCounter;
 
 		// Check if the action requested to skipTracking
@@ -36,13 +33,16 @@ const promiseMiddleware = store => next => action => {
         action.payload = (res.payload || res.body);
 
 				// Tell the app the request finished.
-        store.dispatch({ type: ASYNC_END, subtype: action.type, promise: action.payload });
+        store.dispatch({ type: ASYNC.END, subtype: action.type, promise: action.payload });
 
 				// Send an error to react/redux.
         if (res.error) {
         	action.error = true;
           action.errors = res.errors;
-          store.dispatch({ type: HANDLE_AJAX_ERROR, subtype: action.type, errors: action.errors });
+          if (action.errors[0] === 'Invalid Token') {
+            store.dispatch({ type: APP.DELETE_TOKEN })
+          }
+          store.dispatch({ type: ASYNC.ERROR, subtype: action.type, errors: action.errors });
         } else {
 					store.dispatch(action);
 				}
@@ -56,8 +56,8 @@ const promiseMiddleware = store => next => action => {
         action.error = true;
 				action.errors = ['A connection error occured! If this continues, please report it!'];
 				action.payload = {error: action.error, errors: action.errors};
-				store.dispatch({ type: ASYNC_END, subtype: action.type, promise: action.payload });
-        store.dispatch({ type: CONNECTION_ERROR, errors: action.errors });
+				store.dispatch({ type: ASYNC.END, subtype: action.type, promise: action.payload });
+        store.dispatch({ type: ASYNC.CONNECTION_ERROR, errors: action.errors, killSession: true });
       }
     );
 	} else {
@@ -67,13 +67,13 @@ const promiseMiddleware = store => next => action => {
 
 // Ensure the user's token was removed on logout, and added on login.
 const localStorageMiddleware = store => next => action => {
-	if (action.type === SIGNUP || action.type === LOGIN) {
+	if (action.type === AUTH.SIGNUP || action.type === AUTH.LOGIN) {
     if (!action.error) {
       window.localStorage.setItem('jwt', action.payload.user.token);
 			action.token = action.payload.user.token;
       agent.setToken(action.payload.user.token);
     }
-  } else if (action.type === LOGOUT) {
+  } else if (action.type === AUTH.LOGOUT || action.type === APP.DELETE_TOKEN) {
     window.localStorage.setItem('jwt', '');
     agent.setToken(null);
   }

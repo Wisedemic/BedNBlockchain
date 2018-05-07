@@ -8,9 +8,9 @@ import Room from '../../components/Room';
 import Banner from '../assets/banner6.jpg';
 
 import {
-  ROOMS_PAGE_LOADED,
-  ROOMS_PAGE_UNLOADED,
-  BOOK_ROOM
+  LOAD_PAGE,
+  UNLOAD_PAGE,
+  ROOMS
 } from '../../actions';
 
 const mapStateToProps = state => ({
@@ -22,13 +22,13 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: () => {
     const payload = agent.Rooms.all();
-    dispatch({ type: ROOMS_PAGE_LOADED, payload });
+    dispatch({ type: LOAD_PAGE.ROOMS, payload });
   },
-  onUnload: () => dispatch({ type: ROOMS_PAGE_UNLOADED }),
+  onUnload: () => dispatch({ type: UNLOAD_PAGE.ROOMS }),
   bookRoom: (buyerId, ownerId, roomId, price, guests) => {
     console.log('Booking room', buyerId, ownerId, roomId, price, guests);
     const payload = agent.Bookings.bookRoom(buyerId, ownerId, roomId, price, guests);
-    dispatch({ type: BOOK_ROOM, payload });
+    dispatch({ type: ROOMS.BOOK, payload });
   }
 });
 

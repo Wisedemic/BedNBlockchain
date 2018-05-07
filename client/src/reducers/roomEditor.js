@@ -1,18 +1,9 @@
 import {
-	ASYNC_START,
-	ASYNC_END,
-	ADD_ROOM,
-	EDIT_ROOM,
-  ROOMEDITOR_PAGE_LOADED,
-  ROOMEDITOR_PAGE_UNLOADED,
-  ROOMEDITOR_FIELD_ERROR,
-  UPDATE_ROOMEDITOR_FIELD,
-	HANDLE_AJAX_ERROR,
-	FETCH_GMAPS_RESULTS,
-	UPDATE_LOCATION_FROM_SUGGESTION,
-	INCREMENT_ROOMEDITOR_GUESTS,
-	DECREMENT_ROOMEDITOR_GUESTS,
-	UPLOAD_FEATURED_IMAGE
+	ASYNC,
+	LOAD_PAGE,
+	UNLOAD_PAGE,
+	ROOMEDITOR,
+	ROOMS
 } from '../actions';
 
 const defaultInputState = {
@@ -52,19 +43,19 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-		case ADD_ROOM:
+		case ROOMS.ADD:
 			return {...state,
 				inProgress: false,
 				errors: action.error ? action.payload.errors : null
 			};
 
-		case EDIT_ROOM:
+		case ROOMS.EDIT:
 			return {...state,
 				inProgress: false,
 				errors: action.error ? action.payload.errors : null,
 				message: 'Room Updated Successfully!'
 			};
-    case ROOMEDITOR_PAGE_LOADED:
+    case LOAD_PAGE.ROOMEDITOR:
 			if (action.mode === 'edit') {
 				return {
 	        ...state,
@@ -111,7 +102,7 @@ export default (state = defaultState, action) => {
 	        mode: 'add'
 	      };
 			}
-		case INCREMENT_ROOMEDITOR_GUESTS:
+		case ROOMEDITOR.INCREMENT_GUESTS:
 			return {...state,
 				guests: {...state.guests,
 					value: {...state.guests.value,
@@ -119,7 +110,7 @@ export default (state = defaultState, action) => {
 					}
 				}
 			};
-		case DECREMENT_ROOMEDITOR_GUESTS:
+		case ROOMEDITOR.DECREMENT_GUESTS:
 			return {...state,
 				guests: {...state.guests,
 					value: {...state.guests.value,
@@ -127,7 +118,7 @@ export default (state = defaultState, action) => {
 					}
 				}
 			};
-		case ROOMEDITOR_FIELD_ERROR:
+		case ROOMEDITOR.FIELD_ERROR:
       return { ...state,
         [action.key]: {
           value: action.value,
@@ -136,7 +127,7 @@ export default (state = defaultState, action) => {
           valid: false
         }
       };
-    case UPDATE_ROOMEDITOR_FIELD:
+    case ROOMEDITOR.UPDATE_FIELD:
 			if (action.key === 'location') {
 				return { ...state,
 	        location: {...state.location,
@@ -156,13 +147,13 @@ export default (state = defaultState, action) => {
 	        }
 	      };
 			}
-		case FETCH_GMAPS_RESULTS:
+		case ROOMEDITOR.FETCH_GMAPS_RESULTS:
 			return { ...state,
 				location: {...state.location,
 					results: action.payload.results
 				}
 			};
-		case UPDATE_LOCATION_FROM_SUGGESTION:
+		case ROOMEDITOR.UPDATE_LOCATION_FROM_SUGGESTION:
 			return {
 				...state,
 				location: {...state.location,
@@ -174,7 +165,7 @@ export default (state = defaultState, action) => {
 					}
 				}
 			};
-		case UPLOAD_FEATURED_IMAGE:
+		case ROOMEDITOR.UPLOAD_FEATURED_IMAGE:
 			return {...state,
 				featuredImage: {...state.featuredImage,
 					value: {...state.featuredImage.value,
@@ -187,14 +178,14 @@ export default (state = defaultState, action) => {
 				}
 			};
 
-		case ASYNC_START:
-			if (action.subtype === FETCH_GMAPS_RESULTS) {
+		case ASYNC.START:
+			if (action.subtype === ROOMEDITOR.FETCH_GMAPS_RESULTS) {
 				return { ...state,
 					location: {...state.location,
 						loading: true
 					}
 				};
-			} else if (action.subtype === UPLOAD_FEATURED_IMAGE) {
+			} else if (action.subtype === ROOMEDITOR.UPLOAD_FEATURED_IMAGE) {
 				return {...state,
 					featuredImage: {...state.featuredImage,
 						loading: true,
@@ -204,7 +195,7 @@ export default (state = defaultState, action) => {
 			} else {
 				return {...state};
 			}
-		case ASYNC_END:
+		case ASYNC.END:
 			return { ...state,
 				location: {...state.location,
 					loading: false
@@ -213,25 +204,19 @@ export default (state = defaultState, action) => {
 					loading: false
 				}
 			};
-		case HANDLE_AJAX_ERROR:
-			if (action.subtype === FETCH_GMAPS_RESULTS) {
+		case ASYNC.ERROR:
+			if (action.subtype === ROOMEDITOR.FETCH_GMAPS_RESULTS) {
 				return {...state,
-					location: {...state.location,
-						loading: false
-					},
 					errors: action.errors
 				};
-			} else if (action.subtype === UPLOAD_FEATURED_IMAGE) {
+			} else if (action.subtype === ROOMEDITOR.UPLOAD_FEATURED_IMAGE) {
 				return {...state,
-					featuredImage: {...state.location,
-						loading: false
-					},
 					errors: action.errors
 				};
 			} else {
 				return state;
 			}
-	  case ROOMEDITOR_PAGE_UNLOADED:
+	  case UNLOAD_PAGE.ROOMEDITOR:
       return defaultState;
     default:
       return state;

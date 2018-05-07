@@ -7,12 +7,9 @@ import ErrorList from '../../components/ErrorList';
 import Field from '../../components/Field';
 
 import {
-	LOGIN,
-	LOGIN_PAGE_LOADED,
-	LOGIN_PAGE_UNLOADED,
-	UPDATE_AUTH_FIELD,
-	FIELD_ERROR,
-	CLOSE_ERROR
+	AUTH,
+  LOAD_PAGE,
+  UNLOAD_PAGE
 } from '../../actions';
 
 // Mapping Global Redux State to React Props
@@ -25,60 +22,35 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
-	onLoad: () => {
-		dispatch({ type: LOGIN_PAGE_LOADED }) },
-	unLoad: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
+	onLoad: () => dispatch({ type: LOAD_PAGE.LOGIN }),
+	unLoad: () => dispatch({ type: UNLOAD_PAGE.LOGIN }),
 	onChangeEmail: value => {
 		const key = 'email';
 		if (value.length === 0) {
-			dispatch({
-				type: FIELD_ERROR,
-				key: key,
-				message: 'Email cannot be blank!',
-				inputState: 'is-danger',
-				value: value
-			});
+			dispatch(AUTH.FieldError(key, 'Email cannot be blank!', 'is-danger', value));
 		} else if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(value).toLowerCase()))) {
-			dispatch({
-				type: FIELD_ERROR,
-				key: key,
-				message: 'Must be a proper email! Ex. elon@spacex.com',
-				inputState: 'is-danger',
-				value: value
-			});
+			dispatch(AUTH.FieldError(key, 'Must be a proper email! Ex. elon@spacex.com', 'is-danger', value));
 		} else {
-			dispatch({ type: UPDATE_AUTH_FIELD, key: key, value: value })
+			dispatch({ type: AUTH.UPDATE_FIELD, key: key, value: value })
 		}
 	},
   onChangePassword: value => {
 		const key = 'password';
 		if (value.length === 0) {
-			dispatch({
-				type: FIELD_ERROR,
-				key: key,
-				message: 'Password cannot be blank!',
-				inputState: 'is-danger',
-				value: value
-			});
+			dispatch(AUTH.FieldError(key, 'Password cannot be blank!', 'is-danger', value));
 		} else if (value.length > 16 || value.length < 6) {
-			dispatch({
-				type: FIELD_ERROR,
-				key: key,
-				message: 'Password length must be between 6-16 characters!',
-				inputState: 'is-warning',
-				value: value
-			});
+			dispatch(AUTH.FieldError(key, 'Password length must be between 6-16 characters!', 'is-warning', value));
 		} else {
-			dispatch({ type: UPDATE_AUTH_FIELD, key: key, value: value })
+			dispatch({ type: AUTH.UPDATE_FIELD, key: key, value: value })
 		}
 	},
 	handleSubmit: (email, password) => {
 		const payload = agent.Auth.login(email, password);
 		console.log('PAYLOAD', payload);
-		dispatch({ type: LOGIN, payload })
+		dispatch({ type: AUTH.LOGIN, payload })
 	},
 	closeError: () =>
-		dispatch({ type: CLOSE_ERROR })
+		dispatch({ type: AUTH.CLOSE_ERROR })
 });
 
 export class Login extends Component {

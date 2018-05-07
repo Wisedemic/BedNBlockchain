@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 // Actions
-import { LOGOUT } from '../actions';
+import { AUTH } from '../actions';
 
 import Field from '../components/Field';
 
@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  handleLogout: () => dispatch({ type: LOGOUT })
+  handleLogout: () => dispatch({ type: AUTH.LOGOUT })
 });
 
 const Avatar = props => {

@@ -1,13 +1,13 @@
 import {
-  HOME_PAGE_LOADED,
-  HOME_PAGE_UNLOADED
+  LOAD_PAGE,
+  UNLOAD_PAGE
 } from '../actions';
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case HOME_PAGE_LOADED:
+    case LOAD_PAGE.HOME:
       return state;
-    case HOME_PAGE_UNLOADED:
+    case UNLOAD_PAGE.HOME:
       return {};
     default:
       return state;

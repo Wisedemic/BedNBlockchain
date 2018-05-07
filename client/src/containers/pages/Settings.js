@@ -7,11 +7,9 @@ import ErrorList from '../../components/ErrorList';
 // import Field from '../../components/Field';
 
 import {
-	SIGNUP,
-	SIGNUP_PAGE_LOADED,
-	SIGNUP_PAGE_UNLOADED,
-	UPDATE_AUTH_FIELD,
-	FIELD_ERROR,
+	LOAD_PAGE,
+	UNLOAD_PAGE,
+	SETTINGS,
 	CLOSE_ERROR
 } from '../../actions';
 
@@ -25,13 +23,14 @@ const mapStateToProps = state => ({
 
 // Action Creators
 const mapDispatchToProps = dispatch => ({
-	onLoad: () => dispatch({ type: SIGNUP_PAGE_LOADED }),
-	onUnload: () => dispatch({ type: SIGNUP_PAGE_UNLOADED }),
+	closeError: () => dispatch({ type: SETTINGS.CLOSE_ERROR }),
+	onLoad: () => dispatch({ type: LOAD_PAGE.SETTINGS }),
+	onUnload: () => dispatch({ type: UNLOAD_PAGE.SETTINGS }),
 	onChangeEmail: value => {
 		const key = 'email';
 		if (value.length === 0) {
 			dispatch({
-				type: FIELD_ERROR,
+				type: SETTINGS.FIELD_ERROR,
 				key: key,
 				message: 'Email cannot be blank!',
 				inputState: 'is-danger',
@@ -39,21 +38,21 @@ const mapDispatchToProps = dispatch => ({
 			});
 		} else if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(value).toLowerCase()))) {
 			dispatch({
-				type: FIELD_ERROR,
+				type: SETTINGS.FIELD_ERROR,
 				key: key,
 				message: 'Must be a proper email! Ex. elon@spacex.com',
 				inputState: 'is-danger',
 				value: value
 			});
 		} else {
-			dispatch({ type: UPDATE_AUTH_FIELD, key: key, value: value })
+			dispatch({ type: SETTINGS.UPDATE_FIELD, key: key, value: value })
 		}
 	},
   onChangePassword: value => {
 		const key = 'password';
 			if (value.length === 0) {
 				dispatch({
-					type: FIELD_ERROR,
+					type: SETTINGS.FIELD_ERROR,
 					key: key,
 					message: 'Password cannot be blank!',
 					inputState: 'is-danger',
@@ -61,21 +60,21 @@ const mapDispatchToProps = dispatch => ({
 				});
 			} else if (value.length > 16 || value.length < 6) {
 				dispatch({
-					type: FIELD_ERROR,
+					type: SETTINGS.FIELD_ERROR,
 					key: key,
 					message: 'Password length must be between 6-16 characters!',
 					inputState: 'is-warning',
 					value: value
 				});
 			} else {
-				dispatch({ type: UPDATE_AUTH_FIELD, key: key, value: value })
+				dispatch({ type: SETTINGS.UPDATE_FIELD, key: key, value: value })
 			}
 	},
   onChangePasswordConfirm: (password, passwordConfirm) => {
 	const key = 'passwordConfirm';
 	if (passwordConfirm.length === 0) {
 		dispatch({
-			type: FIELD_ERROR,
+			type: SETTINGS.FIELD_ERROR,
 			key: key,
 			message: 'Password cannot be blank!',
 			inputState: 'is-danger',
@@ -83,7 +82,7 @@ const mapDispatchToProps = dispatch => ({
 		});
 	} else if (passwordConfirm.length > 16 || passwordConfirm.length < 6) {
 			dispatch({
-				type: FIELD_ERROR,
+				type: SETTINGS.FIELD_ERROR,
 				key: key,
 				message: 'Password length must be between 6-16 characters!',
 				inputState: 'is-warning',
@@ -91,22 +90,21 @@ const mapDispatchToProps = dispatch => ({
 			});
 		} else if (password !== passwordConfirm) {
 			dispatch({
-				type: FIELD_ERROR,
+				type: SETTINGS.FIELD_ERROR,
 				key: key,
 				message: 'Passwords Must Match!',
 				inputState: 'is-danger',
 				value: passwordConfirm
 			});
 		} else {
-			dispatch({ type: UPDATE_AUTH_FIELD, key: key, value: passwordConfirm })
+			dispatch({ type: SETTINGS.UPDATE_FIELD, key: key, value: passwordConfirm })
 		}
 	},
 	handleSubmit: (email, password, passwordConfirm) => {
 		const payload = agent.Auth.signup(email, password, passwordConfirm);
 		console.log('PAYLOAD', payload);
-		dispatch({ type: SIGNUP, payload })
-	},
-	closeError: () => dispatch({ type: CLOSE_ERROR })
+		dispatch({ type: SETTINGS.UPDATE_SETTINGS, payload })
+	}
 });
 
 export class Settings extends Component {

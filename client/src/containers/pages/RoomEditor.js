@@ -8,18 +8,10 @@ import Room from '../../components/Room';
 import agent from '../../agent';
 
 import {
-  ADD_ROOM,
-  EDIT_ROOM,
-  ROOMEDITOR_PAGE_LOADED,
-  ROOMEDITOR_PAGE_UNLOADED,
-  UPDATE_ROOMEDITOR_FIELD,
-	FETCH_GMAPS_RESULTS,
-	UPDATE_LOCATION_FROM_SUGGESTION,
-  ROOMEDITOR_FIELD_ERROR,
-  CLOSE_ERROR,
-  INCREMENT_ROOMEDITOR_GUESTS,
-  DECREMENT_ROOMEDITOR_GUESTS,
-	UPLOAD_FEATURED_IMAGE
+  LOAD_PAGE,
+  UNLOAD_PAGE,
+  ROOMS,
+  ROOMEDITOR
 } from '../../actions';
 
 const HomeTypes = [
@@ -62,142 +54,88 @@ const mapDispatchToProps = dispatch => ({
   onLoad: (url) => {
     console.log(url);
     if (url.path === '/your-rooms/add') {
-      dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode: 'add' });
+      dispatch({ type: LOAD_PAGE.ROOMEDITOR, mode: 'add' });
     } else if(url.params.roomId) {
       const payload = agent.Rooms.getRoom(url.params.roomId);
-      dispatch({ type: ROOMEDITOR_PAGE_LOADED, mode: 'edit', payload });
+      dispatch({ type: LOAD_PAGE.ROOMEDITOR, mode: 'edit', payload });
     } else {
       // Something wrong
       console.log(url);
     }
   },
   onUnload: () =>
-		dispatch({ type: ROOMEDITOR_PAGE_UNLOADED }),
+		dispatch({ type: UNLOAD_PAGE.ROOMEDITOR }),
 	closeError: () =>
-		dispatch({ type: CLOSE_ERROR }),
+		dispatch({ type: ROOMEDITOR.CLOSE_ERROR }),
   handleSubmit: (userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId, mode, roomId) => {
 
     if (mode === 'edit') {
       const payload = agent.Rooms.editRoom(roomId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
-      dispatch({ type: EDIT_ROOM, payload });
+      dispatch({ type: ROOMS.EDIT, payload });
     } else if (mode === 'add') {
       const payload = agent.Rooms.add(userId, title, desc, propertyType, roomType, location, price, guests, featuredImageId);
-      dispatch({ type: ADD_ROOM, payload });
+      dispatch({ type: ROOMS.ADD, payload });
     }
   },
   onChangeTitle: value => {
 		const key = 'title';
 		if (value.length === 0) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'Title cannot be blank!',
-				inputState: 'is-danger',
-				value: value
-			});
+      dispatch(ROOMEDITOR.FieldError(key, 'Title cannot be blank!', 'is-danger', value));
 		} else if (value.length < 6 || value.length > 90) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'Must be between 4-90 characters!',
-				inputState: 'is-warning',
-				value: value
-			});
+      dispatch(ROOMEDITOR.FieldError(key, 'Title cannot be blank!', 'is-danger', value));
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value });
+			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value: value });
 		}
 	},
   onChangeDesc: value => {
 		const key = 'desc';
 		if (value.length === 0) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'Description cannot be blank!',
-				inputState: 'is-danger',
-				value: value
-			});
+      dispatch(ROOMEDITOR.FieldError(key, 'Description cannot be blank!', 'is-danger', value));
 		} else if (value.length < 6 || value.length > 300) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'Must be between 6-300 characters!',
-				inputState: 'is-warning',
-				value: value
-			});
+      dispatch(ROOMEDITOR.FieldError(key, 'Must be between 6-300 characters!', 'is-warning', value));
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value })
+			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value: value })
 		}
 	},
   onChangePropertyType: value => {
     const key = 'propertyType';
 		if (!PropertyTypes.includes(value)) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'NO TAMPERING FIELDS!',
-				inputState: 'is-danger',
-				value: value
-			});
+			dispatch(ROOMEDITOR.FieldError(key, 'NO TAMPERING FIELDS!', 'is-danger', value));
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value })
+			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value: value })
 		}
   },
   onChangeHomeType: value => {
     const key = 'roomType';
     if (!HomeTypes.includes(value)) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'NO TAMPERING FIELDS!',
-				inputState: 'is-danger',
-				value: value
-			});
+      dispatch(ROOMEDITOR.FieldError(key, 'NO TAMPERING FIELDS!', 'is-danger', value));
 		} else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value });
+			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value: value });
 		}
   },
-	incrementGuests: (guestType) => dispatch({ type: INCREMENT_ROOMEDITOR_GUESTS, guestType }),
-  decrementGuests: (guestType) => dispatch({ type: DECREMENT_ROOMEDITOR_GUESTS, guestType }),
+	incrementGuests: (guestType) => dispatch({ type: ROOMEDITOR.INCREMENT_GUESTS, guestType }),
+  decrementGuests: (guestType) => dispatch({ type: ROOMEDITOR.DECREMENT_GUESTS, guestType }),
 	onChangeLocation: (value) => {
     const key = 'location';
 		if (value.length === 0) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'Location cannot be blank!',
-				inputState: 'is-danger',
-				value: {formatted_address: ''}
-			});
+      dispatch(ROOMEDITOR.FieldError(key, 'Location cannot be blank!', 'is-danger', {formatted_address: ''}));
 		} else {
 			const payload = agent.Maps.findAddress(value);
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value });
-			dispatch({ type: FETCH_GMAPS_RESULTS, payload });
+			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value });
+			dispatch({ type: ROOMEDITOR.FETCH_GMAPS_RESULTS, payload });
 		}
   },
 	onClickLocation: (value) => {
-			dispatch({ type: UPDATE_LOCATION_FROM_SUGGESTION, value })
+			dispatch({ type: ROOMEDITOR.UPDATE_LOCATION_FROM_SUGGESTION, value })
   },
 	onChangePrice: (value) => {
     const key = 'price';
     if (!value || value === 0) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'A price is required!',
-				inputState: 'is-danger',
-				value: value
-			});
+      dispatch(ROOMEDITOR.FieldError(key, 'A price is required!', 'is-danger', value));
 		} else if (value > 100000) {
-  			dispatch({
-  				type: ROOMEDITOR_FIELD_ERROR,
-  				key,
-  				message: 'Price is too high!',
-  				inputState: 'is-warning',
-  				value: value
-  			});
+        dispatch(ROOMEDITOR.FieldError(key, 'Price is too high!', 'is-warning', value));
     } else {
-			dispatch({ type: UPDATE_ROOMEDITOR_FIELD, key, value: value })
+			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value: value })
 		}
   },
 	onChangeFeaturedImage: (file) => {
@@ -208,35 +146,33 @@ const mapDispatchToProps = dispatch => ({
 			return;
 		}
 		if (file.size > 16000000) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'File size can be no larger then 16MB\'s',
-				inputState: 'is-danger',
-				value: {
-					file_id: '',
-					file_name: '',
-					image: ''
-				}
-			});
+      dispatch(
+        ROOMEDITOR.FieldError(
+          key,
+          'File size can be no larger than 16MB\'s',
+          'is-danger',
+          {file_id: '', file_name: '', image: ''}
+        )
+      );
 		} else if (file.size < 20) {
-			dispatch({
-				type: ROOMEDITOR_FIELD_ERROR,
-				key,
-				message: 'Must upload a featured image!',
-				inputState: 'is-danger',
-				value: {
-					file_id: '',
-					file_name: '',
-					image: ''
-				}
-			});
+      dispatch(
+        RoomEditor(
+          key,
+          'Must upload a featured image!',
+          'is-danger',
+          {
+  					file_id: '',
+  					file_name: '',
+  					image: ''
+  				}
+        )
+      );
 		} else {
 			const formData = new FormData();
       formData.append('file', file);
 			const payload = agent.Uploads.asyncFileUpload(formData);
 			console.log('PAYLOAD', payload);
-			dispatch({ type: UPLOAD_FEATURED_IMAGE, payload: payload});
+			dispatch({ type: ROOMEDITOR.UPLOAD_FEATURED_IMAGE, payload: payload});
 		}
 	}
 });

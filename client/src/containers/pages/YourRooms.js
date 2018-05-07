@@ -7,10 +7,9 @@ import Modal from '../../components/Modal';
 import agent from '../../agent';
 
 import {
-  YOURROOMS_PAGE_LOADED,
-  YOURROOMS_PAGE_UNLOADED,
-  DELETE_ROOM,
-  CLOSE_ERROR
+  LOAD_PAGE,
+  UNLOAD_PAGE,
+  ROOMS
 } from '../../actions';
 
 const mapStateToProps = state => ({
@@ -23,13 +22,13 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: (userId) => {
     const payload = agent.Rooms.roomByUserId(userId);
-    dispatch({ type: YOURROOMS_PAGE_LOADED, payload })
+    dispatch({ type: LOAD_PAGE.YOURROOMS, payload })
   },
-  onUnload: () => dispatch({ type: YOURROOMS_PAGE_UNLOADED }),
-  closeError: () => dispatch({ type: CLOSE_ERROR }),
+  onUnload: () => dispatch({ type: UNLOAD_PAGE.YOURROOMS }),
+  closeError: () => dispatch({ type: ROOMS.CLOSE_ERROR }),
   deleteRoom: (id) => {
     const payload = agent.Rooms.deleteRoom(id);
-    dispatch({ type: DELETE_ROOM, payload });
+    dispatch({ type: ROOMS.DELETE, payload });
   }
 });
 

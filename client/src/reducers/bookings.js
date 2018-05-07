@@ -1,9 +1,8 @@
 import {
-  ASYNC_START,
-  ASYNC_END,
-  BOOKINGS_PAGE_LOADED,
-  BOOKINGS_PAGE_UNLOADED,
-  DELETE_BOOKING
+  ASYNC,
+  LOAD_PAGE,
+  UNLOAD_PAGE,
+  BOOKINGS
 } from '../actions';
 
 const defaultState = {
@@ -15,29 +14,29 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case BOOKINGS_PAGE_LOADED:
+    case LOAD_PAGE.BOOKINGS:
       return {
         ...state,
         reload: false,
         yourBookings: action.payload.bookings ? action.payload.bookings : []
       };
-    case ASYNC_START:
-      if (action.subtype === DELETE_BOOKING) {
+    case ASYNC.START:
+      if (action.subtype === BOOKINGS.DELETE) {
         return {...state,
           loading: true
         };
       }
       return {...state};
-    case ASYNC_END:
+    case ASYNC.END:
       return {...state,
         loading: false
       };
-    case DELETE_BOOKING:
+    case BOOKINGS.DELETE:
       return {...state,
         reload: action.payload.error ? false : true,
         errors: action.payload.error ? action.payload.errors : null
       };
-    case BOOKINGS_PAGE_UNLOADED:
+    case UNLOAD_PAGE.BOOKINGS:
       return state;
     default:
       return state;

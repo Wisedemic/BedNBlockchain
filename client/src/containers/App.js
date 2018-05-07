@@ -18,11 +18,7 @@ import Four_Oh_Four from '../components/404';
 import Loading from '../components/Loading';
 import GlobalErrors from '../components/GlobalErrors';
 
-import {
-	APP_LOAD,
-	REDIRECT,
-	CLOSE_ERROR
-} from '../actions';
+import { APP } from '../actions';
 
 import agent from '../agent';
 
@@ -40,12 +36,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-	closeError: () => dispatch({ type: CLOSE_ERROR }),
+	closeError: () => dispatch({ type: APP.CLOSE_ERROR }),
+	onRedirect: () => dispatch({ type: APP.REDIRECT }),
   onLoad: (payload, token) => {
-	  dispatch({ type: APP_LOAD, payload, token, skipTracking: true })
-	},
-  onRedirect: () =>
-    dispatch({ type: REDIRECT })
+	  dispatch({ type: APP.LOAD, payload, token, skipTracking: true })
+	}
 });
 
 class App extends React.Component {

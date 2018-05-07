@@ -1,12 +1,8 @@
 import {
-  APP_LOAD,
-	HANDLE_AJAX_ERROR,
-	CONNECTION_ERROR,
-  REDIRECT,
-	LOGIN,
-	SIGNUP,
-	LOGOUT,
-  ADD_ROOM
+  APP,
+  ASYNC,
+  AUTH,
+  ROOMS
 } from '../actions';
 
 const defaultState = {
@@ -23,13 +19,13 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-		case CONNECTION_ERROR:
+		case ASYNC.CONNECTION_ERROR:
 			return {
 				...state,
 				errors: action.errors || []
 			};
-		case HANDLE_AJAX_ERROR:
-			if (action.subtype === APP_LOAD) {
+		case ASYNC.ERROR:
+			if (action.subtype === APP.LOAD) {
 				return {
 					...state,
 					token: null,
@@ -39,7 +35,7 @@ export default (state = defaultState, action) => {
 				};
 			}
       return {...state};
-    case APP_LOAD:
+    case APP.LOAD:
       return {
         ...state,
         token: action.token || null,
@@ -47,16 +43,16 @@ export default (state = defaultState, action) => {
         currentUser: action.payload ? action.payload.user : null,
 				errors: action.error ? action.errors : []
       };
-    case REDIRECT:
+    case APP.REDIRECT:
       return { ...state, redirectTo: null };
-		case LOGOUT:
+		case AUTH.LOGOUT:
 			return { ...state, redirectTo: '/', token: null, currentUser: null };
-    case ADD_ROOM:
+    case ROOMS.ADD:
       return {...state,
         redirectTo: action.error ? null : '/your-rooms'
       };
-    case LOGIN:
-    case SIGNUP:
+    case AUTH.LOGIN:
+    case AUTH.SIGNUP:
       return {
         ...state,
         redirectTo: action.error ? null : '/bookings',
