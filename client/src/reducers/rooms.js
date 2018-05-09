@@ -10,7 +10,13 @@ const defaultState = {
   roomsList: [],
   currentRoomInView: null,
   yourRooms: [],
-  errors: null
+  errors: null,
+  guests: {
+    value: {adults: 0, children: 0},
+    message: '',
+    inputState: '',
+    valid: false
+  }
 };
 
 export default (state = defaultState, action) => {
@@ -48,6 +54,22 @@ export default (state = defaultState, action) => {
       return {...state,
         loading: false
       };
+      case ROOMS.INCREMENT_GUESTS:
+  			return {...state,
+  				guests: {...state.guests,
+  					value: {...state.guests.value,
+  						[action.guestType]: ++state.guests.value[action.guestType]
+  					}
+  				}
+  			};
+  		case ROOMS.DECREMENT_GUESTS:
+  			return {...state,
+  				guests: {...state.guests,
+  					value: {...state.guests.value,
+  						[action.guestType]: (state.guests.value[action.guestType] <= 0 ? 0 : --state.guests.value[action.guestType])
+  					}
+  				}
+  			};
     case ROOMS.DELETE:
     case ROOMS.BOOK:
       return {...state,
