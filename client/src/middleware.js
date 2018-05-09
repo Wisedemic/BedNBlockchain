@@ -40,7 +40,8 @@ const promiseMiddleware = store => next => action => {
         	action.error = true;
           action.errors = res.errors;
           if (action.errors[0] === 'Invalid Token') {
-            store.dispatch({ type: APP.DELETE_TOKEN })
+						action.errors[0] = 'You\'ve been signed out!';
+						store.dispatch({ type: APP.DELETE_TOKEN })
           }
           store.dispatch({ type: ASYNC.ERROR, subtype: action.type, errors: action.errors });
         } else {
