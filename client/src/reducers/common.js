@@ -19,6 +19,11 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+		case APP.CLOSE_ERROR:
+		  return {
+				...state,
+				errors: state.errors.filter((item, index) => action.index !== index)
+			};
 		case ASYNC.CONNECTION_ERROR:
 			return {
 				...state,

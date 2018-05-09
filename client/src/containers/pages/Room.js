@@ -14,7 +14,7 @@ import {
 } from '../../actions';
 
 const mapStateToProps = state => ({
-  userId: state.common.currentUser.id,
+  currentUser: state.common.currentUser,
   currentRoom: state.rooms.currentRoomInView,
   reload: state.rooms.reload,
   loading: state.rooms.loading,
@@ -39,7 +39,7 @@ class Room extends Component {
     this.decrementGusts = type => this.props.decrementGuests(type);
     this.submitForm = (guests) => ev => {
       ev.preventDefault();
-      this.props.handleSubmit(this.props.userId, guests);
+      this.props.handleSubmit(this.props.currentUser.id, guests);
     };
   }
   componentDidMount() {

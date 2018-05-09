@@ -36,7 +36,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-	closeError: () => dispatch({ type: APP.CLOSE_ERROR }),
+	closeError: (index) => dispatch({ type: APP.CLOSE_ERROR, index: index }),
 	onRedirect: () => dispatch({ type: APP.REDIRECT }),
   onLoad: (payload, token) => {
 	  dispatch({ type: APP.LOAD, payload, token, skipTracking: true })
