@@ -89,8 +89,8 @@ const mapDispatchToProps = dispatch => ({
 		const key = 'desc';
 		if (value.length === 0) {
       dispatch(ROOMEDITOR.FieldError(key, 'Description cannot be blank!', 'is-danger', value));
-		} else if (value.length < 6 || value.length > 300) {
-      dispatch(ROOMEDITOR.FieldError(key, 'Must be between 6-300 characters!', 'is-warning', value));
+		} else if (value.length < 6 || value.length > 1000) {
+      dispatch(ROOMEDITOR.FieldError(key, 'Must be between 6-1000 characters!', 'is-warning', value));
 		} else {
 			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value: value })
 		}
@@ -185,7 +185,6 @@ class RoomEditor extends Component {
 		this.onChangeLocation = ev => this.props.onChangeLocation(ev.target.value);
 		this.onClickLocation = value => this.props.onClickLocation(value);
     this.onChangePrice = ev => this.props.onChangePrice(ev.target.value);
-    this.onChangeGusts = value => this.props.onChangeGuests(value);
     this.incrementGuests = type => this.props.incrementGuests(type);
     this.decrementGusts = type => this.props.decrementGuests(type);
 		this.onChangeFeaturedImage = ev => this.props.onChangeFeaturedImage((ev.target.files[0]));

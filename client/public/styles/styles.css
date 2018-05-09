@@ -4,6 +4,9 @@
   margin-top: .5rem;
   z-index: 5; }
 
+.hero {
+  background-color: white; }
+
 .box {
   background: rgba(255, 255, 255, 0.5) !important; }
 
@@ -227,8 +230,20 @@
     padding-bottom: 220px;
     color: white !important; }
 
+.route-wrapper {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 11rem;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1); }
+
 footer {
-  padding: 1.5rem !important; }
+  padding: 1.5rem 1.5rem !important;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1; }
   footer .title {
     color: #363636; }
   footer .level-item {

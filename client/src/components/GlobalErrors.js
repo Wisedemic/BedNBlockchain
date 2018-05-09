@@ -5,7 +5,7 @@ const GlobalErrors = props => {
 		return props.errors.map((error, index) => {
 			return(
 				<div key={index} id="global" className="notification is-danger">
-					<button onClick={() => props.handleClose} className="delete"></button>
+					<button onClick={() => props.handleClose(index)} className="delete"></button>
 					{error}
 				</div>
 			);
