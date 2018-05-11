@@ -38,9 +38,9 @@ const Room = props => {
               props.booked ? (
                 <button className="button is-warning" disabled={'disabled'}>Booked!</button>
               ) : (
-                <button onClick={props.onClick ? () => props.onClick(props.ownerId, props.roomId, props.price, props.guests) : null} className="button is-info">
-                  Instant Book
-                </button>
+                <Link to={`/room/${props.roomId}`} className="button is-info">
+                  Customize
+                </Link>
               )
             ) : (
               <button className="button is-text" disabled={'disabled'}>You own this!</button>

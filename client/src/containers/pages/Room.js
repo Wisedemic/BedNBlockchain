@@ -29,7 +29,11 @@ const mapDispatchToProps = dispatch => ({
   onUnload: () => dispatch({ type: UNLOAD_PAGE.ROOM }),
 	incrementGuests: (guestType) => dispatch({ type: ROOMS.INCREMENT_GUESTS, guestType }),
   decrementGuests: (guestType) => dispatch({ type: ROOMS.DECREMENT_GUESTS, guestType }),
-  submitForm: (guests) => dispatch({ type: ROOMS.BOOK, guests: guests })
+  bookRoom: (buyerId, ownerId, roomId, price, guests) => {
+    console.log('Booking room', buyerId, ownerId, roomId, price, guests);
+    const payload = agent.Bookings.bookRoom(buyerId, ownerId, roomId, price, guests);
+    dispatch({ type: ROOMS.BOOK, payload });
+  },
 });
 
 class Room extends Component {
@@ -37,13 +41,9 @@ class Room extends Component {
     super();
     this.incrementGuests = type => this.props.incrementGuests(type);
     this.decrementGusts = type => this.props.decrementGuests(type);
-    this.submitForm = (guests) => ev => {
-      ev.preventDefault();
-      this.props.handleSubmit(this.props.currentUser.id, guests);
-    };
+    this.bookRoom = (price, guests) => this.props.bookRoom(this.props.currentUser.id, this.props.currentRoom.ownerId._id, this.props.currentRoom.id, price, guests);
   }
   componentDidMount() {
-    console.log(this.props)
     this.props.onLoad(this.props.match.params.roomId);
   }
 
@@ -53,7 +53,10 @@ class Room extends Component {
 
   render() {
     const guests = this.props.guests.value;
-    console.log('render', this.props);
+    let price = 0;
+    if (this.props.currentRoom) {
+      price = this.props.currentRoom.price;
+    }
     if (this.props.currentRoom) {
       return (
         <div>
@@ -88,42 +91,84 @@ class Room extends Component {
                         {this.props.currentRoom.booked ? (
                           <Link to="/rooms/" className="button is-info">Browse Rooms</Link>
                         ) : (
-                          <form onSubmit={this.submitForm(guests)}>
-                            <h6 className="subtitle is-6">How many guests?</h6>
-                            <Field
-                              key={'adults'}
-                              label={'Adults'}
-                              type={'incrementer'}
-                              value={this.props.guests.value.adults}
-                              isHorizontal={true}
-                              hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('adults')}>+</a>)}
-                              hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('adults')}>-</a>)}
-                            />
-                            <Field
-                              key={'children'}
-                              label={'Children'}
-                              type={'incrementer'}
-                              value={this.props.guests.value.children}
-                              isHorizontal={true}
-                              hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('children')}>+</a>)}
-                              hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('children')}>-</a>)}
-                            />
-            								<div className="field">
-            									<p className="control">
-            										<button
-            											className={'button is-success' +
-            												(this.props.inProgress ? ' is-loading': '') +
-            												(this.props.guests.valid ? '' : ' is-outlined')
-          												}
-            											onClick={this.submitForm}
-            											disabled={this.props.guests.valid ? false : 'disabled'}
-          											>
-            											Submit
-            										</button>
-                              </p>
-                              <p className="help is-success">{this.props.message ? this.props.message : null}</p>
-            								</div>
-                          </form>
+                          this.props.currentUser ? (
+                            this.props.currentUser.id === this.props.currentRoom.ownerId._id ? (
+                              <button className="button is-text" disabled={'disabled'}>You own this property!</button>
+                            ) : (
+                              <form>
+                                <h6 className="subtitle is-6">How many guests?</h6>
+                                <Field
+                                  key={'adults'}
+                                  label={'Adults'}
+                                  type={'incrementer'}
+                                  value={this.props.guests.value.adults}
+                                  isHorizontal={true}
+                                  hasAddonRight={
+                                    <div>
+                                      <a
+                                        className="button"
+                                        disabled={(this.props.guests.value.adults === this.props.currentRoom.guests.adults) ? 'disabled' : false}
+                                        onClick={() => this.props.guests.value.adults === this.props.currentRoom.guests.adults ? null : this.props.incrementGuests('adults')}>
+                                        +
+                                      </a>
+                                      <span className="incrementer-max">Max: {this.props.currentRoom.guests.adults}</span>
+                                    </div>
+                                  }
+                                  hasAddonLeft={
+                                    <a
+                                      className="button"
+                                      disabled={(this.props.guests.value.adults === 0) ? 'disabled' : false}
+                                      onClick={() => this.props.guests.value.adults === 0 ? null : this.props.decrementGuests('adults')}>
+                                      -
+                                    </a>
+                                  }
+                                  />
+                                <Field
+                                  key={'children'}
+                                  label={'Children'}
+                                  type={'incrementer'}
+                                  value={this.props.guests.value.children}
+                                  isHorizontal={true}
+                                  hasAddonRight={
+                                    <div>
+                                      <a
+                                        className="button"
+                                        disabled={this.props.guests.value.children === this.props.currentRoom.guests.children ? 'disabled' : false}
+                                        onClick={() => this.props.guests.value.children === this.props.currentRoom.guests.children ? null : this.props.incrementGuests('children')}>
+                                        +
+                                      </a>
+                                      <span className="incrementer-max">Max: {this.props.currentRoom.guests.children}</span>
+                                    </div>
+                                  }
+                                  hasAddonLeft={
+                                    <a
+                                      className="button"
+                                      disabled={(this.props.guests.value.children === 0) ? 'disabled' : false}
+                                      onClick={() => this.props.guests.value.children === 0 ? null : this.props.decrementGuests('children')}>
+                                      -
+                                    </a>
+                                  }
+                                />
+                                <div className="field">
+                                  <p className="control">
+                                    <button
+                                      className={'button is-success' +
+                                        (this.props.loading ? ' is-loading': '') +
+                                        (this.props.guests.valid ? '' : ' is-outlined')
+                                      }
+                                      onClick={() => this.bookRoom(price, guests)}
+                                      disabled={this.props.guests.valid ? false : 'disabled'}
+                                      >
+                                      Submit
+                                    </button>
+                                  </p>
+                                  <p className="help is-success">{this.props.message ? this.props.message : null}</p>
+                                </div>
+                              </form>
+                            )
+                          ) : (
+                            <Link to="/signup/" className="button is-info">Signup to Book!</Link>
+                          )
                         )}
                       </div>
                     </div>

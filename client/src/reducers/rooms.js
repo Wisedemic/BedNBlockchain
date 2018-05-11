@@ -11,6 +11,7 @@ const defaultState = {
   currentRoomInView: null,
   yourRooms: [],
   errors: null,
+  loading: false,
   guests: {
     value: {adults: 0, children: 0},
     message: '',
@@ -44,7 +45,7 @@ export default (state = defaultState, action) => {
       };
 
     case ASYNC.START:
-      if (action.subtype === ROOMS.DELETE) {
+      if (action.subtype === ROOMS.DELETE || action.subtype === ROOMS.BOOK) {
         return {...state,
           loading: true
         };
@@ -59,7 +60,8 @@ export default (state = defaultState, action) => {
   				guests: {...state.guests,
   					value: {...state.guests.value,
   						[action.guestType]: ++state.guests.value[action.guestType]
-  					}
+  					},
+            valid: true
   				}
   			};
   		case ROOMS.DECREMENT_GUESTS:
@@ -67,7 +69,8 @@ export default (state = defaultState, action) => {
   				guests: {...state.guests,
   					value: {...state.guests.value,
   						[action.guestType]: (state.guests.value[action.guestType] <= 0 ? 0 : --state.guests.value[action.guestType])
-  					}
+  					},
+            valid: (state.guests.value.children > 0 || state.guests.value.adults > 0 ? true : false)
   				}
   			};
     case ROOMS.DELETE:
@@ -79,7 +82,15 @@ export default (state = defaultState, action) => {
     case UNLOAD_PAGE.ROOMS:
     case UNLOAD_PAGE.ROOM:
     case UNLOAD_PAGE.YOURROOMS:
-      return state;
+      return {...state,
+        guests: {
+          value: {adults: 0, children: 0},
+          message: '',
+          inputState: '',
+          valid: false
+        }
+      };
+
     default:
       return state;
   }

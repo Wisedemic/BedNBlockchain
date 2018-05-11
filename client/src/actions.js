@@ -49,7 +49,6 @@ export const AUTH = {
   UPDATE_FIELD: 'AUTH_UPDATE_FIELD',
   CLOSE_ERROR: 'AUTH_CLOSE_ERROR',
   FieldError: (key, message, inputState, value) => {
-    console.log(AUTH.FIELD_ERROR);
     return {
       type: AUTH.FIELD_ERROR,
       key,
@@ -63,12 +62,22 @@ export const AUTH = {
 // Room related
 export const ROOMS = {
   CLOSE_ERROR: 'ROOMS_CLOSE_ERROR',
+  FIELD_ERROR: 'ROOMS_FIELD_ERROR',
   INCREMENT_GUESTS: 'ROOMS_INCREMENT_GUESTS',
   DECREMENT_GUESTS: 'ROOMS_DECREMENT_GUESTS',
   ADD: 'ADD_ROOM',
   EDIT: 'EDIT_ROOM',
   BOOK: 'BOOK_ROOM',
-  DELETE: 'DELETE_ROOM'
+  DELETE: 'DELETE_ROOM',
+  FieldError: (key, message, inputState, value) => {
+    return {
+      type: ROOMS.FIELD_ERROR,
+      key,
+      message,
+      inputState,
+      value
+    };
+  }
 };
 
 // Booking related

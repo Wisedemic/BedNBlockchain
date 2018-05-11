@@ -128,9 +128,9 @@ class BulmaField extends Component {
 					<Message inputState={this.props.inputState} message={this.props.message}/>
 				</div>
 				{this.props.hasAddonRight ? (
-					<p className="control">
+					<div className="control">
 						{this.props.hasAddonRight}
-					</p>
+					</div>
 				) : null}
 
 			</FieldWrapper>
