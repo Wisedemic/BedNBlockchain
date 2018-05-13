@@ -11,6 +11,7 @@ const helpers = require('../config/helpers.js');
 
 // Add a new booking
 bookings.put('/add', helpers.validateToken, function(req, res, next) {
+	console.log('req body data', req.body);
 	// Define a schema safe object
 	const bookingData = {
     ownerId: req.body.ownerId,
@@ -19,10 +20,10 @@ bookings.put('/add', helpers.validateToken, function(req, res, next) {
     price: req.body.price,
     guests: req.body.guests
 	};
-
+	// console.log('We got req data and stuff', req.body, bookingData);
 	// Create a booking
 	Bookings.create(bookingData, function(err, booking) {
-  	console.log(err, booking);
+  	// console.log(err, booking);
   	if (err || !booking) return res.json({error: true, errors: Bookings.MongoErrors(err)});
 		if (booking) {
 			// Quick update the Room booked to have a {booked: true} status.
@@ -39,7 +40,8 @@ bookings.put('/add', helpers.validateToken, function(req, res, next) {
     				const payload = {
     	        booking: booking
     	      };
-    	      res.send({payload});
+						console.log('PAYLOAD', payload);
+    	      res.json({payload});
     			});
         }
       });
@@ -70,7 +72,7 @@ bookings.post('/edit/:bookingId', helpers.validateToken, function(req, res, next
         const payload = {
 	        booking: booking
 	      };
-	      res.send({payload});
+	      res.json({payload});
       }
     });
   }
@@ -86,7 +88,7 @@ bookings.get('/:bookingId', function(req, res, next) {
       console.log(err, booking);
       if (err || !booking) return res.json({error: true, errors: Bookings.MongoErrors(err)});
 			if (booking) {
-				const payload = {
+				const booking = {
 					id: booking._id,
 					ownerId: booking.ownerId,
           roomId: booking.roomId,
@@ -96,7 +98,7 @@ bookings.get('/:bookingId', function(req, res, next) {
 					updated_at: booking.updated_at,
 					created_at: booking.created_at
 				};
-				return res.json({payload: {booking: payload}});
+				return res.json({payload: {booking}});
       }
     });
   }

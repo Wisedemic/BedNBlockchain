@@ -10,7 +10,7 @@ import {
 
 // Allow an action to a Promise
 const promiseMiddleware = store => next => action => {
-  console.log(action);
+	console.log(action);
 	// If the action has a payload that is a promise.
   if (isPromise(action.payload)) {
 		// Tell react that we started an ASYNC action with it's subtype.
@@ -41,7 +41,7 @@ const promiseMiddleware = store => next => action => {
           action.errors = res.errors;
           if (action.errors[0] === 'Invalid Token') {
 						action.errors[0] = 'You\'ve been signed out!';
-						store.dispatch({ type: APP.DELETE_TOKEN })
+						store.dispatch({ type: APP.DELETE_TOKEN });
           }
           store.dispatch({ type: ASYNC.ERROR, subtype: action.type, errors: action.errors });
         } else {

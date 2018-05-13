@@ -18,7 +18,8 @@ const mapStateToProps = state => ({
   currentRoom: state.rooms.currentRoomInView,
   reload: state.rooms.reload,
   loading: state.rooms.loading,
-  guests: state.rooms.guests
+  guests: state.rooms.guests,
+	dates: state.rooms.dates
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,7 +30,11 @@ const mapDispatchToProps = dispatch => ({
   onUnload: () => dispatch({ type: UNLOAD_PAGE.ROOM }),
 	incrementGuests: (guestType) => dispatch({ type: ROOMS.INCREMENT_GUESTS, guestType }),
   decrementGuests: (guestType) => dispatch({ type: ROOMS.DECREMENT_GUESTS, guestType }),
-  bookRoom: (buyerId, ownerId, roomId, price, guests) => {
+	onChangeDates: (dates) => {
+		console.log(dates);
+		dispatch({ type: ROOMS.SELECT_DATES, dates })
+	},
+	bookRoom: (buyerId, ownerId, roomId, price, guests) => {
     console.log('Booking room', buyerId, ownerId, roomId, price, guests);
     const payload = agent.Bookings.bookRoom(buyerId, ownerId, roomId, price, guests);
     dispatch({ type: ROOMS.BOOK, payload });
@@ -39,10 +44,21 @@ const mapDispatchToProps = dispatch => ({
 class Room extends Component {
   constructor() {
     super();
-    this.incrementGuests = type => this.props.incrementGuests(type);
+		this.state = {
+			isCalendarActive: false
+		};
+		this.toggleCalendar = this.toggleCalendar.bind(this);
+		this.incrementGuests = type => this.props.incrementGuests(type);
     this.decrementGusts = type => this.props.decrementGuests(type);
     this.bookRoom = (price, guests) => this.props.bookRoom(this.props.currentUser.id, this.props.currentRoom.ownerId._id, this.props.currentRoom.id, price, guests);
   }
+
+	toggleCalendar() {
+		console.log('iran')
+		this.setState((prevState) => {
+			return {isCalendarActive: !prevState.isCalendarActive};
+		});
+	}
   componentDidMount() {
     this.props.onLoad(this.props.match.params.roomId);
   }
@@ -52,9 +68,11 @@ class Room extends Component {
   }
 
   render() {
+		console.log(this.state, this.props);
     const guests = this.props.guests.value;
     let price = 0;
-    if (this.props.currentRoom) {
+		let dates = [];
+		if (this.props.currentRoom) {
       price = this.props.currentRoom.price;
     }
     if (this.props.currentRoom) {
@@ -97,7 +115,20 @@ class Room extends Component {
                             ) : (
                               <form>
                                 <h6 className="subtitle is-6">How many guests?</h6>
-                                <Field
+																{this.state.isCalendarActive ? (
+																	<Field
+																		key={'calendar'}
+																		label={'Select Dates'}
+																		type={'calendar'}
+																		value={this.props.dates.value}
+																		onChange={this.onChangeDates}
+																		isHorizontal={true}
+																		active={this.props.dates.active}
+																	/>
+																) : (
+																	<div className="button" onClick={this.toggleCalendar}>{this.props.dates.value + '->'}</div>
+																)}
+																<Field
                                   key={'adults'}
                                   label={'Adults'}
                                   type={'incrementer'}
@@ -108,7 +139,7 @@ class Room extends Component {
                                       <a
                                         className="button"
                                         disabled={(this.props.guests.value.adults === this.props.currentRoom.guests.adults) ? 'disabled' : false}
-                                        onClick={() => this.props.guests.value.adults === this.props.currentRoom.guests.adults ? null : this.props.incrementGuests('adults')}>
+                                        onClick={this.props.guests.value.adults === this.props.currentRoom.guests.adults ? null : () => this.props.incrementGuests('adults')}>
                                         +
                                       </a>
                                       <span className="incrementer-max">Max: {this.props.currentRoom.guests.adults}</span>
@@ -118,7 +149,7 @@ class Room extends Component {
                                     <a
                                       className="button"
                                       disabled={(this.props.guests.value.adults === 0) ? 'disabled' : false}
-                                      onClick={() => this.props.guests.value.adults === 0 ? null : this.props.decrementGuests('adults')}>
+                                      onClick={this.props.guests.value.adults === 0 ? null : () => this.props.decrementGuests('adults')}>
                                       -
                                     </a>
                                   }
@@ -134,7 +165,7 @@ class Room extends Component {
                                       <a
                                         className="button"
                                         disabled={this.props.guests.value.children === this.props.currentRoom.guests.children ? 'disabled' : false}
-                                        onClick={() => this.props.guests.value.children === this.props.currentRoom.guests.children ? null : this.props.incrementGuests('children')}>
+                                        onClick={this.props.guests.value.children === this.props.currentRoom.guests.children ? null : () => this.props.incrementGuests('children')}>
                                         +
                                       </a>
                                       <span className="incrementer-max">Max: {this.props.currentRoom.guests.children}</span>
@@ -144,7 +175,7 @@ class Room extends Component {
                                     <a
                                       className="button"
                                       disabled={(this.props.guests.value.children === 0) ? 'disabled' : false}
-                                      onClick={() => this.props.guests.value.children === 0 ? null : this.props.decrementGuests('children')}>
+                                      onClick={this.props.guests.value.children === 0 ? null : () => this.props.decrementGuests('children')}>
                                       -
                                     </a>
                                   }

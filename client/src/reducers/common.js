@@ -65,6 +65,6 @@ export default (state = defaultState, action) => {
         currentUser: action.error ? null : action.payload.user
       };
     default:
-      return state;
+      return {...state};
   }
 };

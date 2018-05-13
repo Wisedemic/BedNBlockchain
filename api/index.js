@@ -19,7 +19,7 @@ let db = require('./config/database')(api); // DB Config
 let passport = require('./config/passport'); // User Auth Config
 let config = require('./config/config'); // Secret Stuff
 let corsOptions = { // CORS Configuration is done here!
-  origin: ['http://localhost:3001', 'http://localhost:3000', ],
+  origin: ['http://localhost:3001', 'http://localhost:3000'],
   optionsSuccessStatus: 200,
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 };

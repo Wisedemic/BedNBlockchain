@@ -14,8 +14,6 @@ const { matchedData } = require('express-validator/filter');
 
 /* Helpers */
 const helpers = require('../config/helpers.js');
-const generateName = require('sillyname');
-const randomstring = require("randomstring");
 const extend = require('util')._extend;
 
 // Login Submit Handling

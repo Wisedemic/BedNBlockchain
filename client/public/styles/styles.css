@@ -1,3 +1,6 @@
+.react-calendar__navigation__label {
+  font-weight: 800; }
+
 .incrementer-max {
   line-height: 2rem;
   padding-left: .5rem; }

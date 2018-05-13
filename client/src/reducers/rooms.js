@@ -17,7 +17,14 @@ const defaultState = {
     message: '',
     inputState: '',
     valid: false
-  }
+  },
+	dates: {
+		value: [],
+		message: '',
+		inputState: '',
+		valid: false,
+		active: false
+	}
 };
 
 export default (state = defaultState, action) => {
@@ -53,30 +60,36 @@ export default (state = defaultState, action) => {
       return state;
     case ASYNC.END:
       return {...state,
-        loading: false
+        loading: false,
+				reload: false
       };
-      case ROOMS.INCREMENT_GUESTS:
-  			return {...state,
-  				guests: {...state.guests,
-  					value: {...state.guests.value,
-  						[action.guestType]: ++state.guests.value[action.guestType]
-  					},
-            valid: true
-  				}
-  			};
-  		case ROOMS.DECREMENT_GUESTS:
-  			return {...state,
-  				guests: {...state.guests,
-  					value: {...state.guests.value,
-  						[action.guestType]: (state.guests.value[action.guestType] <= 0 ? 0 : --state.guests.value[action.guestType])
-  					},
-            valid: (state.guests.value.children > 0 || state.guests.value.adults > 0 ? true : false)
-  				}
-  			};
+		case ASYNC.CONNECTION_ERROR:
+			return {...state,
+				loading: false,
+				reload: false
+			};
+    case ROOMS.INCREMENT_GUESTS:
+			return {...state,
+				guests: {...state.guests,
+					value: {...state.guests.value,
+						[action.guestType]: ++state.guests.value[action.guestType]
+					},
+          valid: true
+				}
+			};
+		case ROOMS.DECREMENT_GUESTS:
+			return {...state,
+				guests: {...state.guests,
+					value: {...state.guests.value,
+						[action.guestType]: (state.guests.value[action.guestType] <= 0 ? 0 : --state.guests.value[action.guestType])
+					},
+          valid: (state.guests.value.children > 0 || state.guests.value.adults > 0 ? true : false)
+				}
+			};
     case ROOMS.DELETE:
     case ROOMS.BOOK:
       return {...state,
-        reload: action.payload.error ? false : true,
+        // reload: action.payload.error ? false : true,
         errors: action.payload.error ? action.payload.errors : null
       };
     case UNLOAD_PAGE.ROOMS:

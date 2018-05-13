@@ -67,7 +67,6 @@ const Rooms = {
   editRoom: (roomId, title, desc, propertyType, roomType, location, price, guests, featuredImageId) => requests.post('/rooms/edit/'+ roomId, {title, desc, propertyType, roomType, location, price, guests, featuredImageId}),
   getRoom: (id) => requests.get('/rooms/'+id),
   roomByUserId: (id) => requests.get('/rooms/ownerId/'+id),
-  bookRoom: (roomId, userId) => requests.post('/rooms/bookRoom/'+roomId, {userId}),
   deleteRoom: (id) => requests.del('/rooms/delete/'+id)
 };
 

@@ -1,10 +1,20 @@
+// React
 import React from 'react';
 
+// Redux
 import { connect } from 'react-redux';
+
+// Route wrapper
 import { Route } from 'react-router-dom';
+
+// Animate route changes
 import { AnimatedSwitch, spring } from 'react-router-transition';
 
+// Components
 import Header from './Header';
+import GlobalErrors from '../components/GlobalErrors';
+
+// Routes
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -16,15 +26,18 @@ import Bookings from './pages/Bookings';
 import Settings from './pages/Settings';
 import Four_Oh_Four from '../components/404';
 import Loading from '../components/Loading';
-import GlobalErrors from '../components/GlobalErrors';
 
+// Actions
 import { APP } from '../actions';
 
+// HTTP Request agent
 import agent from '../agent';
 
+// Location and State history
 import { store } from '../store';
 import { push } from 'react-router-redux';
 
+// Assign Global State to Props
 const mapStateToProps = state => {
   return {
     appLoaded: state.common.appLoaded,
@@ -35,6 +48,7 @@ const mapStateToProps = state => {
   }
 };
 
+// Assign Redux Actions to Props
 const mapDispatchToProps = dispatch => ({
 	closeError: (index) => dispatch({ type: APP.CLOSE_ERROR, index: index }),
 	onRedirect: () => dispatch({ type: APP.REDIRECT }),
@@ -43,6 +57,10 @@ const mapDispatchToProps = dispatch => ({
 	}
 });
 
+/*
+* 	Application Wrapper component.
+* 	This is the first component to render a view for bednblockchain.
+*/
 class App extends React.Component {
 	componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
@@ -52,10 +70,15 @@ class App extends React.Component {
   }
 
   componentWillMount() {
+		// Grab a user token if it exists
     const token = window.localStorage.getItem('jwt');
+
+		// If there was a token
     if (token) {
+			// Tell our request agent to use it for all requests.
       agent.setToken(token);
     }
+		// Fetch the user from the server and load the app.
     this.props.onLoad(token ? agent.Auth.current() : null, token);
   }
 
@@ -95,7 +118,6 @@ class App extends React.Component {
 
     return (
       <div className="app">
-
         <Header
           appName={this.props.appName}
           currentUser={this.props.currentUser}
@@ -170,9 +192,5 @@ class App extends React.Component {
     );
   }
 }
-
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

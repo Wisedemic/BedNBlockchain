@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Calendar from 'react-calendar';
 
 class BulmaInput extends Component {
   constructor(props) {
@@ -7,7 +8,7 @@ class BulmaInput extends Component {
     this.onBlur = this.onBlur.bind(this);
     this.onHover = this.onHover.bind(this);
     this.offHover = this.offHover.bind(this);
-    this.state = {
+		this.state = {
       focused: false,
       hover: false
     }
@@ -24,8 +25,18 @@ class BulmaInput extends Component {
   offHover() {
     this.setState({hover: false});
   }
+
   render() {
 		switch (this.props.type) {
+			case 'calendar':
+				console.log((<Calendar />), this.props);
+				return (
+					<Calendar
+						minDate={new Date(Date.now())}
+						selectRange={true}
+						onChange={this.props.onChange}
+					/>
+				);
 			case 'file':
 				return (
 					<div className="file is-info">
