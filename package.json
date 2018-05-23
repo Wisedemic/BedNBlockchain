@@ -1,7 +1,33 @@
 {
   "name": "bednblockchain",
+  "description": "A learning project for blockchain.",
   "version": "0.1.0",
   "private": false,
+  "author": "Tristan Navarrete",
+  "license": "ISC",
+  "homepage": "https://github.com/Wisedemic/BedNBlockchain#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wisedemic/BedNBlockchain.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Wisedemic/BedNBlockchain/issues"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "npm-run-all -p server client",
+    "server": "npm-run-all -p watch-css nodemon-server",
+    "client": "cd client && npm run start",
+    "start-prod": "npm-run-all -p client-prod build-react server-prod",
+    "server-prod": "node server-prod.js",
+    "client-prod": "cd client && npm run serve",
+    "build-react": "cd client && npm run build",
+    "build-css": "node-sass-chokidar --include-path client/src --include-path node_modules client/src/ -o client/public/ ",
+    "nodemon-server": "cd api && nodemon",
+    "watch-css": "npm run build-css && node-sass-chokidar --watch --recursive --include-path client/src --include-path node_modules client/src/ -o client/public/",
+    "heroku-postbuild": "npm install && npm run build-react"
+  },
+  "devDependencies": {},
   "dependencies": {
     "autoprefixer": "7.1.6",
     "babel-core": "6.26.0",
@@ -76,32 +102,14 @@
     "webpack-manifest-plugin": "1.3.2",
     "whatwg-fetch": "2.0.3"
   },
-  "scripts": {
-    "start": "npm-run-all -p server client",
-    "server": "npm-run-all -p watch-css nodemon-server",
-    "client": "cd client && npm run start",
-    "start-prod": "npm-run-all -p client-prod build-react server-prod",
-    "server-prod": "node server-prod.js",
-    "client-prod": "cd client && npm run serve",
-    "build-react": "cd client && npm run build",
-    "build-css": "node-sass-chokidar --include-path client/src --include-path node_modules client/src/ -o client/public/ ",
-    "nodemon-server": "cd api && nodemon",
-    "watch-css": "npm run build-css && node-sass-chokidar --watch --recursive --include-path client/src --include-path node_modules client/src/ -o client/public/",
-    "heroku-postbuild": "npm install && npm run build-react"
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
   },
-  "description": "A learning project for blockchain.",
-  "main": "index.js",
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Wisedemic/BedNBlockchain.git"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "author": "Tristan Navarrete",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Wisedemic/BedNBlockchain/issues"
-  },
-  "homepage": "https://github.com/Wisedemic/BedNBlockchain#readme",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"
@@ -135,13 +143,5 @@
       "node",
       "mjs"
     ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   }
 }
