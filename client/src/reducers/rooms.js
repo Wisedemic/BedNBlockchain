@@ -86,7 +86,13 @@ export default (state = defaultState, action) => {
           valid: (state.guests.value.children > 0 || state.guests.value.adults > 0 ? true : false)
 				}
 			};
-    case ROOMS.DELETE:
+		case ROOMS.SELECT_DATES:
+			return {...state,
+				dates: {...state.dates,
+					value: action.dates
+				}
+			};
+		case ROOMS.DELETE:
     case ROOMS.BOOK:
       return {...state,
         // reload: action.payload.error ? false : true,

@@ -38,6 +38,14 @@ const defaultState = {
 		message: '',
 		inputState: '',
 		valid: false
+	},
+	dates: {
+		value: [],
+		message: '',
+		inputState: '',
+		types: 'range',
+		valid: false,
+		active: false
 	}
 };
 

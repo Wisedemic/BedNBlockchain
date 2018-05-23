@@ -2,7 +2,6 @@ import React, {	Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import ErrorList from '../../components/ErrorList';
 import Field from '../../components/Field';
 
 import agent from '../../agent';
@@ -30,8 +29,7 @@ const mapDispatchToProps = dispatch => ({
   onUnload: () => dispatch({ type: UNLOAD_PAGE.ROOM }),
 	incrementGuests: (guestType) => dispatch({ type: ROOMS.INCREMENT_GUESTS, guestType }),
   decrementGuests: (guestType) => dispatch({ type: ROOMS.DECREMENT_GUESTS, guestType }),
-	onChangeDates: (dates) => {
-		console.log(dates);
+	changeDates: (dates) => {
 		dispatch({ type: ROOMS.SELECT_DATES, dates })
 	},
 	bookRoom: (buyerId, ownerId, roomId, price, guests) => {
@@ -45,20 +43,21 @@ class Room extends Component {
   constructor() {
     super();
 		this.state = {
-			isCalendarActive: false
+			isCalendarActive: false,
+			dates: []
 		};
-		this.toggleCalendar = this.toggleCalendar.bind(this);
+
+		this.deactivateCalendar = () => this.setState({isCalendarActive: true});
 		this.incrementGuests = type => this.props.incrementGuests(type);
     this.decrementGusts = type => this.props.decrementGuests(type);
     this.bookRoom = (price, guests) => this.props.bookRoom(this.props.currentUser.id, this.props.currentRoom.ownerId._id, this.props.currentRoom.id, price, guests);
+		this.onChangeDates = dates => {
+			this.props.changeDates(dates);
+			this.setState({isCalendarActive: false});
+		};
+
   }
 
-	toggleCalendar() {
-		console.log('iran')
-		this.setState((prevState) => {
-			return {isCalendarActive: !prevState.isCalendarActive};
-		});
-	}
   componentDidMount() {
     this.props.onLoad(this.props.match.params.roomId);
   }
@@ -68,10 +67,9 @@ class Room extends Component {
   }
 
   render() {
-		console.log(this.state, this.props);
     const guests = this.props.guests.value;
     let price = 0;
-		let dates = [];
+		// let dates = [];
 		if (this.props.currentRoom) {
       price = this.props.currentRoom.price;
     }
@@ -114,21 +112,18 @@ class Room extends Component {
                               <button className="button is-text" disabled={'disabled'}>You own this property!</button>
                             ) : (
                               <form>
-                                <h6 className="subtitle is-6">How many guests?</h6>
-																{this.state.isCalendarActive ? (
-																	<Field
-																		key={'calendar'}
-																		label={'Select Dates'}
-																		type={'calendar'}
-																		value={this.props.dates.value}
-																		onChange={this.onChangeDates}
-																		isHorizontal={true}
-																		active={this.props.dates.active}
-																	/>
-																) : (
-																	<div className="button" onClick={this.toggleCalendar}>{this.props.dates.value + '->'}</div>
-																)}
-																<Field
+                                <h6 className="subtitle is-6">Customize your booking</h6>
+                                  <Field
+  																	key={'calendar'}
+  																	label={'Select Dates'}
+  																	type={'calendar'}
+  																	value={this.props.dates.value}
+  																	isHorizontal={true}
+  																	active={this.state.isCalendarActive}
+                                    onChange={this.onChangeDates}
+  																	onClick={this.deactivateCalendar}
+  																/>
+  																<Field
                                   key={'adults'}
                                   label={'Adults'}
                                   type={'incrementer'}
@@ -180,6 +175,12 @@ class Room extends Component {
                                     </a>
                                   }
                                 />
+																<div className="field is-horizontal">
+																	<label className="field-label is-normal">Price</label>
+																	<div className="field-body">
+																		<p className="content"></p>
+																	</div>
+																</div>
                                 <div className="field">
                                   <p className="control">
                                     <button

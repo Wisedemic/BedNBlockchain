@@ -29,14 +29,35 @@ class BulmaInput extends Component {
   render() {
 		switch (this.props.type) {
 			case 'calendar':
-				console.log((<Calendar />), this.props);
-				return (
-					<Calendar
-						minDate={new Date(Date.now())}
-						selectRange={true}
-						onChange={this.props.onChange}
-					/>
-				);
+        if (this.props.active) {
+          return (
+  					<Calendar
+  						minDate={new Date(Date.now())}
+  						selectRange={true}
+  						onChange={this.props.onChange}
+							value={this.props.value.length > 0 ? this.props.value : null}
+  					/>
+  				);
+        } else {
+          return (
+            <div className="field is-expanded">
+              <div className="field has-addons">
+                <div className="control">
+                  <a className="button is-static">
+                    <i className="fa fa-calendar"></i>
+                  </a>
+                </div>
+                <div className="control">
+                  <div onClick={this.props.onClick} className="input">
+                    {this.props.value[0] ? `${this.props.value[0].getMonth()}/${this.props.value[0].getDate()}`: 'mm/dd '}
+                    <i className="calendar-input-icon fa fa-arrow-right"></i>
+                    {this.props.value[1] ? `${this.props.value[1].getMonth()}/${this.props.value[1].getDate()}`: ' mm/dd'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
 			case 'file':
 				return (
 					<div className="file is-info">

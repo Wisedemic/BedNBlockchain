@@ -14,6 +14,12 @@ import {
   ROOMEDITOR
 } from '../../actions';
 
+const dateTypeOptions = [
+	'Always Available',
+	'Select Date Range',
+	'Select Unavailable Dates'
+];
+
 const HomeTypes = [
   'Entire Place',
   'Private Room',
@@ -136,9 +142,16 @@ const mapDispatchToProps = dispatch => ({
 			dispatch({ type: ROOMEDITOR.UPDATE_FIELD, key, value: value })
 		}
   },
+	onChangeCalendarType: (type) => {
+		const key = 'dates';
+		if (!dateTypeOptions.includes(type)) {
+			dispatch(ROOMEDITOR.FieldError(key, 'NO TAMPERING FIELDS!', 'is-danger', []));
+		} else {
+			dispatch({ type: ROOMS.UPDATE_CALENDAR_TYPE, type });
+		}
+	},
 	onChangeFeaturedImage: (file) => {
 		const key = 'featuredImage';
-		console.log(file);
 		if (!file) {
 			console.log('No File!');
 			return;
@@ -188,6 +201,11 @@ class RoomEditor extends Component {
     this.incrementGuests = type => this.props.incrementGuests(type);
     this.decrementGusts = type => this.props.decrementGuests(type);
 		this.onChangeFeaturedImage = ev => this.props.onChangeFeaturedImage((ev.target.files[0]));
+		this.deactivateCalendar = () => this.setState({isCalendarActive: true});
+		this.onChangeDates = dates => {
+			this.props.changeDates(dates);
+			this.setState({isCalendarActive: false});
+		};
 
     this.submitForm = (title, desc, propertyType, roomType, location, price, guests, featuredImageId) => ev => {
       ev.preventDefault();
@@ -329,15 +347,32 @@ class RoomEditor extends Component {
                   message={this.props.price.message}
                 />
 
-                <Field
-                  key={'adults'}
-                  label={'Max Adults'}
-                  type={'incrementer'}
-                  value={this.props.guests.value.adults}
+								<Field
+                  key={'calendarType'}
+                  label={'Availability Type'}
+                  type={'select'}
+                  value={this.props.dates.type}
+                  opts={dateTypeOptions}
                   isHorizontal={true}
-                  hasAddonLeft={(<a className="button" onClick={() => this.props.incrementGuests('adults')}>+</a>)}
-                  hasAddonRight={(<a className="button" onClick={() => this.props.decrementGuests('adults')}>-</a>)}
+                  placeholder={'Please Select'}
+                  onChange={this.onChangeCalendarType}
+                  inputState={this.props.dates.inputState}
+                  message={this.props.dates.message}
                 />
+								{this.props.dates.type ? (
+                  null
+								) : (
+									<Field
+										key={'calendar'}
+										label={'Availability'}
+										type={'calendar'}
+										value={this.props.dates.value}
+										isHorizontal={true}
+										active={this.isCalendarActive}
+										onChange={this.onChangeDates}
+										onClick={this.deactivateCalendar}
+									/>
+							)}
                 <Field
                   key={'children'}
                   label={'Max Children'}
@@ -370,9 +405,9 @@ class RoomEditor extends Component {
 													this.props.propertyType.valid &&
 													this.props.location.valid &&
 													this.props.price.valid &&
-													this.props.featuredImage.valid) ?
-													'' : ' is-outlined')
-												}
+													this.props.featuredImage.valid
+                        ) ? '' : ' is-outlined')
+											}
 											onClick={this.submitForm}
 											disabled={
                         (this.props.title.valid &&
