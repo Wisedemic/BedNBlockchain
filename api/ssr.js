@@ -1,14 +1,20 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
-import createMemoryHistory from 'history/createMemoryHistory';
-import { ConnectedRouter } from 'react-router-redux';
 
+// Global state binding for React
+import { Provider } from 'react-redux';
+
+// Router Components
+import { Router, Route, Switch } from 'react-router';
+
+import createMemoryHistory from 'history/createMemoryHistory';
 import setupStore from 'client/store';
+
 // Application View Component
 import App from 'client/containers/App';
 import template from 'client/index.html';
 
+// Export page render as a function
 export default () => {
   const history = createMemoryHistory();
   const store = setupStore(history);
@@ -16,9 +22,9 @@ export default () => {
 
   const rendered = renderToString(
     <Provider store={store}>
-      <ConnectedRouter history={history}>
+      <Router history={history}>
         <Route component={App} />
-      </ConnectedRouter>
+      </Router>
     </Provider>,
   );
   const page = template

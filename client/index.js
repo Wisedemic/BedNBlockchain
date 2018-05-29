@@ -6,12 +6,11 @@ import { render } from 'react-dom';
 import setupStore from './store';
 import createHistory from 'history/createBrowserHistory';
 
-// Router Components
-import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
-
 // Global State Binding for React
 import { Provider } from 'react-redux';
+
+// Router Components
+import { Router, Route, Switch } from 'react-router';
 
 // Application View Component
 import App from './containers/App';
@@ -22,11 +21,11 @@ const store = setupStore(history);
 const renderToPage = Component => {
   render(
 		<Provider store={store}>
-	    <ConnectedRouter history={history} onUpdate={() => window.scrollTo(0, 0)}>
+	    <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
 	      <Switch>
-	        <Route path="/" component={App} />
+	        <Route path="/" component={Component} />
 	      </Switch>
-	    </ConnectedRouter>
+	    </Router>
 	  </Provider>,
 	document.getElementById('root'));
 };
@@ -40,4 +39,4 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
   });
 }
 
-console.log('Version:', window.CONFIG.VERSION);
+console.log('Version:', window);
