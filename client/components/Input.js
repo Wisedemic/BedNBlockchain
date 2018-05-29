@@ -31,7 +31,7 @@ class BulmaInput extends Component {
 			case 'calendar':
         if (this.props.active) {
           return (
-						<div></div>
+            <div>To be fixed later</div>
   					// <Calendar
   					// 	minDate={new Date(Date.now())}
   					// 	selectRange={true}
