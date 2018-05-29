@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 // Define Booking Schema
 const BookingsSchema = new Schema({
   ownerId: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: mongoose.Schema.Types.ObjectId, 
 		ref: 'Users',
 		required: [true, 'An ownerId is required!']
 	},

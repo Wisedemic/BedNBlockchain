@@ -1,20 +1,17 @@
-/* Requires */
-const router = require('express').Router();
+import express from 'express';
 
-// Export all routes to express
-module.exports = function(api) {
+// Grab all our routes
+import auth from './auth';
+import rooms from './rooms';
+import bookings from './bookings';
+import uploads from './uploads';
 
-	// Define All Other Routes Here
-	router.use('/auth/', require('./auth'));
-	router.use('/rooms/', require('./rooms'));
-	router.use('/bookings/', require('./bookings'));
-	router.use('/uploads/', require('./uploads'));
+const router = express.Router();
 
-  // Handle 404 (Final Route)
-	router.use(function(req, res, next) {
-		res.sendStatus(404);
-	});
+// // Define Routes
+router.use('/api/auth/', auth);
+router.use('/api/rooms/', rooms);
+router.use('/api/bookings/', bookings);
+router.use('/api/uploads/', uploads);
 
-	// Export all express routes.
-	return router;
-};
+export default router;

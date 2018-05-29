@@ -1,13 +1,12 @@
-// Generate Random String.
-const uuidv4 = require('uuid/v4');
-const secret = require('./config.js').secret;
-const jwt = require('jsonwebtoken');
+import uuidv4 from 'uuid/v4';
+import jwt from 'jsonwebtoken';
+import { SECRET } from '../constants';
 
 // Token Expiry default
 const expiresDefault = '1d';
 
 // Validation middleware to check for a token in the req.header.
-function validateToken(req, res, next) {
+export function validateToken(req, res, next) {
   // Ensure a token was provided.
   if (!req.headers.authorization) {
     console.log('[REQUEST VERIFICATION] -- Bad request headers!', req.headers);
@@ -35,18 +34,18 @@ function validateToken(req, res, next) {
 }
 
 // create JWT
-function generateToken(req, GUID, opts) {
+export function generateToken(req, GUID, opts) {
   opts = opts || {};
   const token = jwt.sign({
     auth:  GUID,
     agent: req.headers['user-agent']
-  }, secret, { expiresIn: opts.expires || expiresDefault });
+  }, SECRET, { expiresIn: opts.expires || expiresDefault });
 	console.log('[REQUEST VERIFICATION] -- token generated: ', token);
   return token;
 }
 
 // Store the token in the user's metaData.
-function generateAndStoreToken(req, user, opts) {
+export function generateAndStoreToken(req, user, opts) {
   const GUID   = uuidv4(); // Generate UUIDv4.
   const token  = generateToken(req, GUID, opts); // Generate Token
 
@@ -71,23 +70,16 @@ function generateAndStoreToken(req, user, opts) {
 }
 
 // Token verifier
-function verify(token) {
+export function verify(token) {
   let decoded = false;
 
 	// Attempt to decode our token and verify.
 	try {
-    decoded = jwt.verify(token, secret);
+    decoded = jwt.verify(token, SECRET);
   } catch (e) {
     decoded = false; // still false
   }
 
 	// Did we decode properly?
   return decoded;
-}
-
-// Exports
-module.exports = {
-  verify : verify,
-  generateAndStoreToken: generateAndStoreToken,
-  validateToken: validateToken
 }
