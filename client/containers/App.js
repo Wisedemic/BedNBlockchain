@@ -22,8 +22,8 @@ import Four_Oh_Four from '../components/404';
 import Loading from '../components/Loading';
 
 // styles
-// import '../styles/Bulma.scss';
-import '../styles/styles.scss';
+import Bulma from '../styles/Bulma.scss';
+import styles from '../styles/styles.scss';
 
 // Actions
 import { APP } from '../actions';

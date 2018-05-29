@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   target: 'web',
 	mode: 'development',
   entry: [
@@ -19,7 +19,7 @@ module.exports = {
   },
   resolve: {
     modules: [
-      path.resolve('../client'), // to resolve path liek '/components' on client
+      path.resolve('./client'), // to resolve path liek '/components' on client
       'node_modules',
     ],
   },
@@ -42,13 +42,7 @@ module.exports = {
             loader: 'css-loader'
           },
           {
-            loader: 'resolve-url-loader',
-          },
-          {
-            loader: 'sass-loader'
-          },
-          {
-            loader: 'postcss-loader',
+            loader: 'sass-loader',
             options: {
               autoprefixer: {
                 browsers: ['last 2 versions']
