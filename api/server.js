@@ -16,9 +16,9 @@ const api = express();
 
 // Setup MongoDB
 connectMongoose(api);
-//
+
 // // Attach our mongodb to express session data
-// const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);
 
 // Set Global Express vars
 api.set('port', PORT);
@@ -29,8 +29,8 @@ api.use(session({
 	maxAge: 100*60*60,
 	secret: api.get('secret'),
 	resave: false,
-	saveUninitialized: false
-	// store: new MongoStore({url: MONGO_DB_URI})
+	saveUninitialized: false,
+	store: new MongoStore({url: MONGO_DB_URI})
 }));
 api.use(passport.initialize()); // Passport.js Init
 api.use(passport.session()); // Session Init
@@ -48,11 +48,13 @@ let corsOptions = {
 // Pass all routes through this middleware
 api.all('*', cors(corsOptions), (req, res, next) => {
 	req.accepts('application/json');
+	console.log('-----------------------------');
 	console.log('Path: ', req.path);
 	console.log('Method: ', req.method);
 	console.log('Params: ', req.params);
 	console.log('Body: ', req.body);
 	console.log('Headers: ', req.headers);
+	console.log('-----------------------------');
 	next();
 });
 
@@ -78,8 +80,7 @@ if (process.env.NODE_ENV === 'development') {
   }));
 
   // Tell express where to find files while in development
-  api.use('/static', express.static(__dirname + '../.build'))
-
+  api.use(express.static(path.resolve('.build')));
   // Logging
   const morgan = require('morgan');
   api.use(morgan('dev'));
@@ -94,7 +95,7 @@ api.use(routes);
 
 // And finally if no other route is matched,
 // then send our react app.
-api.get('/', (req, res) => {
+api.get('/*', (req, res) => {
 	console.log('iran');
   if (process.env.NODE_ENV === 'production') {
     const page = serverSideRender();
