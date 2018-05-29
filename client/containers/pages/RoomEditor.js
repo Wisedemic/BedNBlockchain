@@ -53,7 +53,8 @@ const mapStateToProps = state => ({
   location: state.roomEditor.location,
   price: state.roomEditor.price,
   guests: state.roomEditor.guests,
-	featuredImage: state.roomEditor.featuredImage
+	featuredImage: state.roomEditor.featuredImage,
+  dates: state.roomEditor.dates
 });
 
 const mapDispatchToProps = dispatch => ({
