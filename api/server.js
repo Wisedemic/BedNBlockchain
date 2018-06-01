@@ -63,7 +63,6 @@ api.all('*', cors(corsOptions), (req, res, next) => {
 	listen to changes in our api server
 	if we're in development mode.
 */
-console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
 
   // Bind our webpack compiler to our express webpack Hot Middleware
@@ -96,7 +95,6 @@ api.use(routes);
 // And finally if no other route is matched,
 // then send our react app.
 api.get('/*', (req, res) => {
-	console.log('iran');
   if (process.env.NODE_ENV === 'production') {
     const page = serverSideRender();
     return res.send(page);
