@@ -7,14 +7,16 @@ This application was built using:
 - MongoDB w/ Mongoose
 
 ### Installation
-1. npm i
-2. npm i --only=dev
+    1. npm i
+    2. npm i --only=dev
 
 For Production:
-3. npm run serve:fresh
+
+    3. npm run serve:fresh
 
 For Development:
-3. npm start
+
+    3. npm start
 
 ### Folder Structure
     .
