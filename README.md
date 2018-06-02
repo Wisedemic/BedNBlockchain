@@ -19,21 +19,21 @@ For Development:
 ### Folder Structure
     .
     ├── .build                  # Compiled Webpack Development files
-		├── dist                    # Compiled Webpack Proudction files
+    ├── dist                    # Compiled Webpack Proudction files
     ├── api                     # Express Server. (Providing React Server Side Rendering)
     ├── client                  # React Client-side files
     ├── config                  # Webpack files for compiler configuration
-		├── .env                    # Read more @ .env section
+    ├── .env                    # Read more @ .env section
     └── README.md
 
 ### .env
 The .env file should be formated like so:
 `
-MONGO_DB_URI=YOUR_MONGO_URL
-VERSION=0.0.1
-SECRET=somesecret
-PORT=3000
-NODE_ENV=production
+MONGO_DB_URI=YOUR_MONGO_URL  
+VERSION=0.0.1  
+SECRET=somesecret  
+PORT=3000  
+NODE_ENV=production  
 `
 This file is critical for a successful build.
 
