@@ -1,9 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
   devtool: 'source-map',
   target: 'web',
+  mode: 'production',
   entry: ['babel-polyfill', path.resolve('./client/index.js')],
   output: {
     path: path.resolve('./dist/'),
@@ -28,6 +31,28 @@ module.exports = {
         use: 'raw-loader',
       },
       {
+        test: /\.s?css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              autoprefixer: {
+                browsers: ['last 2 versions']
+              },
+              plugins: () => [
+                autoprefixer
+              ]
+            },
+          }
+        ]
+      },
+      {
         test: /\.(png|jpg|jpeg|gif|woff|woff2|svg|eot|ttf|otf|wav|mp3)$/,
         use: [
           {
@@ -41,17 +66,14 @@ module.exports = {
     ],
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production'),
+        NODE_ENV: JSON.stringify('production')
       },
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      minimize: true,
-      compress: {
-        warnings: false,
-      },
-    }),
+    })
   ],
 }

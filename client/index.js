@@ -38,5 +38,3 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
     renderToPage(HotApp);
   });
 }
-
-console.log('Version:', window);

@@ -67,17 +67,17 @@ class App extends React.Component {
     }
   }
 
-  componentWillMount() {
-		// Grab a user token if it exists
-    const token = window.localStorage.getItem('jwt');
-
-		// If there was a token
+  componentDidMount() {
+		const localStorage = require('web-storage')().localStorage;
+		const token = localStorage.get('jwt');
+    // If there was a token
     if (token) {
-			// Tell our request agent to use it for all requests.
+      // Tell our request agent to use it for all requests.
       agent.setToken(token);
     }
-		// Fetch the user from the server and load the app.
+    // Fetch the user from the server and load the app.
     this.props.onLoad(token ? agent.Auth.current() : null, token);
+
   }
 
   render() {

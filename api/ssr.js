@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToStaticMarkup  } from 'react-dom/server';
 
 // Global state binding for React
 import { Provider } from 'react-redux';
@@ -20,12 +20,12 @@ export default () => {
   const store = setupStore(history);
   const state = store.getState();
 
-  const rendered = renderToString(
+  const rendered = renderToStaticMarkup(
     <Provider store={store}>
       <Router history={history}>
         <Route component={App} />
       </Router>
-    </Provider>,
+    </Provider>
   );
   const page = template
     .replace('<!-- CONTENT -->', rendered)

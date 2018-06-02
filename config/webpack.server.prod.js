@@ -1,10 +1,13 @@
 const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
   devtool: 'source-map',
   target: 'node',
+  mode: 'production',
   entry: ['babel-polyfill', path.resolve('./api/index')],
   output: {
     path: path.resolve('./dist'),
@@ -18,6 +21,17 @@ module.exports = {
     ],
   },
   externals: nodeExternals(),
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
+    }
+  },
   module: {
     rules: [
       {
@@ -33,6 +47,28 @@ module.exports = {
             options: { minimize: true },
           },
         ],
+      },
+      {
+        test: /\.s?css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              autoprefixer: {
+                browsers: ['last 2 versions']
+              },
+              plugins: () => [
+                autoprefixer
+              ]
+            },
+          }
+        ]
       },
       {
         test: /\.md$/,
@@ -57,15 +93,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         BUILD_TARGET: JSON.stringify('server'),
-        NODE_ENV: JSON.stringify('production'),
+        NODE_ENV: JSON.stringify('production')
       },
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      minimize: true,
-      compress: {
-        warnings: false,
-      },
-    }),
+    })
   ],
 };

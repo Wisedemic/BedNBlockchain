@@ -98,11 +98,12 @@ api.get('/*', (req, res) => {
   if (process.env.NODE_ENV === 'production') {
     const page = serverSideRender();
     return res.send(page);
-  }
-  const template = require('../client/index.html');
-  const CONSTANT = require('../client/constants');
-  const page = template.replace('"-- CONFIG --"', JSON.stringify(CONSTANT));
-  return res.send(page);
+  } else {
+		const template = require('../client/index.html');
+		const CONSTANT = require('../client/constants');
+		const page = template.replace('"-- CONFIG --"', JSON.stringify(CONSTANT));
+		return res.send(page);
+	}
 });
 
 export default api;

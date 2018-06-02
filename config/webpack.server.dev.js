@@ -91,7 +91,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         BUILD_TARGET: JSON.stringify('server'),
-        NODE_ENV: JSON.stringify('development'),
+        NODE_ENV: JSON.stringify('development')
       },
     }),
   ],

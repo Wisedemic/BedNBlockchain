@@ -10,7 +10,6 @@ import {
 
 // Allow an action to a Promise
 const promiseMiddleware = store => next => action => {
-	console.log(action);
 	// If the action has a payload that is a promise.
   if (isPromise(action.payload)) {
 		// Tell react that we started an ASYNC action with it's subtype.
@@ -68,14 +67,15 @@ const promiseMiddleware = store => next => action => {
 
 // Ensure the user's token was removed on logout, and added on login.
 const localStorageMiddleware = store => next => action => {
+	const localStorage = require('web-storage')().localStorage;
 	if (action.type === AUTH.SIGNUP || action.type === AUTH.LOGIN) {
     if (!action.error) {
-      window.localStorage.setItem('jwt', action.payload.user.token);
+      localStorage.set('jwt', action.payload.user.token);
 			action.token = action.payload.user.token;
       agent.setToken(action.payload.user.token);
     }
   } else if (action.type === AUTH.LOGOUT || action.type === APP.DELETE_TOKEN) {
-    window.localStorage.setItem('jwt', '');
+    localStorage.set('jwt', '');
     agent.setToken(null);
   }
   next(action);
