@@ -20,7 +20,8 @@
     "build:server": "webpack --config config/webpack.server.prod.js --bail",
     "build": "rimraf dist && npm run build:server && npm run build:client",
     "serve:fresh": "npm run build && npm run serve",
-    "serve": "node dist/server.js"
+    "serve": "node dist/server.js",
+    "heroku-postbuild": "npm run serve:fresh"
   },
   "devDependencies": {
     "babel-loader": "^7.1.4",
