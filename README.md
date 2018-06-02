@@ -37,10 +37,6 @@ The .env file should be formated like so:
     PORT=3000
     NODE_ENV=production
     
-This file is critical for a successful build.
-
-# How to Run / Install
-1. npm i
-2. npm start
+* This file is critical for a successful build.
 
 by Tristan Navarrete
