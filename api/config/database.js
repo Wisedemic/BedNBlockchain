@@ -1,10 +1,11 @@
+import { MONGO_DB_URI } from '../constants';
+
 // DB Config. Requires Express.js
-module.exports = function(api) {
+export const connectMongoose = (api) => {
 
 	/* Requires */
 	const mongoose = require('mongoose');
 	const Grid = require('gridfs-stream');
-	const config = require('./config.js');
 
 	// Config
 	mongoose.Promise = global.Promise;
@@ -24,7 +25,7 @@ module.exports = function(api) {
 	}
 
 	// Connect to MongoDB
-	mongoose.connect(config.mongoURL, function (err, res) {
+	mongoose.connect(MONGO_DB_URI, function (err, res) {
 		// mongoose.connection.db.dropDatabase();
 	  if (err) {
 	    console.log('[DB] Connection to MongoDB failed!. ' + err);
