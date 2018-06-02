@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
     console.log(errors, env);
   };
 }
-
+console.log(process.env);
 const env = cleanEnv(process.env, {
   VERSION: str({ default: '5.0.0' }),
 }, options);
