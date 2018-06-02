@@ -28,13 +28,13 @@ For Development:
 
 ### .env
 The .env file should be formated like so:
-`
-MONGO_DB_URI=YOUR_MONGO_URL  
-VERSION=0.0.1  
-SECRET=somesecret  
-PORT=3000  
-NODE_ENV=production  
-`
+
+    MONGO_DB_URI=YOUR_MONGO_URL
+    VERSION=0.0.1
+    SECRET=somesecret
+    PORT=3000
+    NODE_ENV=production
+    
 This file is critical for a successful build.
 
 by Tristan Navarrete
