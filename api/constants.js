@@ -5,6 +5,7 @@ if (process.env.NODE_ENV === 'production') {
   options.dotEnvPath = null;
   options.reporter = ({ errors = {}, env = {} }) => {
     console.log(errors, env);
+		return;
   };
 }
 const env = cleanEnv(process.env, {
@@ -13,7 +14,6 @@ const env = cleanEnv(process.env, {
   SECRET: str({ default: process.env.SECRET })
 }, options);
 
-console.log(env);
 export const { PORT, MONGO_DB_URI, SECRET } = env;
 
 export default env;
