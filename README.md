@@ -36,7 +36,5 @@ The .env file should be formated like so:
     SECRET=somesecret
     PORT=3000
     NODE_ENV=production
-    
-* This file is critical for a successful build.
 
 by Tristan Navarrete
