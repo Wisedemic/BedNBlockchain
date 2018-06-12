@@ -94,6 +94,7 @@ module.exports = {
       'process.env': {
         BUILD_TARGET: JSON.stringify('server'),
         NODE_ENV: JSON.stringify('production'),
+        BROWSER: JSON.stringify(false),
 				MONGO_DB_URI: JSON.stringify(process.env.MONGO_DB_URI ? process.env.MONGO_DB_URI : ''),
 				VERSION: JSON.stringify(process.env.VERSION ? process.env.VERSION : ''),
 				SECRET: JSON.stringify(process.env.SECRET ? process.env.SECRET : '')

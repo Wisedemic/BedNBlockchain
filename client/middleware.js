@@ -8,6 +8,10 @@ import {
   AUTH
 } from './actions';
 
+const drizzleMiddleware = store => next => action => {
+  next(action);
+};
+
 // Allow an action to a Promise
 const promiseMiddleware = store => next => action => {
 	// If the action has a payload that is a promise.
@@ -22,7 +26,7 @@ const promiseMiddleware = store => next => action => {
 		// Await the response from the promise
     action.payload.then(
       res => {
-        const currentState = store.getState()
+        const currentState = store.getState();
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
           return;
         }
@@ -48,7 +52,7 @@ const promiseMiddleware = store => next => action => {
 				}
       },
       error => {
-        const currentState = store.getState()
+        const currentState = store.getState();
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
           return
         }
@@ -85,4 +89,4 @@ function isPromise(v) {
   return v && typeof v.then === 'function';
 }
 
-export { promiseMiddleware, localStorageMiddleware }
+export { promiseMiddleware, localStorageMiddleware, drizzleMiddleware }

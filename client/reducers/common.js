@@ -1,3 +1,6 @@
+import { generateContractsInitialState } from 'drizzle';
+import drizzleOptions from './drizzleOptions';
+
 import {
   APP,
   ASYNC,
@@ -14,7 +17,8 @@ const defaultState = {
     loading: false,
     value: '',
     results: []
-  }
+  },
+  contracts: generateContractsInitialState(drizzleOptions)
 };
 
 export default (state = defaultState, action) => {

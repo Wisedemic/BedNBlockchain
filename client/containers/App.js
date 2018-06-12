@@ -32,8 +32,12 @@ import { APP } from '../actions';
 import agent from '../agent';
 
 // Location and State history
-// import { store } from '../store';
+import { getStore } from '../store';
 import { push } from 'react-router-redux';
+
+import initWeb3 from '../../truffle/web3';
+
+const store = getStore();
 
 // Assign Global State to Props
 const mapStateToProps = state => {
@@ -42,7 +46,9 @@ const mapStateToProps = state => {
     appName: state.common.appName,
     currentUser: state.common.currentUser,
     redirectTo: state.common.redirectTo,
-		errors: state.common.errors
+		errors: state.common.errors,
+    contract: state.common.contracts,
+    drizzleStatus: state.drizzleStatus.initialized
   }
 };
 
@@ -62,22 +68,29 @@ const mapDispatchToProps = dispatch => ({
 class App extends React.Component {
 	componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
-      // store.dispatch(push(nextProps.redirectTo));
+      store.dispatch(push(nextProps.redirectTo));
       this.props.onRedirect();
     }
   }
 
   componentDidMount() {
-		const localStorage = require('web-storage')().localStorage;
-		const token = localStorage.get('jwt');
-    // If there was a token
-    if (token) {
-      // Tell our request agent to use it for all requests.
-      agent.setToken(token);
-    }
-    // Fetch the user from the server and load the app.
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
+    if (process.env.BROWSER === true) {
+      const web3 = initWeb3.then((instance) => {
+        console.log(instance);
+      }).catch((message) => {
+        console.log(message);
+      });
 
+      const localStorage = require('web-storage')().localStorage;
+      const token = localStorage.get('jwt');
+      // If there was a token
+      if (token) {
+        // Tell our request agent to use it for all requests.
+        agent.setToken(token);
+      }
+      // Fetch the user from the server and load the app.
+      this.props.onLoad(token ? agent.Auth.current() : null, token);
+    }
   }
 
   render() {
@@ -132,7 +145,7 @@ class App extends React.Component {
             mapStyles={mapStyles}
             className="route-wrapper"
           >
-            {this.props.appLoaded ? null : (
+            {(this.props.appLoaded && this.props.drizzleStatus) ? null : (
               <Route component={Loading} />
             )}
             <Route exact path="/" component={Home} />

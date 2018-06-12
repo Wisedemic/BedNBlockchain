@@ -4,6 +4,7 @@ const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
@@ -84,6 +85,7 @@ module.exports = {
       filename: '[name].css',
       chunkFilename: '[id].css'
     }),
+    new CopyWebpackPlugin([{from: path.resolve('./truffle/build'), to: path.resolve('./.build')}]),
     new StartServerPlugin('server.js'),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
@@ -91,7 +93,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         BUILD_TARGET: JSON.stringify('server'),
-        NODE_ENV: JSON.stringify('development')
+        NODE_ENV: JSON.stringify('development'),
+        BROWSER: JSON.stringify(false)
       },
     }),
   ],

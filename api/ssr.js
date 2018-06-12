@@ -8,7 +8,11 @@ import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router';
 
 import createMemoryHistory from 'history/createMemoryHistory';
-import setupStore from 'client/store';
+import { setupStore } from 'client/store';
+
+// Drizzle tells our app to listen to the Ethereum network
+// for our contracts! It updates automatically.
+import { DrizzleProvider } from 'drizzle-react'
 
 // Application View Component
 import App from 'client/containers/App';
@@ -21,11 +25,13 @@ export default () => {
   const state = store.getState();
 
   const rendered = renderToStaticMarkup(
-    <Provider store={store}>
-      <Router history={history}>
-        <Route component={App} />
-      </Router>
-    </Provider>
+    <DrizzleProvider options={drizzleOptions} store={store}>
+      <Provider store={store}>
+        <Router history={history}>
+          <Route component={App} />
+        </Router>
+      </Provider>
+    </DrizzleProvider>
   );
   const page = template
     .replace('<!-- CONTENT -->', rendered)
