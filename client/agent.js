@@ -6,8 +6,8 @@ import superagentPromise from 'superagent-promise';
 const superagent = superagentPromise(_superagent, global.Promise);
 
 // Define constants
-const API_ROOT = 'http://localhost:3000/api';
-const GMAPS_ROOT = 'https://maps.googleapis.com/maps/api/geocode/';
+export const API_ROOT = 'http://localhost:3000/api';
+export const GMAPS_ROOT = 'https://maps.googleapis.com/maps/api/geocode/';
 // const encode = encodeURIComponent;
 const responseBody = res => res.body;
 let token = null;

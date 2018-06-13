@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Modal from '../../components/Modal';
 
-import agent from '../../agent';
+import { default as agent, API_ROOT } from '../../agent';
 
 import {
   LOAD_PAGE,
@@ -88,7 +88,7 @@ class YourRooms extends Component {
 									return (
 										<div className="box" key={index}>
                       <figure className="image">
-                        <img src={'http://localhost:3001/api/uploads/' + room.featuredImageId} alt="Placeholder" />
+                        <img src={`${API_ROOT}/uploads/` + room.featuredImageId} alt="Placeholder" />
                       </figure>
                       <div className="details">
                         <h5 className="title is-5">{room.title}</h5>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { API_ROOT } from '../agent';
 
 const Room = props => {
   return (
@@ -7,13 +8,13 @@ const Room = props => {
       {props.preview ? (
         <div className="card-image">
           <figure className="image is-4by3">
-            <img src={props.featuredImage ? 'http://localhost:3001/api/uploads/' + props.featuredImage : 'https://bulma.io/images/placeholders/640x480.png'} alt="Placeholder" />
+            <img src={props.featuredImage ? `${API_ROOT}/uploads/` + props.featuredImage : 'https://bulma.io/images/placeholders/640x480.png'} alt="Placeholder" />
           </figure>
         </div>
       ) : (
         <Link to={'/room/' + props.roomId} className="card-image">
           <figure className="image is-4by3">
-            <img src={props.featuredImage ? 'http://localhost:3001/api/uploads/' + props.featuredImage : 'https://bulma.io/images/placeholders/640x480.png'} alt="Placeholder" />
+            <img src={props.featuredImage ? `${API_ROOT}/uploads/` + props.featuredImage : 'https://bulma.io/images/placeholders/640x480.png'} alt="Placeholder" />
           </figure>
         </Link>
       )}
