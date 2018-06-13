@@ -14,13 +14,13 @@ export const connectMongoose = (api) => {
 		let data = [];
 		let counter = 0;
 		for (var label in errs.errors) {
-			console.log(errs)
+			console.log(errs);
 			const msg = errs.errors[label].properties.message;
 	    data[counter] = msg;
 			counter++;
 		}
 		return data;
-	}
+	};
 
 	// Connect to MongoDB
 	mongoose.connect(MONGO_DB_URI, function (err, res) {
@@ -40,4 +40,4 @@ export const connectMongoose = (api) => {
 			const GFS = require('../models/GridFSModel');
 	  }
 	});
-}
+};

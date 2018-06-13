@@ -21,6 +21,8 @@ const defaultState = {
   contracts: generateContractsInitialState(drizzleOptions)
 };
 
+console.log(drizzleOptions);
+
 export default (state = defaultState, action) => {
   switch (action.type) {
 		case APP.CLOSE_ERROR:

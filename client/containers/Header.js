@@ -116,10 +116,10 @@ const NavButtons = props => {
 
 class Header extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       toggled: false
-    }
+    };
     this.onClickMenu = this.onClickMenu.bind(this);
   }
 

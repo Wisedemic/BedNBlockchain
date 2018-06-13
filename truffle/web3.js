@@ -32,20 +32,20 @@ const logEthObjectVersion = (ethObject) => {
   ethObject.version.getNetwork((err, netId) => {
     switch (netId) {
       case "1":
-      console.log('This is mainnet')
-      break
+      console.log('This is mainnet');
+      break;
       case "2":
-      console.log('This is the deprecated Morden test network.')
-      break
+      console.log('This is the deprecated Morden test network.');
+      break;
       case "3":
-      console.log('This is the ropsten test network.')
-      break
+      console.log('This is the ropsten test network.');
+      break;
       case "4":
-      console.log('This is the Rinkeby test network.')
-      break
+      console.log('This is the Rinkeby test network.');
+      break;
       case "42":
-      console.log('This is the Kovan test network.')
-      break
+      console.log('This is the Kovan test network.');
+      break;
       default:
       console.log(netId, err);
       console.log('This is an unknown network.')
@@ -78,7 +78,7 @@ const initEth = new Promise((resolve, reject) => {
           resolve(eth);
         } else {
           // Setup the MetaMask provider
-          setupEth(window.web3.currentProvider)
+          setupEth(window.web3.currentProvider);
           logEthObjectVersion(window.web3);
           resolve(eth);
         }

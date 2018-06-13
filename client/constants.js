@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
   options.dotEnvPath = null;
   options.reporter = ({ errors = {}, env = {} }) => {
     console.log(errors, env);
-		return;
+
   };
 }
 const env = cleanEnv(process.env, {

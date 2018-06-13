@@ -61,7 +61,7 @@ bookings.post('/edit/:bookingId', helpers.validateToken, function(req, res, next
       price: req.body.price,
       guests: req.body.guests
   	};
-    console.log('before update', req.params.bookingId)
+    console.log('before update', req.params.bookingId);
     Bookings.findByIdAndUpdate(
 			req.params.bookingId,
 			{$set: bookingData},
@@ -112,7 +112,7 @@ bookings.get('/buyerId/:buyerId', function(req, res, next) {
 		// .populate('featuredImageId')
 		.populate('roomId')
 		.exec(function(err, bookings) {
-			console.log(err, bookings)
+			console.log(err, bookings);
       if (err || !bookings) return res.json({error: false, errors: Bookings.MongoErrors(err)});
       if (bookings) {
 				const payload = bookings.map((booking, index) => {

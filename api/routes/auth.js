@@ -99,7 +99,7 @@ auth.post('/signup', function(req, res, next) {
 							updated_at: user.updated_at,
 							created_at: user.created_at,
 							token: helpers.generateAndStoreToken(req, user)
-						}}
+						}};
 						return res.json({payload});
 					} else {
 						return res.json({

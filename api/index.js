@@ -1,5 +1,5 @@
 import { createServer } from 'http';
-
+console.log(process.env);
 import api from './server';
 import { PORT } from './constants';
 console.log('[SERVER] Bed\'N\'Blockchain API starting....');

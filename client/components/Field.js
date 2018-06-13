@@ -11,7 +11,7 @@ const Label = props => {
     );
 	}
 	return null;
-}
+};
 
 // Wrap the message and apply the inputState for styles
 const Message = props => {
@@ -53,7 +53,7 @@ const FieldWrapper = props => {
 			</div>
 		);
 	}
-}
+};
 
 class BulmaField extends Component {
 
@@ -115,7 +115,7 @@ class BulmaField extends Component {
 								{this.props.results.map((room, index) => {
 									const searchObj = {
 										resultId: index,
-									}
+									};
 									return (
 										<div
 											key={index}
@@ -143,7 +143,7 @@ class BulmaField extends Component {
 									lat: result.geometry.location.lat,
 									lng: result.geometry.location.lng,
 									formatted_address: result.formatted_address
-								}
+								};
 								return (<div key={key} className="suggestion" onClick={() => this.props.onClick(locationObj)}>{locationObj.formatted_address}</div>);
 							}, this)}
 						</div>
