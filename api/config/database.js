@@ -1,15 +1,13 @@
 import { MONGO_DB_URI } from '../constants';
+import mongoose from 'mongoose';
+import Grid from 'gridfs-stream';
+
+// Config
+mongoose.Promise = global.Promise;
+Grid.mongo = mongoose.mongo;
 
 // DB Config. Requires Express.js
 export const connectMongoose = (api) => {
-
-	/* Requires */
-	const mongoose = require('mongoose');
-	const Grid = require('gridfs-stream');
-
-	// Config
-	mongoose.Promise = global.Promise;
-	Grid.mongo = mongoose.mongo;
 
 	// Define Error Handler for All Mongo Errors into JSON.
 	mongoose.Model.MongoErrors = function(errs) {
