@@ -37,8 +37,6 @@ import { push } from 'react-router-redux';
 
 import initWeb3 from '../../truffle/web3';
 
-const store = getStore();
-
 // Assign Global State to Props
 const mapStateToProps = state => {
   return {
@@ -68,7 +66,7 @@ const mapDispatchToProps = dispatch => ({
 class App extends React.Component {
 	componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
-      store.dispatch(push(nextProps.redirectTo));
+      getStore().dispatch(push(nextProps.redirectTo));
       this.props.onRedirect();
     }
   }
