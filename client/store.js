@@ -7,8 +7,6 @@ import { all, fork } from 'redux-saga/effects'
 import { promiseMiddleware, localStorageMiddleware, drizzleMiddleware } from './middleware';
 import reducers from './reducers/';
 
-console.log(drizzleSagas);
-
 const rootSaga = function*() {
   yield all(drizzleSagas.map(saga => fork(saga)));
 };
